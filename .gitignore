@@ -1,5 +1,9 @@
 docs/site/
 
+# logs
+wandb/
+outputs/
+
 # test cache
 manual_test/
 
