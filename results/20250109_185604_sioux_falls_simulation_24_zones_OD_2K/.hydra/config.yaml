@@ -1,0 +1,27 @@
+model:
+  type: GCN
+  hidden_dim: 64
+  num_gnn_layers: 6
+train:
+  lr: 0.03
+  batch_size: 32
+  epochs: 1500
+  weight_decay: 1.0e-05
+  device: cpu
+  optimizer: AdamW
+  loss_fn: L1Loss
+  random_seed: 42
+data:
+  data_class: SiouxFalls24Zones
+  dataset_name: sioux_falls_simulation_24_zones_OD_2K
+  processed_dir: data/processed
+  raw_dir: data/raw
+scaling: StandardScaler
+output:
+  model_dir: models/
+  figures_dir: reports/figures/
+inference:
+  run: false
+  model_path: ''
+wandb:
+  project_name: ${data.dataset_name}

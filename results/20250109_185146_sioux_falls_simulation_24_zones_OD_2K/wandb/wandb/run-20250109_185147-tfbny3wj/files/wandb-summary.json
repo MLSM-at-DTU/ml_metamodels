@@ -1,0 +1,1 @@
+{"_step":1500,"Valildation_loss":941.0873413085938,"edge_feature_dim":3,"Epoch":1499,"_wandb":{"runtime":212},"_runtime":211.888693,"hidden_dim":32,"_timestamp":1.736445319443221e+09,"node_feature_dim":24,"model_type":"GCN","Train_loss":810.7740027386209}
