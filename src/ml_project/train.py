@@ -24,7 +24,7 @@ class TrainModel():
         self._make_logger()
         self._save_data()
 
-    def _make_logger(self) -> None:
+    def _config_wandb(self) -> None:
         """Create a logger object."""
         # Initialize wandb and set log directory
         self.wandb_run = wandb.init(
