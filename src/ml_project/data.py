@@ -15,8 +15,8 @@ class SiouxFalls24Zones(Dataset):
         # Load the configuration
         self.cfg = cfg
         # Define the base directories
-        raw_dir = self.cfg.data.raw_dir
-        processed_dir = self.cfg.data.processed_dir
+        raw_dir = "data/raw"
+        processed_dir = "data/processed"
 
         # Create paths based on the dataset name
         self.raw_data_path = os.path.join(raw_dir, cfg.data.dataset_name)
