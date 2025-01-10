@@ -21,7 +21,7 @@ class TrainModel():
 
         self._set_seed(cfg.train.random_seed)  # Set seed for reproducibility
         self._check_data_path()
-        self._make_logger()
+        self._config_wandb()
         self._save_data()
 
     def _config_wandb(self) -> None:
