@@ -1,8 +1,25 @@
-# ml_project
+# Project Description
 
-The final hand-in for the exam in ml-ops.
+## Overall Goal
 
-## Project structure
+The overall goal of this project is to build a repository for metamodelling scientific simulators using Graph Neural Networks (GNNs). The repository expects the data to be provided in `train.pickle`, `validation.pickle`, and `test.pickle` files, each containing a list of PyTorch Geometric (PyG) objects.
+
+## Framework
+
+The primary framework used in this repository is PyTorch Geometric, which provides robust tools for handling graph-based data and implementing GNN architectures. This choice enables efficient experimentation with state-of-the-art GNN models.
+
+## Data
+
+The initial dataset will be generated from a scientific simulator designed to estimate the flow on edges of a transportation network. The input data includes node features and edge features, representing various attributes of the transportation network. The flow on edges is estimated by solving the stochastic user equilibrium, which forms the basis of an edge regression task. 
+
+The repository expects static graph data, meaning the number of nodes, edges, and adjacency matrix structure remain constant. However, variations in node features, edge features, and corresponding edge-level regression targets should be supported.
+
+## Models
+
+We plan to experiment with state-of-the-art GNN architectures, starting with a baseline implementation of a simple transformer-based encoder, GNN layer, and decoder model. Initially, a GCN layer will be used as the GNN component, however the repository must allow for iteratively adding more advanced architectures.
+
+
+# Project structure
 
 The directory structure of the project looks like this:
 ```txt
