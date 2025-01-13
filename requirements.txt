@@ -13,6 +13,7 @@ chardet==5.2.0
 charset-normalizer==3.4.1
 click==8.1.8
 cookiecutter==2.6.0
+coverage==7.6.10
 docker-pycreds==0.4.0
 fastapi==0.115.6
 filelock==3.16.1
