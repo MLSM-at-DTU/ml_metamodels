@@ -140,8 +140,7 @@ class TrainModel():
                 optimizer.zero_grad()
 
                 # Forward pass
-                y_pred = model(data)
-
+                y_pred = model(data)              
                 loss = loss_fn(y_pred, data.y)  
                 loss.backward()
                 optimizer.step()
