@@ -34,7 +34,7 @@ class TrainModel():
         wandb_api_key = os.getenv("WANDB_API_KEY")
         if not wandb_api_key:
             raise ValueError("WANDB_API_KEY is not set. Please check your .env file.")
-        print(f"WANDB_API_KEY loaded successfully: {wandb_api_key}")
+        print(f"WANDB_API_KEY loaded successfully.")
 
         # Initialize wandb and set log directory
         self.wandb_run = wandb.init(
