@@ -1,4 +1,3 @@
-import typer
 from torch.utils.data import Dataset
 import os.path as osp
 import pickle
