@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import torch
 import typer
 from torch_geometric.loader import DataLoader
-from ml_project.data import SiouxFalls24Zones
 from ml_project.model import GCN
 import datetime
 import hydra
@@ -76,7 +75,7 @@ class TrainModel():
         np.random.seed(seed)
         random.seed(seed)
 
-    def load_data(self, split = 'train') -> None:
+    def load_data(self, split) -> None:
         """Load a part of the data."""
         
         # Ensure split used for training can only be train and validation

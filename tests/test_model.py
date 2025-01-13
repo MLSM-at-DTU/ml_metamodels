@@ -7,9 +7,9 @@ import torch_geometric.data
 @pytest.mark.parametrize(
     "num_edges, num_edge_features, num_nodes, node_feature_dim, hidden_dim, batch_size, num_gnn_layers",
     [
-        (76, 3, 24, 24, 64, 32, 2),  # Default configuration
-        (76, 2, 24, 11, 128, 16, 3),  # Larger configuration
-        (76, 1, 24, 76, 32, 1, 1),  # Smaller configuration
+        (76, 77, 24, 24, 64, 32, 2),  # Default configuration
+        (76, 78, 24, 11, 128, 16, 3),  # Larger configuration
+        (76, 79, 24, 76, 32, 1, 1),  # Smaller configuration
     ],
 )
 class TestGCN:
@@ -18,17 +18,14 @@ class TestGCN:
         linear_encoder = LinearEncoder(
             node_feature_dim=node_feature_dim,
             edge_feature_dim=num_edge_features,
-            hidden_dim=hidden_dim,
-            num_edges=num_edges,
-        )
+            hidden_dim=hidden_dim)
 
         # Mock input data
         x = torch.rand(num_nodes * batch_size, node_feature_dim)  # Node features
         edge_attr = torch.rand(num_edges * batch_size, num_edge_features)  # Edge features
-        batch = torch.arange(batch_size).repeat_interleave(num_nodes)  # Batch tensor for nodes
 
         # Forward pass
-        encoded_nodes, encoded_edges = linear_encoder(x, edge_attr, batch)
+        encoded_nodes, encoded_edges = linear_encoder(x, edge_attr)
 
         # Assertions
         assert encoded_nodes.shape == (num_nodes * batch_size, hidden_dim)  # Shape: [num_nodes_total, hidden_dim]
@@ -38,8 +35,7 @@ class TestGCN:
         # Instantiate GCNConvLayer
         gcn_conv_layer = GCNConvLayer(
             hidden_dim=hidden_dim,
-            num_gnn_layers=num_gnn_layers,
-        )
+            num_gnn_layers=num_gnn_layers)
 
         # Mock input data
         x = torch.rand(num_nodes * batch_size, hidden_dim)  # Node embeddings
@@ -73,8 +69,6 @@ class TestGCN:
             edge_feature_dim=num_edge_features,
             hidden_dim=hidden_dim,
             num_gnn_layers=num_gnn_layers,
-            num_nodes=num_nodes,
-            num_edges=num_edges,
         )
 
         # Mock input data
