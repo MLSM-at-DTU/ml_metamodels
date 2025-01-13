@@ -5,28 +5,18 @@ from torch_geometric.data import Data
 
 class LinearEncoder(nn.Module):
     """Encodes node features and edge features."""
-    def __init__(self, node_feature_dim: int, edge_feature_dim: int, hidden_dim: int, num_edges: int) -> None:
+    def __init__(self, node_feature_dim: int, edge_feature_dim: int, hidden_dim: int) -> None:
         super().__init__()
 
-        self.num_edges = num_edges
-
         self.node_encoder = nn.Linear(node_feature_dim, hidden_dim) 
-        self.edge_encoder = nn.Linear(edge_feature_dim + num_edges, hidden_dim)
+        self.edge_encoder = nn.Linear(edge_feature_dim, hidden_dim)
 
-    def forward(self, x, edge_attr, batch):
-
-        num_batches = batch.max().item() + 1
-
-        # Create one identity matrix and repeat it for all graphs
-        identity_matrix = torch.eye(self.num_edges, device=edge_attr.device)  # Shape: [num_edges_per_graph, num_edges_per_graph]
-        stacked_identity_matrix = identity_matrix.repeat(num_batches, 1)  # Shape: [num_batches * num_edges_per_graph, num_edges_per_graph]
-
+    def forward(self, x, edge_attr):
         # Encoded nodes
         encoded_nodes = torch.relu(self.node_encoder(x))
         
         # Encoded edges
-        combined_edge_features = torch.cat([edge_attr, stacked_identity_matrix], dim=1)
-        encoded_edges = torch.relu(self.edge_encoder(combined_edge_features))  # Shape: [num_edges_total, hidden_dim]
+        encoded_edges = torch.relu(self.edge_encoder(edge_attr))  # Directly use edge_attr
 
         return encoded_nodes, encoded_edges
 
@@ -64,17 +54,17 @@ class GCNConvDecoder(nn.Module):
 
 class GCN(nn.Module):
     """GCN model with Encoder-GNN-Decoder structure."""
-    def __init__(self, node_feature_dim: int, edge_feature_dim: int, hidden_dim: int, num_gnn_layers: int, num_nodes: int = 24, num_edges: int = 76) -> None:
+    def __init__(self, node_feature_dim: int, edge_feature_dim: int, hidden_dim: int, num_gnn_layers: int) -> None:
         super().__init__()
-        self.encoder = LinearEncoder(node_feature_dim, edge_feature_dim, hidden_dim, num_edges)
+        self.encoder = LinearEncoder(node_feature_dim, edge_feature_dim, hidden_dim)
         self.gnn = GCNConvLayer(hidden_dim, num_gnn_layers)
         self.decoder = GCNConvDecoder(hidden_dim)
 
     def forward(self, data: torch.Tensor) -> torch.Tensor:
-        x, edge_index, edge_attr, batch = data.x, data.edge_index, data.edge_attr, data.batch
+        x, edge_index, edge_attr = data.x, data.edge_index, data.edge_attr
 
         # Step 1: Encode node and edge features
-        x_encoded, edge_encoded = self.encoder(x, edge_attr, batch)
+        x_encoded, edge_encoded = self.encoder(x, edge_attr)
 
         # Step 2: Process node embeddings using the GNN
         x_embeddings = self.gnn(x_encoded, edge_index)
@@ -92,7 +82,7 @@ if __name__ == "__main__":
     dummy_data = Data(
         x=torch.randn(24, 24), 
         edge_index=torch.randint(0, 24, (2, 76)), 
-        edge_attr=torch.randn(76,3)
+        edge_attr=torch.randn(76*2,3)
     )
 
     output = model(dummy_data)

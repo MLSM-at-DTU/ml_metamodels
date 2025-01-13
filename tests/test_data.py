@@ -35,7 +35,7 @@ class TestSiouxFalls24Zones:
             graphs = torch.load(osp.join(preprocessed_data_path, f'{split}.pt'), weights_only=False)
 
         assert graphs[0].x.shape == (24, 24)
-        assert graphs[0].edge_attr.shape == (76, 3)
+        assert graphs[0].edge_attr.shape == (76, 79) ## increased as it has been appended identity matrix
         assert graphs[0].y.shape == (76,)
         assert graphs[0].edge_weight.shape == (76,)
 

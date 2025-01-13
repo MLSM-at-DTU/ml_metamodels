@@ -63,6 +63,11 @@ class SiouxFalls24Zones(Dataset):
                 graph.x = torch.tensor(graph.x.flatten().reshape(-1, 1), dtype=torch.float32)
                 graph.edge_attr = torch.tensor(graph.edge_attr.view(-1, 3), dtype=torch.float32)
 
+                # Add one-hot encoding for edges
+                num_edges = graph.edge_attr.shape[0]
+                one_hot_edges = torch.eye(num_edges, dtype=torch.float32)
+                graph.edge_attr = torch.cat([graph.edge_attr, one_hot_edges], dim=1)
+
                 # Make sure 32 float
                 graph.y = graph.y.float()                
                 graph.edge_weight = graph.edge_weight.float()
@@ -106,6 +111,11 @@ class SiouxFalls24Zones(Dataset):
                 # Normalize using fitted scalers
                 graph.x = torch.tensor(node_scaler.transform(graph.x.flatten().reshape(-1, 1)).reshape(graph.x.shape), dtype=torch.float32)
                 graph.edge_attr = torch.tensor(edge_scaler.transform(graph.edge_attr.view(-1, 3)), dtype=torch.float32)
+
+                # Add one-hot encoding for edges
+                num_edges = graph.edge_attr.shape[0]
+                one_hot_edges = torch.eye(num_edges, dtype=torch.float32)
+                graph.edge_attr = torch.cat([graph.edge_attr, one_hot_edges], dim=1)
 
                 # Make sure 32 float
                 graph.y = graph.y.float()                
