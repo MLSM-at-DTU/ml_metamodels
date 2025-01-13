@@ -21,9 +21,7 @@ class TrainModel():
         self.processed_data_path = osp.join(processed_dir, cfg.data.dataset_name)
 
         self._set_seed(cfg.train.random_seed)  # Set seed for reproducibility
-        self._check_data_path()
         self._config_wandb()
-        self._save_data_to_wandb()
 
     def _config_wandb(self) -> None:
         """Create a logger object."""
@@ -40,7 +38,10 @@ class TrainModel():
         self.wandb_run = wandb.init(
             project=self.cfg.wandb.project_name,
             config=OmegaConf.to_container(self.cfg, resolve=True))
-    
+
+        # Save the processed data to wandb
+        self._save_data_to_wandb()
+
     def _save_data_to_wandb(self) -> None:
         """Save the processed data into wandb."""
         # Save data to wandb
@@ -107,6 +108,9 @@ class TrainModel():
 
     def train(self) -> None:
         """Train the GCN model on the Sioux Falls dataset."""     
+        # Check if the processed data path exists
+        self._check_data_path()
+
         # Load training configuration
         print("Training configuration:")
         print(OmegaConf.to_yaml(self.cfg.train))
