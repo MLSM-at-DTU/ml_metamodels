@@ -65,7 +65,25 @@ The directory structure of the project looks like this:
 ├── requirements_dev.txt      # Development requirements
 └── tasks.py                  # Project tasks
 ```
+## Notes
+To save new dependencies, use the following command:
+Either use pipreqs or pip freeze (not recommended):
+```bash
+pipreqs .
+```
 
+For format and linting, use the following commands:
+```bash
+ruff check .
+ruff format .
+```
+
+
+# Tests
+```bash
+coverage run -m pytest tests/
+coverage report
+```
 
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
