@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import torch
-import typer
 from torch_geometric.loader import DataLoader
 from src.ml_project.model import GCN
 import datetime
@@ -31,7 +30,7 @@ class TrainModel:
         wandb_api_key = os.getenv("WANDB_API_KEY")
         if not wandb_api_key:
             raise ValueError("WANDB_API_KEY is not set. Please check your .env file.")
-        print(f"WANDB_API_KEY loaded successfully.")
+        print("WANDB_API_KEY loaded successfully.")
 
         # Initialize wandb and set log directory
         self.wandb_run = wandb.init(
@@ -174,7 +173,7 @@ class TrainModel:
                     val_loss += loss_fn(y_pred, data.y).item()
                 val_loss /= len(val_loader)
                 statistics["val_loss"].append(val_loss)
-                print(f"Epoch {epoch+1}/{self.cfg.train.epochs}, Loss: {epoch_loss}, Validation Loss: {val_loss}")
+                print(f"Epoch {epoch + 1}/{self.cfg.train.epochs}, Loss: {epoch_loss}, Validation Loss: {val_loss}")
                 wandb.log({"Epoch": epoch, "Train_loss": epoch_loss, "Valildation_loss": val_loss})
 
         # Save model

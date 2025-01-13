@@ -1,6 +1,4 @@
 import pytest
-from unittest.mock import MagicMock, patch
-import torch
 import os
 from omegaconf import OmegaConf
 from src.ml_project.train import TrainModel
