@@ -21,7 +21,6 @@ class TrainModel():
         self.processed_data_path = osp.join(processed_dir, cfg.data.dataset_name)
 
         self._set_seed(cfg.train.random_seed)  # Set seed for reproducibility
-        self._config_wandb()
 
     def _config_wandb(self) -> None:
         """Create a logger object."""
@@ -110,6 +109,9 @@ class TrainModel():
         """Train the GCN model on the Sioux Falls dataset."""     
         # Check if the processed data path exists
         self._check_data_path()
+
+        # Initialize wandb
+        self._config_wandb()
 
         # Load training configuration
         print("Training configuration:")
