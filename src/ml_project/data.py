@@ -31,7 +31,7 @@ class SiouxFalls24Zones(Dataset):
                 f"is three separate datasets: 'train.pickle', 'val.pickle', and 'test.pickle', with each containing lists of PyG Data objects."
             )
 
-    
+
     def preprocess(self) -> None:
         """Preprocess the raw data and save it to the output folder."""
 
@@ -42,7 +42,7 @@ class SiouxFalls24Zones(Dataset):
 
         # See if scaling is required
         scaling = self.cfg.scaling
-        
+
         # Preprocess the data
         if scaling is None:
             print("Preprocessing data without scaling...")
@@ -56,7 +56,7 @@ class SiouxFalls24Zones(Dataset):
         for split in ['train', 'val', 'test']:
             with open(osp.join(self.raw_data_path, f'{split}.pickle'), 'rb') as f:
                 graphs = pickle.load(f)
-            
+
             processed_graphs = []
             for graph in graphs:
                 # Normalize using fitted scalers
@@ -69,7 +69,7 @@ class SiouxFalls24Zones(Dataset):
                 graph.edge_attr = torch.cat([graph.edge_attr, one_hot_edges], dim=1)
 
                 # Make sure 32 float
-                graph.y = graph.y.float()                
+                graph.y = graph.y.float()
                 graph.edge_weight = graph.edge_weight.float()
 
                 processed_graphs.append(graph)
@@ -85,7 +85,7 @@ class SiouxFalls24Zones(Dataset):
             edge_scaler = StandardScaler()
         else:
             raise NotImplementedError(f"Scaling type {scaling_type} is not implemented.")
-        
+
         # Collect all node and edge features for training data
         all_node_features = []
         all_edge_features = []
@@ -98,7 +98,7 @@ class SiouxFalls24Zones(Dataset):
                 for graph in graphs:
                     all_node_features.extend(graph.x.flatten().tolist())
                     all_edge_features.extend(graph.edge_attr.view(-1, 3).tolist())
-                
+
                 all_node_features_for_scalar = torch.tensor(all_node_features).clone().detach().reshape(-1, 1)
                 all_edge_features_for_scalar = torch.tensor(all_edge_features).clone().detach()
 
@@ -118,7 +118,7 @@ class SiouxFalls24Zones(Dataset):
                 graph.edge_attr = torch.cat([graph.edge_attr, one_hot_edges], dim=1)
 
                 # Make sure 32 float
-                graph.y = graph.y.float()                
+                graph.y = graph.y.float()
                 graph.edge_weight = graph.edge_weight.float()
 
                 processed_graphs.append(graph)
@@ -140,6 +140,6 @@ def main(cfg: DictConfig) -> None:
         print("Preprocessing complete!")
     else:
         raise NotImplementedError(f"Data class {data_class}) is not implemented.")
-    
+
 if __name__ == "__main__":
     main()

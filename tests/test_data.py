@@ -9,7 +9,7 @@ class TestSiouxFalls24Zones:
 
     def test_raw_data(self):
         """Test whether the dataset nodes and edges are correct."""
-        
+
         raw_data_path = "data/raw/sioux_falls_simulation_24_zones_OD_2K"
 
         all_graphs = []
@@ -22,7 +22,7 @@ class TestSiouxFalls24Zones:
             assert graphs[0].edge_attr.shape == (228,) ### raw data should be changed to 76 x 3 shape
             assert graphs[0].y.shape == (76,)
             assert graphs[0].edge_weight.shape == (76,)
-        
+
         assert len(all_graphs) == 2000 ### Not sure I like to do this test if the number of graphs is not fixed
 
     def test_preprocessed_data(self):
@@ -38,6 +38,3 @@ class TestSiouxFalls24Zones:
         assert graphs[0].edge_attr.shape == (76, 79) ## increased as it has been appended identity matrix
         assert graphs[0].y.shape == (76,)
         assert graphs[0].edge_weight.shape == (76,)
-
-
-    
