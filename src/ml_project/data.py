@@ -15,11 +15,11 @@ class SiouxFalls24Zones(Dataset):
         # Load the configuration
         self.cfg = cfg
         # Define the base directories
-        raw_dir = "data/raw"
-        processed_dir = "data/processed"
+        self.raw_dir = "data/raw"
+        self.processed_dir = "data/processed"
 
         # Create paths based on the dataset name
-        self.raw_data_path = os.path.join(raw_dir, cfg.data.dataset_name)
+        self.raw_data_path = os.path.join(self.raw_dir, cfg.data.dataset_name)
         # Ensure the raw directory exists
         assert osp.exists(self.raw_data_path), f"Raw data path {self.raw_data_path} does not exist."
 
@@ -31,15 +31,19 @@ class SiouxFalls24Zones(Dataset):
                 f"is three separate datasets: 'train.pickle', 'val.pickle', and 'test.pickle', with each containing lists of PyG Data objects."
             )
 
-        self.processed_data_path = os.path.join(processed_dir, cfg.data.dataset_name)
-        # Ensure the processed directory exists
-        os.makedirs(self.processed_data_path, exist_ok=True)
     
     def preprocess(self) -> None:
         """Preprocess the raw data and save it to the output folder."""
-        
+
+        # Create the processed data directory
+        self.processed_data_path = os.path.join(self.processed_dir, self.cfg.data.dataset_name)
+        # Ensure the processed directory exists
+        os.makedirs(self.processed_data_path, exist_ok=True)
+
+        # See if scaling is required
         scaling = self.cfg.scaling
         
+        # Preprocess the data
         if scaling is None:
             print("Preprocessing data without scaling...")
             self._preprocess_no_scaling()
@@ -58,6 +62,11 @@ class SiouxFalls24Zones(Dataset):
                 # Normalize using fitted scalers
                 graph.x = torch.tensor(graph.x.flatten().reshape(-1, 1), dtype=torch.float32)
                 graph.edge_attr = torch.tensor(graph.edge_attr.view(-1, 3), dtype=torch.float32)
+
+                # Add one-hot encoding for edges
+                num_edges = graph.edge_attr.shape[0]
+                one_hot_edges = torch.eye(num_edges, dtype=torch.float32)
+                graph.edge_attr = torch.cat([graph.edge_attr, one_hot_edges], dim=1)
 
                 # Make sure 32 float
                 graph.y = graph.y.float()                
@@ -102,6 +111,11 @@ class SiouxFalls24Zones(Dataset):
                 # Normalize using fitted scalers
                 graph.x = torch.tensor(node_scaler.transform(graph.x.flatten().reshape(-1, 1)).reshape(graph.x.shape), dtype=torch.float32)
                 graph.edge_attr = torch.tensor(edge_scaler.transform(graph.edge_attr.view(-1, 3)), dtype=torch.float32)
+
+                # Add one-hot encoding for edges
+                num_edges = graph.edge_attr.shape[0]
+                one_hot_edges = torch.eye(num_edges, dtype=torch.float32)
+                graph.edge_attr = torch.cat([graph.edge_attr, one_hot_edges], dim=1)
 
                 # Make sure 32 float
                 graph.y = graph.y.float()                

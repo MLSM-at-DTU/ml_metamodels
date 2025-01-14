@@ -2,8 +2,7 @@ import matplotlib.pyplot as plt
 import torch
 import typer
 from torch_geometric.loader import DataLoader
-from ml_project.data import SiouxFalls24Zones
-from ml_project.model import GCN, MLP
+from ml_project.model import GCN
 import datetime
 import hydra
 from omegaconf import DictConfig, OmegaConf 
@@ -12,6 +11,7 @@ import os
 import numpy as np
 import random
 import wandb
+from dotenv import load_dotenv
 
 class TrainModel():
     def __init__(self, cfg: DictConfig) -> None:
@@ -20,18 +20,27 @@ class TrainModel():
         self.processed_data_path = osp.join(processed_dir, cfg.data.dataset_name)
 
         self._set_seed(cfg.train.random_seed)  # Set seed for reproducibility
-        self._check_data_path()
-        self._config_wandb()
-        self._save_data()
 
     def _config_wandb(self) -> None:
         """Create a logger object."""
+        
+        # Load .env file from root directory
+        load_dotenv(".env")
+        # Example: Access WANDB_API_KEY from the environment
+        wandb_api_key = os.getenv("WANDB_API_KEY")
+        if not wandb_api_key:
+            raise ValueError("WANDB_API_KEY is not set. Please check your .env file.")
+        print(f"WANDB_API_KEY loaded successfully.")
+
         # Initialize wandb and set log directory
         self.wandb_run = wandb.init(
             project=self.cfg.wandb.project_name,
             config=OmegaConf.to_container(self.cfg, resolve=True))
-    
-    def _save_data(self) -> None:
+
+        # Save the processed data to wandb
+        self._save_data_to_wandb()
+
+    def _save_data_to_wandb(self) -> None:
         """Save the processed data into wandb."""
         # Save data to wandb
         for split in ["train", "val", "test"]:
@@ -66,7 +75,7 @@ class TrainModel():
         np.random.seed(seed)
         random.seed(seed)
 
-    def load_data(self, split = 'train') -> None:
+    def load_data(self, split) -> None:
         """Load a part of the data."""
         
         # Ensure split used for training can only be train and validation
@@ -97,6 +106,12 @@ class TrainModel():
 
     def train(self) -> None:
         """Train the GCN model on the Sioux Falls dataset."""     
+        # Check if the processed data path exists
+        self._check_data_path()
+
+        # Initialize wandb
+        self._config_wandb()
+
         # Load training configuration
         print("Training configuration:")
         print(OmegaConf.to_yaml(self.cfg.train))
@@ -130,8 +145,7 @@ class TrainModel():
                 optimizer.zero_grad()
 
                 # Forward pass
-                y_pred = model(data)
-
+                y_pred = model(data)              
                 loss = loss_fn(y_pred, data.y)  
                 loss.backward()
                 optimizer.step()
