@@ -8,13 +8,13 @@ class LinearEncoder(nn.Module):
     def __init__(self, node_feature_dim: int, edge_feature_dim: int, hidden_dim: int) -> None:
         super().__init__()
 
-        self.node_encoder = nn.Linear(node_feature_dim, hidden_dim) 
+        self.node_encoder = nn.Linear(node_feature_dim, hidden_dim)
         self.edge_encoder = nn.Linear(edge_feature_dim, hidden_dim)
 
     def forward(self, x, edge_attr):
         # Encoded nodes
         encoded_nodes = torch.relu(self.node_encoder(x))
-        
+
         # Encoded edges
         encoded_edges = torch.relu(self.edge_encoder(edge_attr))  # Directly use edge_attr
 
@@ -31,7 +31,7 @@ class GCNConvLayer(nn.Module):
         for conv in self.convs:
             x_res = x
             x = torch.relu(conv(x, edge_index) + self.residual(x_res))  # Update node embeddings
-        return x 
+        return x
 
 class GCNConvDecoder(nn.Module):
     """Decodes node embeddings and edge features for predictions."""
@@ -80,8 +80,8 @@ if __name__ == "__main__":
     print(f"Number of parameters: {sum(p.numel() for p in model.parameters())}")
 
     dummy_data = Data(
-        x=torch.randn(24, 24), 
-        edge_index=torch.randint(0, 24, (2, 76)), 
+        x=torch.randn(24, 24),
+        edge_index=torch.randint(0, 24, (2, 76)),
         edge_attr=torch.randn(76*2,3)
     )
 
