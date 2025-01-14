@@ -2,10 +2,11 @@ import torch
 import typer
 from torch_geometric.loader import DataLoader
 from data import SiouxFalls_24_zones
-from ml_project.model import GCN
+from src.ml_project.model import GCN
 
-#DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+# DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 DEVICE = torch.device("cpu")
+
 
 def evaluate(model_checkpoint: str, batch_size: int = 32) -> None:
     """Evaluate a trained GCN model."""
@@ -13,8 +14,8 @@ def evaluate(model_checkpoint: str, batch_size: int = 32) -> None:
     print(f"Model checkpoint: {model_checkpoint}")
 
     # Load dataset
-    dataset = SiouxFalls_24_zones('sioux_falls_simulation_24_zones_OD_2K')
-    test_data = dataset.load_split('test')
+    dataset = SiouxFalls_24_zones("sioux_falls_simulation_24_zones_OD_2K")
+    test_data = dataset.load_split("test")
     test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False)
 
     # Load model
