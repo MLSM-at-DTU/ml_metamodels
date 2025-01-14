@@ -34,5 +34,5 @@ def test_cfg(tmp_path):
 def test_train_init(test_cfg): ### Not sure I like this one..
     """Test the _set_seed method."""
     trainer = TrainModel(test_cfg)
-    
+
     assert isinstance(trainer, TrainModel)
