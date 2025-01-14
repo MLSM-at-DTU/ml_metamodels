@@ -1,17 +1,32 @@
 # Base image
-FROM python:3.11-slim AS base
+FROM python:3.11-slim
 
+# Install Python
 RUN apt update && \
     apt install --no-install-recommends -y build-essential gcc && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
-COPY src src/
+# Copy environment related files
 COPY requirements.txt requirements.txt
-COPY requirements_dev.txt requirements_dev.txt
-COPY README.md README.md
 COPY pyproject.toml pyproject.toml
+COPY README.md README.md
+COPY requirements_dev.txt requirements_dev.txt
 
-RUN pip install -r requirements.txt --no-cache-dir --verbose
-RUN pip install . --no-deps --no-cache-dir --verbose
+# Copy project files
+COPY configs/ configs/
+COPY src/ml_project/ src/ml_project/
+COPY data/ data/
+COPY models/ models/
+COPY reports/figures/ reports/figures/
+# Expects a wandb API key in the .env file
+COPY .env .env
+
+# Set the working directory
+WORKDIR /
+
+# Install the project
+RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
+#RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install . --no-deps --no-cache-dir
 
 ENTRYPOINT ["python", "-u", "src/ml_project/train.py"]
