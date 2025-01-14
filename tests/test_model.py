@@ -13,12 +13,13 @@ import torch_geometric.data
     ],
 )
 class TestGCN:
-    def test_linear_encoder(self, num_edges, num_edge_features, num_nodes, node_feature_dim, hidden_dim, batch_size, num_gnn_layers):
+    def test_linear_encoder(
+        self, num_edges, num_edge_features, num_nodes, node_feature_dim, hidden_dim, batch_size, num_gnn_layers
+    ):
         # Instantiate LinearEncoder
         linear_encoder = LinearEncoder(
-            node_feature_dim=node_feature_dim,
-            edge_feature_dim=num_edge_features,
-            hidden_dim=hidden_dim)
+            node_feature_dim=node_feature_dim, edge_feature_dim=num_edge_features, hidden_dim=hidden_dim
+        )
 
         # Mock input data
         x = torch.rand(num_nodes * batch_size, node_feature_dim)  # Node features
@@ -31,11 +32,11 @@ class TestGCN:
         assert encoded_nodes.shape == (num_nodes * batch_size, hidden_dim)  # Shape: [num_nodes_total, hidden_dim]
         assert encoded_edges.shape == (num_edges * batch_size, hidden_dim)  # Shape: [num_edges_total, hidden_dim]
 
-    def test_gcn_conv(self, num_edges, num_edge_features, num_nodes, node_feature_dim, hidden_dim, batch_size, num_gnn_layers):
+    def test_gcn_conv(
+        self, num_edges, num_edge_features, num_nodes, node_feature_dim, hidden_dim, batch_size, num_gnn_layers
+    ):
         # Instantiate GCNConvLayer
-        gcn_conv_layer = GCNConvLayer(
-            hidden_dim=hidden_dim,
-            num_gnn_layers=num_gnn_layers)
+        gcn_conv_layer = GCNConvLayer(hidden_dim=hidden_dim, num_gnn_layers=num_gnn_layers)
 
         # Mock input data
         x = torch.rand(num_nodes * batch_size, hidden_dim)  # Node embeddings
@@ -47,7 +48,9 @@ class TestGCN:
         # Assertions
         assert x_embeddings.shape == (num_nodes * batch_size, hidden_dim)  # Shape: [num_nodes_total, hidden_dim]
 
-    def test_gcn_conv_decoder(self, num_edges, num_edge_features, num_nodes, node_feature_dim, hidden_dim, batch_size, num_gnn_layers):
+    def test_gcn_conv_decoder(
+        self, num_edges, num_edge_features, num_nodes, node_feature_dim, hidden_dim, batch_size, num_gnn_layers
+    ):
         # Instantiate GCNConvDecoder
         gcn_decoder = GCNConvDecoder(hidden_dim=hidden_dim)
 
@@ -62,7 +65,9 @@ class TestGCN:
         # Assertions
         assert edge_output.shape == (num_edges * batch_size,)  # Shape: [num_edges_total]
 
-    def test_gcn_model(self, num_edges, num_edge_features, num_nodes, node_feature_dim, hidden_dim, batch_size, num_gnn_layers):
+    def test_gcn_model(
+        self, num_edges, num_edge_features, num_nodes, node_feature_dim, hidden_dim, batch_size, num_gnn_layers
+    ):
         # Instantiate GCN model
         gcn_model = GCN(
             node_feature_dim=node_feature_dim,

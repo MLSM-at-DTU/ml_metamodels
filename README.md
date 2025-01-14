@@ -10,7 +10,7 @@ The primary framework used in this repository is PyTorch Geometric, which provid
 
 ## Data
 
-The initial dataset will be generated from a scientific simulator designed to estimate the flow on edges of a transportation network. The input data includes node features and edge features, representing various attributes of the transportation network. The flow on edges is estimated by solving the stochastic user equilibrium, which forms the basis of an edge regression task. 
+The initial dataset will be generated from a scientific simulator designed to estimate the flow on edges of a transportation network. The input data includes node features and edge features, representing various attributes of the transportation network. The flow on edges is estimated by solving the stochastic user equilibrium, which forms the basis of an edge regression task.
 
 The repository expects static graph data, meaning the number of nodes, edges, and adjacency matrix structure remain constant. However, variations in node features, edge features, and corresponding edge-level regression targets should be supported.
 
@@ -65,7 +65,25 @@ The directory structure of the project looks like this:
 ├── requirements_dev.txt      # Development requirements
 └── tasks.py                  # Project tasks
 ```
+## Notes
+To save new dependencies, use the following command:
+Either use pipreqs or pip freeze (not recommended):
+```bash
+pipreqs .
+```
 
+For format and linting, use the following commands:
+```bash
+ruff check .
+ruff format .
+```
+
+
+# Tests
+```bash
+coverage run -m pytest tests/
+coverage report
+```
 
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
