@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import torch
 from torch_geometric.loader import DataLoader
-from src.ml_project.model import GCN
+from src.ml_project.model import GCN, GAT
 import datetime
 import hydra
 from omegaconf import DictConfig, OmegaConf
@@ -100,6 +100,13 @@ class TrainModel:
                 num_gnn_layers=self.cfg.model.num_gnn_layers,
             ).to(self.cfg.train.device)
 
+        elif self.cfg.model.layer_type == "GAT":
+            model = GAT(
+                node_feature_dim=self.node_feature_dim,
+                edge_feature_dim=self.edge_feature_dim,
+                hidden_dim=self.cfg.model.hidden_dim,
+                num_gnn_layers=self.cfg.model.num_gnn_layers,
+            ).to(self.cfg.train.device)
         else:
             raise ValueError(f"Model type {self.model.layer_type} not supported. Please choose from ['GCN']")
 

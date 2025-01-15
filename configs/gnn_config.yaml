@@ -1,5 +1,5 @@
 model:
-  layer_type: GCN
+  layer_type: GAT
   hidden_dim: 64
   num_gnn_layers: 3
 
