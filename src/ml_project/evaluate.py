@@ -2,7 +2,7 @@ import torch
 import typer
 from torch_geometric.loader import DataLoader
 from data import SiouxFalls_24_zones
-from src.ml_project.model import GCN
+from ml_project.model import GCN
 
 # DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 DEVICE = torch.device("cpu")
