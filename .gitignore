@@ -3,6 +3,7 @@ docs/site/
 # logs
 wandb/
 outputs/
+models/
 
 # test cache
 manual_test/

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import torch
 from torch_geometric.loader import DataLoader
-from src.ml_project.model import GCN, GAT
+from ml_project.model import GCN, GAT
 import datetime
 import hydra
 from omegaconf import DictConfig, OmegaConf
@@ -109,6 +109,10 @@ class TrainModel:
             ).to(self.cfg.train.device)
         else:
             raise ValueError(f"Model type {self.model.layer_type} not supported. Please choose from ['GCN']")
+
+
+        # Log model to wandb
+        print("Model architecture: " + str(model))
 
         return model
 
