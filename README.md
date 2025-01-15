@@ -66,6 +66,13 @@ The directory structure of the project looks like this:
 └── tasks.py                  # Project tasks
 ```
 ## Notes
+To run training for example, start with:
+```bash
+pip install -r requirements.txt
+pip install -e .
+python src/project_name/train.py
+```
+
 To save new dependencies, use the following command:
 Either use pipreqs or pip freeze (not recommended):
 ```bash
@@ -85,6 +92,12 @@ coverage run -m pytest tests/
 coverage report
 ```
 
+# Docker
+For the train dockerfile:
+```bash
+docker build -f dockerfiles/train.dockerfile . -t train:latest
+docker run --name train train:latest
+```
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
