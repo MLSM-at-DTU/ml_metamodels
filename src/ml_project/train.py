@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import torch
 from torch_geometric.loader import DataLoader
-from src.ml_project.model import GCN
+from ml_project.model import GCN
 import datetime
 import hydra
 from omegaconf import DictConfig, OmegaConf
