@@ -26,8 +26,8 @@ class GCNConvLayer(nn.Module):
         self.convs = nn.ModuleList([GCNConv(hidden_dim, hidden_dim) for _ in range(num_gnn_layers)])
         self.residual = nn.Linear(hidden_dim, hidden_dim)  # Residual connection
 
-    def forward(self, x, edge_index):
+    def forward(self, x, edge_index, edge_weight=None):
         for conv in self.convs:
             x_res = x
-            x = torch.relu(conv(x, edge_index) + self.residual(x_res))  # Update node embeddings
+            x = torch.relu(conv(x, edge_index, edge_weight = edge_weight) + self.residual(x_res))  # Update node embeddings
         return x

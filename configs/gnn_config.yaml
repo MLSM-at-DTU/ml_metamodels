@@ -1,12 +1,13 @@
 model:
-  layer_type: GAT
+  layer_type: GCN
   hidden_dim: 64
-  num_gnn_layers: 3
+  num_gnn_layers: 1
+  diffusion: ff
 
 train:
   lr: 0.03
-  batch_size: 32
-  epochs: 500
+  batch_size: 64
+  epochs: 100
   weight_decay: 1e-5
   device: cpu
   optimizer: AdamW ## AdamW
@@ -16,6 +17,8 @@ train:
 data:
   data_class: SiouxFalls24Zones
   dataset_name: sioux_falls_simulation_24_zones_OD_2K
+  edge_feature_to_weight_index: 1
+  edge_feature_identity_matrix: True
 
 scaling: StandardScaler
 
