@@ -96,8 +96,28 @@ coverage report
 For the train dockerfile:
 ```bash
 docker build -f dockerfiles/train.dockerfile . -t train:latest
-docker run --name train train:latest
+docker run --name train --env WANDB_API_KEY=$(cat .env | grep WANDB_API_KEY | cut -d '=' -f2) train:latest
 ```
+
+# Cloud
+Provide the WANDB_API_KEY in the environment variables
+```bash
+gcloud secrets create wandb-api-key --replication-policy="automatic"
+echo -n "your-wandb-api-key-value" | gcloud secrets versions add wandb-api-key --data-file=-
+
+gcloud secrets add-iam-policy-binding wandb-api-key \
+  --member="serviceAccount:test-service@ml-metamodels.iam.gserviceaccount.com" \
+  --role="roles/secretmanager.secretAccessor"
+
+gcloud builds submit --config=configs/cloudbuild.yaml .
+```
+
+You can pull the image that was pushed to the cloud and then run it by:
+```bash
+docker pull <region>-docker.pkg.dev/<project-id>/<registry-name>/<image-name>:<image-tag>
+docker run --name train --env WANDB_API_KEY=$(cat .env | grep WANDB_API_KEY | cut -d '=' -f2) <region>-docker.pkg.dev/<project-id>/<registry-name>/<image-name>:<image-tag>
+```
+
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
