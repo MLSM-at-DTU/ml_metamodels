@@ -1,32 +1,31 @@
-from torch_geometric.utils import to_scipy_sparse_matrix, from_scipy_sparse_matrix
-import scipy.sparse as sp
-import numpy as np
+import torch
+import torch_sparse
 
-def preprocess_diffusion(edge_index, edge_weight, num_nodes):
+def calculate_diffusion(edge_index, edge_weight):
     """
-    Preprocess edge_index and edge_weight to create a diffusion-aware graph.
-
+    Compute P^k, the k-step transition probability matrix.
+    
     Args:
-        edge_index (Tensor): Edge index of shape [2, num_edges].
-        edge_weight (Tensor): Edge weights of shape [num_edges].
-        num_nodes (int): Number of nodes in the graph.
-        symmetric (bool): Whether to use symmetric normalization.
+        edge_index (Tensor): Edge index of the graph.
+        edge_weight (Tensor): Edge weights for the graph.
+        k (int): Number of diffusion steps.
 
     Returns:
-        edge_index (Tensor): Updated edge index.
-        edge_weight (Tensor): Updated edge weights after normalization.
+        Tensor: P^k as a sparse matrix or dense tensor.
     """
-    # Create a weighted adjacency matrix
-    adj = to_scipy_sparse_matrix(edge_index, edge_weight, num_nodes=num_nodes)
+    # Create adjacency matrix (sparse)
+    num_nodes = edge_index.max().item() + 1
+    adj = torch_sparse.SparseTensor.from_edge_index(edge_index, edge_weight, sparse_sizes=(num_nodes, num_nodes))
 
-    # Symmetric normalization: D^(-1/2) * A * D^(-1/2)
-    rowsum = np.array(adj.sum(1)).flatten()
-    d_inv_sqrt = np.power(rowsum, -0.5)
-    d_inv_sqrt[np.isinf(d_inv_sqrt)] = 0.0
-    d_mat_inv_sqrt = sp.diags(d_inv_sqrt)
-    adj_normalized = adj @ d_mat_inv_sqrt @ d_mat_inv_sqrt.T
+    print("Adjacency Matrix (Sparse):")
+    print(adj.to_dense())  # For debugging, convert sparse to dense
 
-    # Convert back to PyG format
-    edge_index, edge_weight = from_scipy_sparse_matrix(adj_normalized)
-
-    return edge_index, edge_weight
+    # Row-normalize the adjacency matrix to get the transition matrix P
+    row_sum = torch_sparse.sum(adj, dim=1)
+    row_inv = 1.0 / (row_sum + 1e-6)
+    row_inv = row_inv.view(-1, 1)
+    transition_matrix = adj.mul(row_inv)
+    print("\nTransition Matrix (Sparse):")
+    print(transition_matrix.to_dense())  # Convert to dense for debugging
+    
+    return transition_matrix

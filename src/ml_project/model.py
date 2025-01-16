@@ -4,24 +4,19 @@ from torch_geometric.data import Data
 from ml_project.node_embeddings import LinearEncoder
 from ml_project.gnn_layers import GCNConvLayer, GATConvLayer
 from ml_project.gnn_decoders import GNNConvDecoder
-from ml_project.diffusions import preprocess_diffusion
 
 class GCN(nn.Module):
     """GCN model with Encoder-GNN-Decoder structure."""
 
-    def __init__(self, node_feature_dim: int, edge_feature_dim: int, hidden_dim: int, num_gnn_layers: int, diffusion: str = None) -> None:
+    def __init__(self, node_feature_dim: int, edge_feature_dim: int, hidden_dim: int, num_gnn_layers: int) -> None:
         super().__init__()
         self.encoder = LinearEncoder(node_feature_dim, edge_feature_dim, hidden_dim)
         self.gnn = GCNConvLayer(hidden_dim, num_gnn_layers)
         self.decoder = GNNConvDecoder(hidden_dim)
-        self.diffusion = diffusion
 
     def forward(self, data: torch.Tensor) -> torch.Tensor:
         x, edge_index, edge_attr, edge_weight = data.x, data.edge_index, data.edge_attr, data.edge_weight
         
-        if self.diffusion is not None:
-            edge_index, edge_weight = preprocess_diffusion(edge_index, edge_weight, x.size(0))
-
         # Step 1: Encode node and edge features
         x_encoded, edge_encoded = self.encoder(x, edge_attr)
 

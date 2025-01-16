@@ -19,11 +19,6 @@ class TrainModel:
         processed_dir = "data/processed"
         self.processed_data_path = osp.join(processed_dir, cfg.data.dataset_name)
 
-        # Load diffusion configuration
-        self.diffusion = cfg.model.diffusion
-        if self.diffusion != "diffusion":
-            self.diffusion = None
-
         self._set_seed(cfg.train.random_seed)  # Set seed for reproducibility
 
     def _config_wandb(self) -> None:
@@ -103,7 +98,6 @@ class TrainModel:
                 edge_feature_dim=self.edge_feature_dim,
                 hidden_dim=self.cfg.model.hidden_dim,
                 num_gnn_layers=self.cfg.model.num_gnn_layers,
-                diffusion = self.diffusion,
             ).to(self.cfg.train.device)
 
         elif self.cfg.model.layer_type == "GAT":

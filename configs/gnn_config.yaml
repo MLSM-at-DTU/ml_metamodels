@@ -1,13 +1,12 @@
 model:
   layer_type: GCN
   hidden_dim: 64
-  num_gnn_layers: 1
-  diffusion: ff
+  num_gnn_layers: 2
 
 train:
-  lr: 0.03
-  batch_size: 64
-  epochs: 100
+  lr: 0.1
+  batch_size: 32
+  epochs: 150
   weight_decay: 1e-5
   device: cpu
   optimizer: AdamW ## AdamW
@@ -19,8 +18,9 @@ data:
   dataset_name: sioux_falls_simulation_24_zones_OD_2K
   edge_feature_to_weight_index: 1
   edge_feature_identity_matrix: True
+  diffusion: False
 
-scaling: StandardScaler
+scaling:
 
 inference:
   run: False
