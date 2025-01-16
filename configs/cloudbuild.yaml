@@ -8,7 +8,7 @@ steps:
       '-t',
       'europe-west1-docker.pkg.dev/ml-metamodels/ml-metamodels-registry/$_IMAGE_NAME',
       '-f',
-      'dockerfiles/train.dockerfile'
+      'dockerfiles/$_IMAGE_NAME.dockerfile'
     ]
 - name: 'gcr.io/cloud-builders/docker'
   id: 'Push container image'
