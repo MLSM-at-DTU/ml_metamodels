@@ -1,14 +1,14 @@
 model:
-  layer_type: GCN
+  layer_type: DiffusionTestModel
   hidden_dim: 64
   num_gnn_layers: 3
 
 train:
   lr: 0.03
-  batch_size: 32
+  batch_size: 1
   epochs: 1000
   weight_decay: 1e-4
-  device: cpu
+  device: mps
   optimizer: AdamW ## AdamW
   loss_fn: MSELoss ## L1Loss
   random_seed: 42

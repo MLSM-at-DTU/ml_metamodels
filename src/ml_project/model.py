@@ -57,23 +57,17 @@ class GAT(nn.Module):
 class DiffusionTestModel(nn.Module):
     """Simple model for testing purposes."""
 
-    def __init__(self, num_nodes, num_edges, embedding_dim=8):
+    def __init__(self, num_nodes, num_edges):
         super().__init__()
         
         # 1) Graph Convolution Layer (as before)
-        self.gconv = GCNConv(in_channels=num_nodes, out_channels=num_nodes, add_self_loops=True, normalize=True)
+        self.gconv = GCNConv(in_channels=num_nodes, out_channels=num_nodes, add_self_loops=True, normalize=True, bias=True)
         
         # 2) Linear layer to map H1 (N x N) -> (N x E)
-        self.Wq = nn.Linear(num_nodes, num_edges)
+        self.Wq = nn.Linear(num_nodes, num_edges, bias=True)
         
-        # 3) Edge Embeddings
-        #    Instead of a one-hot of size E, we learn an embedding of smaller dimension
-        self.edge_emb = nn.Embedding(num_edges, embedding_dim)
-        
-        # 4) Final layer
-        #    Notice the in_features is now N + embedding_dim, because we will concat
-        #    edge embeddings to H2^T (which has dimension N).
-        self.WF = nn.Linear(num_nodes + embedding_dim, 1, bias=True)
+        # 3) Final layer
+        self.WF = nn.Linear(num_nodes, 1, bias=True)
 
     def forward(self, data):
         # Unpack inputs
@@ -89,23 +83,9 @@ class DiffusionTestModel(nn.Module):
         
         # Step 3: Transpose => [E, N]
         H2_t = H2.transpose(0, 1)  # [E, N]
-        
-        # --- Injection of Edge Embedding ---
-        # a) Get a tensor of edge IDs: 0..E-1
-        E = H2_t.size(0)
-        device = H2_t.device
-        edge_ids = torch.arange(E, device=device, dtype=torch.long)  # [E]
-        
-        # b) Lookup the edge embedding => shape [E, embedding_dim]
-        edge_features = self.edge_emb(edge_ids)
-        
-        # c) Concatenate the edge features to each edge's row
-        #    H2_t: [E, N], edge_features: [E, embedding_dim]
-        #    => cat along dim=1 => [E, N + embedding_dim]
-        H2_t_with_emb = torch.cat([H2_t, edge_features], dim=1)
-        
+                
         # Step 4: Apply final linear layer => shape [E, 1]
-        F_hat = self.WF(H2_t_with_emb)  # => [E, 1]
+        F_hat = self.WF(H2_t)  # => [E, 1]
         F_hat = F_hat.squeeze(-1)       # => [E]
         return F_hat
     
