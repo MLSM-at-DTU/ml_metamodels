@@ -6,7 +6,8 @@ outputs/
 models/
 
 # data
-data/processed/
+data/processed/*
+!data/processed/.gitkeep
 
 # test cache
 manual_test/
