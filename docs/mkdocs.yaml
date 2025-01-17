@@ -1,5 +1,5 @@
-site_name: ml_project
-site_author: Oskar Lassen
+site_name: ml_metamodels
+site_author: Oskar Lassen, Francisco Madaleno
 docs_dir: source
 
 theme:
