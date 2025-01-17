@@ -1,19 +1,23 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   id: 'Build container image'
-  args: [
-    'build',
-    '.',
-    '-t',
-    'europe-west1-docker.pkg.dev/ml_metamodels/ml_metamodels_registry/train',
-    '-f',
-    'dockerfiles/train.dockerfile'
-  ]
+  args:
+    [
+      'build',
+      '.',
+      '-t',
+      'europe-west1-docker.pkg.dev/ml-metamodels/ml-metamodels-registry/$_IMAGE_NAME',
+      '-f',
+      'dockerfiles/$_IMAGE_NAME.dockerfile'
+    ]
 - name: 'gcr.io/cloud-builders/docker'
   id: 'Push container image'
-  args: [
-    'push',
-    'europe-west1-docker.pkg.dev/ml_metamodels/ml_metamodels_registry/train'
-  ]
+  args:
+    [
+      'push',
+      'europe-west1-docker.pkg.dev/ml-metamodels/ml-metamodels-registry/$_IMAGE_NAME:latest'
+    ]
 options:
   logging: CLOUD_LOGGING_ONLY
+substitutions:
+  _IMAGE_NAME: 'train'

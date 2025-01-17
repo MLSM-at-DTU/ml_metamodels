@@ -18,14 +18,14 @@ COPY src/ml_project/ src/ml_project/
 COPY data/ data/
 COPY models/ models/
 COPY reports/figures/ reports/figures/
-# Expects a wandb API key in the .env file
-COPY .env .env
 
 # Set the working directory
 WORKDIR /
 
 # Install the project
-RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
+#RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
+RUN pip install -r requirements.txt
+
 #RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 
