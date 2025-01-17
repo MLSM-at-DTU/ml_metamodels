@@ -1,3 +1,3 @@
 ## Documentation
 
-Documentation for ml_project
+Documentation for ml_metamodels

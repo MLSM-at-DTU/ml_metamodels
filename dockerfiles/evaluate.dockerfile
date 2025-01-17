@@ -8,7 +8,7 @@ RUN apt update && \
 
 COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
-COPY src/ml_project/ src/ml_project/
+COPY src/ml_metamodels/ src/ml_metamodels/
 COPY data/ data/
 COPY models/ models/
 COPY reports/figures/ reports/figures/
@@ -17,4 +17,4 @@ WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "src/ml_project/evaluate.py"]
+ENTRYPOINT ["python", "-u", "src/ml_metamodels/evaluate.py"]
