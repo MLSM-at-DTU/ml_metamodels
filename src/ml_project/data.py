@@ -4,7 +4,6 @@ import pickle
 import torch
 import os
 from sklearn.preprocessing import StandardScaler
-from ml_project.diffusions import calculate_diffusion
 import hydra
 from omegaconf import DictConfig
 import torch_sparse
@@ -21,7 +20,6 @@ class SiouxFalls24Zones(Dataset):
         self.processed_dir = "data/processed"
         self.num_edge_features = 3
         self.num_node_features = 24
-        self.diffusion = self.cfg.data.diffusion
         # See if scaling is required
         self.scaling = self.cfg.scaling
 
@@ -94,7 +92,6 @@ class SiouxFalls24Zones(Dataset):
             with open(osp.join(self.raw_data_path, f"{split}.pickle"), "rb") as f:
                 graphs = pickle.load(f)
 
-            i = 0
             preprocessed_graphs = []
             for graph in graphs:
                 graph.x = graph.x.clone().detach().float()
@@ -105,16 +102,6 @@ class SiouxFalls24Zones(Dataset):
 
                 if self.edge_feature_to_weight is not None:        
                     graph = self.move_edge_feature_to_weight(graph)
-                    if self.diffusion:
-                        if i == 0:
-                            transition_matrix = calculate_diffusion(graph.edge_index, graph.edge_weight)
-                            i += 1
-                            print(graph.x)
-                            print(torch_sparse.matmul(transition_matrix, graph.x))
-                        # Transform graph.x using P_k
-                        node_features = graph.x
-                        diffused_features = torch_sparse.matmul(transition_matrix, node_features)
-                        graph.x = diffused_features
                     
                 if self.edge_feature_identity_matrix:
                     if self.scaling is None:
@@ -122,7 +109,6 @@ class SiouxFalls24Zones(Dataset):
                     else:
                         Warning ("Edge feature identity matrix will be added after scaling.")
                         
-
                 # Append the preprocessed graph
                 preprocessed_graphs.append(graph)
 

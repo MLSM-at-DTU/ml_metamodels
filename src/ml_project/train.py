@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import torch
 from torch_geometric.loader import DataLoader
-from ml_project.model import GCN, GAT
+from ml_project.model import GCN, GAT, DiffusionTestModel
 import datetime
 import hydra
 from omegaconf import DictConfig, OmegaConf
@@ -107,6 +107,11 @@ class TrainModel:
                 hidden_dim=self.cfg.model.hidden_dim,
                 num_gnn_layers=self.cfg.model.num_gnn_layers,
             ).to(self.cfg.train.device)
+
+        elif self.cfg.model.layer_type == "DiffusionTestModel":
+            model = DiffusionTestModel(
+                num_nodes=self.num_nodes, num_edges=self.num_edges
+            ).to(self.cfg.train.device)
         else:
             raise ValueError(f"Model type {self.model.layer_type} not supported. Please choose from ['GCN']")
 
@@ -115,6 +120,39 @@ class TrainModel:
         print("Model architecture: " + str(model))
 
         return model
+
+    def _get_loss_fn(self) -> torch.nn.Module:
+        """Get the loss function for the model."""
+
+        loss_fn = self.cfg.train.loss_fn
+
+        if loss_fn == "L1Loss":
+            loss_fn = torch.nn.L1Loss()
+
+        elif loss_fn == "MSELoss":
+            loss_fn = torch.nn.MSELoss()
+
+        else:
+            raise ValueError(f"Loss function {loss_fn} not supported. Please choose from ['L1Loss', 'MSELoss']")
+
+        return loss_fn
+    
+    def _get_validation_metrics(self, y_pred, y_true):
+        """Get the validation metrics for the model."""
+        
+        # Calculate L1 loss
+        l1_loss = torch.nn.L1Loss()
+        l1_loss_value = l1_loss(y_pred, y_true).item()
+
+        # Calculate MSE
+        mse_loss = torch.nn.MSELoss()
+        mse_loss_value_for_rmse = mse_loss(y_pred, y_true)
+        mse_loss_value = mse_loss_value_for_rmse.item()
+        
+        # Calculate RMSE
+        rmse_loss_value = torch.sqrt(mse_loss_value_for_rmse).item()
+
+        return mse_loss_value, l1_loss_value, rmse_loss_value
 
     def train(self) -> None:
         """Train the GCN model on the Sioux Falls dataset."""
@@ -142,13 +180,15 @@ class TrainModel:
 
         # Get input dimension
         self.node_feature_dim = train_data[0].x.shape[1]
+        self.num_nodes = train_data[0].x.shape[0]
         self.edge_feature_dim = train_data[0].edge_attr.shape[1]
+        self.num_edges = train_data[0].edge_attr.shape[0]
 
         # Initialize model
         model = self.load_model()
 
         # Loss function and optimizer
-        loss_fn = torch.nn.L1Loss()
+        loss_fn = self._get_loss_fn()
         optimizer = torch.optim.AdamW(
             model.parameters(), lr=self.cfg.train.lr, weight_decay=self.cfg.train.weight_decay
         )
@@ -177,15 +217,29 @@ class TrainModel:
             # Validate model
             model.eval()
             val_loss = 0
+            mse_loss = 0
+            l1_loss = 0
+            rmse_loss = 0
             with torch.no_grad():
                 for data in val_loader:
                     data = data.to(self.cfg.train.device)
                     y_pred = model(data)
                     val_loss += loss_fn(y_pred, data.y).item()
+
+                    # Calculate validation metrics
+                    mse, l1, rmse = self._get_validation_metrics(y_pred, data.y)
+                    mse_loss += mse
+                    l1_loss += l1
+                    rmse_loss += rmse
+
                 val_loss /= len(val_loader)
+                mse_loss /= len(val_loader)
+                l1_loss /= len(val_loader)
+                rmse_loss /= len(val_loader)
+
                 statistics["val_loss"].append(val_loss)
-                print(f"Epoch {epoch + 1}/{self.cfg.train.epochs}, Loss: {epoch_loss}, Validation Loss: {val_loss}")
-                wandb.log({"Epoch": epoch, "Train_loss": epoch_loss, "Valildation_loss": val_loss})
+                print(f"Epoch {epoch + 1}/{self.cfg.train.epochs}, Loss: {epoch_loss}, Validation Loss: {val_loss}, MSE loss: {mse_loss}, L1 Loss: {l1_loss}, RMSE Loss: {rmse_loss}")
+                wandb.log({"Epoch": epoch, "Train_loss": epoch_loss, "Valildation_loss": val_loss, "L1_loss": l1_loss, "MSE_loss": mse_loss, "RMSE_loss": rmse_loss})
 
         # Save model
         print("Training complete")
