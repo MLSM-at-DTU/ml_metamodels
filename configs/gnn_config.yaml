@@ -8,7 +8,7 @@ train:
   batch_size: 1
   epochs: 1000
   weight_decay: 1e-4
-  device: mps
+  device: cpu
   optimizer: AdamW ## AdamW
   loss_fn: MSELoss ## L1Loss
   random_seed: 42
