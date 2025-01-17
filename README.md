@@ -70,7 +70,17 @@ To run training for example, start with:
 ```bash
 pip install -r requirements.txt
 pip install -e .
-python src/project_name/train.py
+python src/ml_metamodels/train.py
+```
+
+Additionally, since the CLI is setup, you can run the following command to see the available options:
+```bash
+invoke --list
+```
+
+And since pyproject.toml is setup with scripts, you can ommit the invoke for some of the tasks, example:
+```bash
+train
 ```
 
 To save new dependencies, use the following command:

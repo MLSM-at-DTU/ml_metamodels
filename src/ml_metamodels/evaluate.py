@@ -2,12 +2,15 @@ import torch
 import typer
 from torch_geometric.loader import DataLoader
 from data import SiouxFalls_24_zones
-from ml_project.model import GCN
+from ml_metamodels.model import GCN
+
+app = typer.Typer()
 
 # DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 DEVICE = torch.device("cpu")
 
 
+@app.command()
 def evaluate(model_checkpoint: str, batch_size: int = 32) -> None:
     """Evaluate a trained GCN model."""
     print("Evaluating GCN model")
@@ -39,4 +42,4 @@ def evaluate(model_checkpoint: str, batch_size: int = 32) -> None:
 
 
 if __name__ == "__main__":
-    typer.run(evaluate)
+    app()
