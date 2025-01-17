@@ -4,8 +4,11 @@ import pickle
 import torch
 import os
 from sklearn.preprocessing import StandardScaler
-import hydra
+from hydra import initialize, compose
 from omegaconf import DictConfig
+import typer
+
+app = typer.Typer()
 
 
 class SiouxFalls24Zones(Dataset):
@@ -131,8 +134,11 @@ class SiouxFalls24Zones(Dataset):
             pickle.dump({"node_scaler": node_scaler, "edge_scaler": edge_scaler}, f)
 
 
-@hydra.main(config_path="../../configs", config_name="gnn_config", version_base=None)
-def main(cfg: DictConfig) -> None:
+@app.command()
+def main() -> None:
+    with initialize(config_path="../../configs"):
+        # hydra.main() decorator was not used since it was conflicting with typer decorator
+        cfg = compose(config_name="gnn_config.yaml")
     data_class = cfg.data.data_class
 
     if data_class == "SiouxFalls24Zones":
@@ -145,4 +151,4 @@ def main(cfg: DictConfig) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    app()

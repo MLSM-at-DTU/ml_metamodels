@@ -14,7 +14,7 @@ COPY requirements_dev.txt requirements_dev.txt
 
 # Copy project files
 COPY configs/ configs/
-COPY src/ml_project/ src/ml_project/
+COPY src/ml_metamodels/ src/ml_metamodels/
 COPY data/ data/
 COPY models/ models/
 COPY reports/figures/ reports/figures/
@@ -29,4 +29,4 @@ RUN pip install -r requirements.txt
 #RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "src/ml_project/train.py"]
+ENTRYPOINT ["python", "-u", "src/ml_metamodels/train.py"]
