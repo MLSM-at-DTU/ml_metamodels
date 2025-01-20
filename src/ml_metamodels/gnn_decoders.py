@@ -9,7 +9,9 @@ class GNNConvDecoder(nn.Module):
         super().__init__()
         self.edge_predictor = nn.Linear(hidden_dim * 3, 1)
 
-    def forward(self, x_embeddings: torch.Tensor, edge_embeddings: torch.Tensor, edge_index: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self, x_embeddings: torch.Tensor, edge_embeddings: torch.Tensor, edge_index: torch.Tensor
+    ) -> torch.Tensor:
         row, col = edge_index
 
         # Embedded node features for edge endpoints
