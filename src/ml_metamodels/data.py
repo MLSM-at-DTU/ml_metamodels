@@ -7,6 +7,7 @@ from sklearn.preprocessing import StandardScaler
 import hydra
 from omegaconf import DictConfig
 
+
 class SiouxFalls24Zones(Dataset):
     """My custom dataset."""
 
@@ -56,7 +57,6 @@ class SiouxFalls24Zones(Dataset):
 
         # Remove the selected column from edge_attr
         if graph.edge_attr.shape[1] > 1:  # Only remove if more than one feature exists
-
             graph.edge_attr = torch.cat(
                 [
                     graph.edge_attr[:, : self.edge_feature_to_weight],
@@ -163,7 +163,6 @@ class SiouxFalls24Zones(Dataset):
             for graph in graphs:
                 # Normalize using fitted scalers
                 graph.x = torch.tensor(
-
                     self.node_scaler.transform(graph.x.flatten().reshape(-1, 1)).reshape(graph.x.shape),
                     dtype=torch.float32,
                 )
@@ -184,6 +183,7 @@ class SiouxFalls24Zones(Dataset):
                 self.val_graphs = normalized_graphs
             elif split == "test":
                 self.test_graphs = normalized_graphs
+
 
 @hydra.main(config_path="../../configs", config_name="gnn_config", version_base=None)
 def main(cfg: DictConfig) -> None:

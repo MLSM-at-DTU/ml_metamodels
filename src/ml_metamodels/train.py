@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 
 app = typer.Typer()
 
+
 class TrainModel:
     def __init__(self, cfg: DictConfig) -> None:
         self.cfg = cfg
@@ -111,9 +112,7 @@ class TrainModel:
             ).to(self.cfg.train.device)
 
         elif self.cfg.model.layer_type == "DiffusionTestModel":
-            model = DiffusionTestModel(
-                num_nodes=self.num_nodes, num_edges=self.num_edges
-            ).to(self.cfg.train.device)
+            model = DiffusionTestModel(num_nodes=self.num_nodes, num_edges=self.num_edges).to(self.cfg.train.device)
         else:
             raise ValueError(f"Model type {self.model.layer_type} not supported. Please choose from ['GCN']")
 
@@ -137,7 +136,7 @@ class TrainModel:
             raise ValueError(f"Loss function {loss_fn} not supported. Please choose from ['L1Loss', 'MSELoss']")
 
         return loss_fn
-    
+
     def _get_validation_metrics(self, y_pred, y_true):
         """Get the validation metrics for the model."""
 

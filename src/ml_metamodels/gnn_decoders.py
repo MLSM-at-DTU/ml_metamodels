@@ -1,6 +1,6 @@
-
 import torch
 from torch import nn
+
 
 class GNNConvDecoder(nn.Module):
     """Decodes node embeddings and edge features for predictions."""

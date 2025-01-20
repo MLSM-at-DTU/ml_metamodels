@@ -1,10 +1,9 @@
-import matplotlib.pyplot as plt
 import torch
 from torch_geometric.loader import DataLoader
 from ml_metamodels.model import GCN, GAT, DiffusionTestModel
 import datetime
 from hydra import initialize, compose
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import OmegaConf
 import os.path as osp
 import os
 import numpy as np
@@ -14,6 +13,7 @@ import typer
 from dotenv import load_dotenv
 
 app = typer.Typer()
+
 
 class TrainModelSweep:
     def __init__(self, cfg) -> None:
@@ -41,7 +41,7 @@ class TrainModelSweep:
         """
         # Convert Hydra config to a dictionary
         cfg_dict = OmegaConf.to_container(self.cfg, resolve=True)
-        
+
         # Recursively update the config using flat keys from wandb.config
         def update_cfg_with_wandb(node, prefix=""):
             if isinstance(node, dict):
@@ -56,7 +56,7 @@ class TrainModelSweep:
 
         # Update the config dictionary
         updated_cfg_dict = update_cfg_with_wandb(cfg_dict)
-        
+
         # Convert back to OmegaConf for further use
         self.cfg = OmegaConf.create(updated_cfg_dict)
 
@@ -132,12 +132,9 @@ class TrainModelSweep:
             ).to(self.cfg.train.device)
 
         elif self.cfg.model.layer_type == "DiffusionTestModel":
-            model = DiffusionTestModel(
-                num_nodes=self.num_nodes, num_edges=self.num_edges
-            ).to(self.cfg.train.device)
+            model = DiffusionTestModel(num_nodes=self.num_nodes, num_edges=self.num_edges).to(self.cfg.train.device)
         else:
             raise ValueError(f"Model type {self.model.layer_type} not supported. Please choose from ['GCN']")
-
 
         # Log model to wandb
         print("Model architecture: " + str(model))
@@ -159,10 +156,10 @@ class TrainModelSweep:
             raise ValueError(f"Loss function {loss_fn} not supported. Please choose from ['L1Loss', 'MSELoss']")
 
         return loss_fn
-    
+
     def _get_validation_metrics(self, y_pred, y_true):
         """Get the validation metrics for the model."""
-        
+
         # Calculate L1 loss
         l1_loss = torch.nn.L1Loss()
         l1_loss_value = l1_loss(y_pred, y_true).item()
@@ -171,7 +168,7 @@ class TrainModelSweep:
         mse_loss = torch.nn.MSELoss()
         mse_loss_value_for_rmse = mse_loss(y_pred, y_true)
         mse_loss_value = mse_loss_value_for_rmse.item()
-        
+
         # Calculate RMSE
         rmse_loss_value = torch.sqrt(mse_loss_value_for_rmse).item()
 
@@ -264,8 +261,19 @@ class TrainModelSweep:
                 rmse_loss /= len(val_loader)
 
                 statistics["val_loss"].append(val_loss)
-                print(f"Epoch {epoch + 1}/{self.cfg.train.epochs}, Loss: {epoch_loss}, Validation Loss: {val_loss}, MSE loss: {mse_loss}, L1 Loss: {l1_loss}, RMSE Loss: {rmse_loss}")
-                wandb.log({"Epoch": epoch, "Train_loss": epoch_loss, "Validation_loss": val_loss, "L1_loss": l1_loss, "MSE_loss": mse_loss, "RMSE_loss": rmse_loss})
+                print(
+                    f"Epoch {epoch + 1}/{self.cfg.train.epochs}, Loss: {epoch_loss}, Validation Loss: {val_loss}, MSE loss: {mse_loss}, L1 Loss: {l1_loss}, RMSE Loss: {rmse_loss}"
+                )
+                wandb.log(
+                    {
+                        "Epoch": epoch,
+                        "Train_loss": epoch_loss,
+                        "Validation_loss": val_loss,
+                        "L1_loss": l1_loss,
+                        "MSE_loss": mse_loss,
+                        "RMSE_loss": rmse_loss,
+                    }
+                )
 
         # Save model
         print("Training complete")
@@ -285,10 +293,12 @@ class TrainModelSweep:
         self.wandb_run.log_artifact(artifact)
 
 
-
 from typing import Dict, Any
 
-def generate_sweep_configuration(cfg: Dict[str, Any], sweep_name: str = "sweep", metric_name: str = "L1_loss", goal: str = "minimize") -> Dict[str, Any]:
+
+def generate_sweep_configuration(
+    cfg: Dict[str, Any], sweep_name: str = "sweep", metric_name: str = "L1_loss", goal: str = "minimize"
+) -> Dict[str, Any]:
     """
     Generates a sweep configuration for Weights & Biases based on list-type entries in the Hydra config.
 
@@ -302,7 +312,7 @@ def generate_sweep_configuration(cfg: Dict[str, Any], sweep_name: str = "sweep",
         Dict[str, Any]: A dictionary defining the sweep configuration.
     """
     sweep_parameters = {}
-    
+
     # Recursively find list-type entries in the config
     def find_list_entries(node, prefix=""):
         if isinstance(node, dict):
@@ -312,10 +322,10 @@ def generate_sweep_configuration(cfg: Dict[str, Any], sweep_name: str = "sweep",
         elif isinstance(node, list):
             # Add the list as a sweep parameter
             sweep_parameters[prefix] = {"values": node}
-    
+
     # Start processing the configuration
     find_list_entries(OmegaConf.to_container(cfg, resolve=True))
-    
+
     # Create the sweep configuration
     sweep_configuration = {
         "method": "random",
@@ -323,17 +333,18 @@ def generate_sweep_configuration(cfg: Dict[str, Any], sweep_name: str = "sweep",
         "metric": {"goal": goal, "name": metric_name},
         "parameters": sweep_parameters,
     }
-    
+
     return sweep_configuration
 
 
 def main() -> None:
     with initialize(config_path="../../configs"):
-    # hydra.main() decorator was not used since it was conflicting with typer decorator
+        # hydra.main() decorator was not used since it was conflicting with typer decorator
         cfg = compose(config_name="gnn_config_sweep.yaml")
     # Train the model
     trainer = TrainModelSweep(cfg)
     trainer.train()
+
 
 @app.command()
 def sweep() -> None:
@@ -343,13 +354,13 @@ def sweep() -> None:
 
     # Generate the sweep configuration dynamically
     sweep_cfg = generate_sweep_configuration(cfg, sweep_name="gnn_sweep", metric_name="L1_loss", goal="minimize")
-    
+
     # Initialize W&B sweep
     sweep_id = wandb.sweep(sweep=sweep_cfg, project=cfg["wandb"]["project_name"])
-    
+
     # Start the sweep
     wandb.agent(sweep_id, function=main)
 
-if __name__ == "__main__":   
-    sweep()
 
+if __name__ == "__main__":
+    sweep()
