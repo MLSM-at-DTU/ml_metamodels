@@ -1,7 +1,7 @@
 import pytest
 import torch
 from ml_metamodels.node_embeddings import LinearEncoder
-from ml_metamodels.gnn_layers import GCNConvLayer, GATConvLayer
+from ml_metamodels.gnn_layers import GCNConvLayer
 from ml_metamodels.gnn_decoders import GNNConvDecoder
 from ml_metamodels.model import GCN
 import torch_geometric.data
