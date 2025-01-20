@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 
+
 class LinearEncoder(nn.Module):
     """Encodes node features and edge features."""
 
