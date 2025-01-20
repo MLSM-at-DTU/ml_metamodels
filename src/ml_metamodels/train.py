@@ -15,6 +15,7 @@ import typer
 
 app = typer.Typer()
 
+
 class TrainModel:
     def __init__(self, cfg: DictConfig) -> None:
         self.cfg = cfg
