@@ -6,8 +6,6 @@ import os
 from sklearn.preprocessing import StandardScaler
 import hydra
 from omegaconf import DictConfig
-import torch_sparse
-
 
 class SiouxFalls24Zones(Dataset):
     """My custom dataset."""
@@ -48,7 +46,7 @@ class SiouxFalls24Zones(Dataset):
             graph.edge_attr = one_hot_edges
 
         return graph
-    
+
     def move_edge_feature_to_weight(self, graph):
         # Ensure the index is valid
         assert 0 <= self.edge_feature_to_weight < graph.edge_attr.shape[1], "Invalid edge feature index"
@@ -58,8 +56,14 @@ class SiouxFalls24Zones(Dataset):
 
         # Remove the selected column from edge_attr
         if graph.edge_attr.shape[1] > 1:  # Only remove if more than one feature exists
-            graph.edge_attr = torch.cat([graph.edge_attr[:, :self.edge_feature_to_weight], 
-                                        graph.edge_attr[:, (self.edge_feature_to_weight+1):]], dim=1)
+
+            graph.edge_attr = torch.cat(
+                [
+                    graph.edge_attr[:, : self.edge_feature_to_weight],
+                    graph.edge_attr[:, (self.edge_feature_to_weight + 1) :],
+                ],
+                dim=1,
+            )
         else:
             graph.edge_attr = None  # If only one feature, set edge_attr to None
 
@@ -67,7 +71,7 @@ class SiouxFalls24Zones(Dataset):
         assert torch.any(graph.edge_weight != 0), "Edge weight cannot be all zeros"
 
         return graph
-    
+
     def save_data_and_scalers(self):
         torch.save(self.train_graphs, osp.join(self.processed_data_path, "train.pt"))
         torch.save(self.val_graphs, osp.join(self.processed_data_path, "val.pt"))
@@ -100,15 +104,14 @@ class SiouxFalls24Zones(Dataset):
                 graph.y = graph.y.clone().detach().float()
                 graph.edge_weight = graph.edge_weight.clone().detach().float()
 
-                if self.edge_feature_to_weight is not None:        
+                if self.edge_feature_to_weight is not None:
                     graph = self.move_edge_feature_to_weight(graph)
-                    
+
                 if self.edge_feature_identity_matrix:
                     if self.scaling is None:
                         graph = self.add_identity_edge_features(graph)
                     else:
-                        Warning ("Edge feature identity matrix will be added after scaling.")
-                        
+                        Warning("Edge feature identity matrix will be added after scaling.")
                 # Append the preprocessed graph
                 preprocessed_graphs.append(graph)
 
@@ -125,7 +128,6 @@ class SiouxFalls24Zones(Dataset):
             if self.edge_feature_to_weight:
                 self.num_edge_features -= 1
             self._preprocess_with_scaling()
-
 
     def _preprocess_with_scaling(self) -> None:
         scaling_type = self.cfg.scaling
@@ -161,17 +163,19 @@ class SiouxFalls24Zones(Dataset):
             for graph in graphs:
                 # Normalize using fitted scalers
                 graph.x = torch.tensor(
-                    self.node_scaler.transform(graph.x.flatten().reshape(-1, 1)).reshape(graph.x.shape), dtype=torch.float32
+
+                    self.node_scaler.transform(graph.x.flatten().reshape(-1, 1)).reshape(graph.x.shape),
+                    dtype=torch.float32,
                 )
-                
+
                 graph.edge_attr = torch.tensor(
                     self.edge_scaler.transform(graph.edge_attr.view(-1, self.num_edge_features)), dtype=torch.float32
-                    )
-                
+                )
+
                 # Add identity matrix to edge features
                 if self.edge_feature_identity_matrix:
                     graph = self.add_identity_edge_features(graph)
-                
+
                 normalized_graphs.append(graph)
 
             if split == "train":
@@ -180,7 +184,6 @@ class SiouxFalls24Zones(Dataset):
                 self.val_graphs = normalized_graphs
             elif split == "test":
                 self.test_graphs = normalized_graphs
-            
 
 @hydra.main(config_path="../../configs", config_name="gnn_config", version_base=None)
 def main(cfg: DictConfig) -> None:

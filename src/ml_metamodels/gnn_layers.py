@@ -1,7 +1,7 @@
-
 import torch
 from torch import nn
 from torch_geometric.nn import GCNConv, GATv2Conv
+
 
 class GATConvLayer(nn.Module):
     """GNN layer for learning node embeddings."""
@@ -29,5 +29,8 @@ class GCNConvLayer(nn.Module):
     def forward(self, x, edge_index, edge_weight=None):
         for conv in self.convs:
             x_res = x
-            x = torch.relu(conv(x, edge_index, edge_weight = edge_weight) + self.residual(x_res))  # Update node embeddings
+
+            x = torch.relu(
+                conv(x, edge_index, edge_weight=edge_weight) + self.residual(x_res)
+            )  # Update node embeddings
         return x

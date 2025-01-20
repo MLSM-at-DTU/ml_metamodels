@@ -117,7 +117,6 @@ class TrainModel:
         else:
             raise ValueError(f"Model type {self.model.layer_type} not supported. Please choose from ['GCN']")
 
-
         # Log model to wandb
         print("Model architecture: " + str(model))
 
@@ -141,7 +140,7 @@ class TrainModel:
     
     def _get_validation_metrics(self, y_pred, y_true):
         """Get the validation metrics for the model."""
-        
+
         # Calculate L1 loss
         l1_loss = torch.nn.L1Loss()
         l1_loss_value = l1_loss(y_pred, y_true).item()
@@ -150,7 +149,7 @@ class TrainModel:
         mse_loss = torch.nn.MSELoss()
         mse_loss_value_for_rmse = mse_loss(y_pred, y_true)
         mse_loss_value = mse_loss_value_for_rmse.item()
-        
+
         # Calculate RMSE
         rmse_loss_value = torch.sqrt(mse_loss_value_for_rmse).item()
 
@@ -240,8 +239,20 @@ class TrainModel:
                 rmse_loss /= len(val_loader)
 
                 statistics["val_loss"].append(val_loss)
-                print(f"Epoch {epoch + 1}/{self.cfg.train.epochs}, Loss: {epoch_loss}, Validation Loss: {val_loss}, MSE loss: {mse_loss}, L1 Loss: {l1_loss}, RMSE Loss: {rmse_loss}")
-                wandb.log({"Epoch": epoch, "Train_loss": epoch_loss, "Valildation_loss": val_loss, "L1_loss": l1_loss, "MSE_loss": mse_loss, "RMSE_loss": rmse_loss})
+
+                print(
+                    f"Epoch {epoch + 1}/{self.cfg.train.epochs}, Loss: {epoch_loss}, Validation Loss: {val_loss}, MSE loss: {mse_loss}, L1 Loss: {l1_loss}, RMSE Loss: {rmse_loss}"
+                )
+                wandb.log(
+                    {
+                        "Epoch": epoch,
+                        "Train_loss": epoch_loss,
+                        "Valildation_loss": val_loss,
+                        "L1_loss": l1_loss,
+                        "MSE_loss": mse_loss,
+                        "RMSE_loss": rmse_loss,
+                    }
+                )
 
         # Save model
         print("Training complete")
