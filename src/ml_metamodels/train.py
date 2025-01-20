@@ -1,17 +1,19 @@
 import matplotlib.pyplot as plt
 import torch
 from torch_geometric.loader import DataLoader
-from ml_project.model import GCN, GAT, DiffusionTestModel
+from ml_metamodels.model import GCN, GAT, DiffusionTestModel
 import datetime
-import hydra
+from hydra import initialize, compose
 from omegaconf import DictConfig, OmegaConf
 import os.path as osp
 import os
 import numpy as np
 import random
 import wandb
+import typer
 from dotenv import load_dotenv
 
+app = typer.Typer()
 
 class TrainModel:
     def __init__(self, cfg: DictConfig) -> None:
@@ -271,12 +273,15 @@ class TrainModel:
         plt.savefig(graph_dir)
 
 
-@hydra.main(config_path="../../configs", config_name="gnn_config", version_base=None)
-def main(cfg: DictConfig) -> None:
+@app.command()
+def main() -> None:
+    with initialize(config_path="../../configs"):
+        # hydra.main() decorator was not used since it was conflicting with typer decorator
+        cfg = compose(config_name="gnn_config.yaml")
     # Train the model
     trainer = TrainModel(cfg)
     trainer.train()
 
 
 if __name__ == "__main__":
-    main()
+    app()

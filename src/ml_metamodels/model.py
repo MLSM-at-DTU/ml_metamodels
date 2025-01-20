@@ -1,9 +1,9 @@
 import torch
 from torch import nn
 from torch_geometric.data import Data
-from ml_project.node_embeddings import LinearEncoder
-from ml_project.gnn_layers import GCNConvLayer, GATConvLayer
-from ml_project.gnn_decoders import GNNConvDecoder
+from ml_metamodels.node_embeddings import LinearEncoder
+from ml_metamodels.gnn_layers import GCNConvLayer, GATConvLayer
+from ml_metamodels.gnn_decoders import GNNConvDecoder
 
 
 from torch_geometric.nn import GCNConv
