@@ -1,7 +1,7 @@
 import pytest
 import os
 from omegaconf import OmegaConf
-from src.ml_project.train import TrainModel
+from src.ml_metamodels.train import TrainModel
 
 
 @pytest.fixture
