@@ -1,6 +1,9 @@
 import pytest
 import torch
-from ml_metamodels.model import LinearEncoder, GCNConvLayer, GCNConvDecoder, GCN
+from ml_metamodels.node_embeddings import LinearEncoder
+from ml_metamodels.gnn_layers import GCNConvLayer, GATConvLayer
+from ml_metamodels.gnn_decoders import GNNConvDecoder
+from ml_metamodels.model import GCN
 import torch_geometric.data
 
 
@@ -52,7 +55,7 @@ class TestGCN:
         self, num_edges, num_edge_features, num_nodes, node_feature_dim, hidden_dim, batch_size, num_gnn_layers
     ):
         # Instantiate GCNConvDecoder
-        gcn_decoder = GCNConvDecoder(hidden_dim=hidden_dim)
+        gcn_decoder = GNNConvDecoder(hidden_dim=hidden_dim)
 
         # Mock input data
         x_embeddings = torch.rand(num_nodes * batch_size, hidden_dim)  # Node embeddings
