@@ -37,7 +37,7 @@ class TrainModelSweep:
 
     def _load_sweep_parameters(self):
         """
-        Dynamically replace list values in the Hydra config with those from wandb.config.
+        Dynamically replace list values in the Hydra config with those from wandb.config for sweep.
         """
         # Convert Hydra config to a dictionary
         cfg_dict = OmegaConf.to_container(self.cfg, resolve=True)
