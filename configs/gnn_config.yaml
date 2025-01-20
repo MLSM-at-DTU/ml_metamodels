@@ -15,7 +15,9 @@ train:
 
 data:
   data_class: SiouxFalls24Zones
-  dataset_name: sioux_falls_simulation_24_zones_OD_2K
+  dataset_name: sioux_falls_simulation_24_zones_OD_10K
+  edge_feature_to_weight_index: 1
+  edge_feature_identity_matrix: True
 
 scaling: StandardScaler
 

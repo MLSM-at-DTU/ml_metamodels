@@ -4,6 +4,9 @@ docs/site/
 wandb/
 outputs/
 
+# Ignore data
+data/
+
 # test cache
 manual_test/
 
