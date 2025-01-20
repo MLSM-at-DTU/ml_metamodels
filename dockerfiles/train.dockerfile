@@ -29,4 +29,4 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 #RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install . --no-deps --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "src/ml_project/train.py"]
+ENTRYPOINT ["python", "-u", "train"]

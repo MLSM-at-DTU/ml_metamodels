@@ -4,8 +4,6 @@ from torch_geometric.data import Data
 from ml_metamodels.node_embeddings import LinearEncoder
 from ml_metamodels.gnn_layers import GCNConvLayer, GATConvLayer
 from ml_metamodels.gnn_decoders import GNNConvDecoder
-
-
 from torch_geometric.nn import GCNConv
 
 
