@@ -29,6 +29,7 @@ class GCNConvLayer(nn.Module):
     def forward(self, x, edge_index, edge_weight=None):
         for conv in self.convs:
             x_res = x
+
             x = torch.relu(
                 conv(x, edge_index, edge_weight=edge_weight) + self.residual(x_res)
             )  # Update node embeddings

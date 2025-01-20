@@ -112,7 +112,6 @@ class SiouxFalls24Zones(Dataset):
                         graph = self.add_identity_edge_features(graph)
                     else:
                         Warning("Edge feature identity matrix will be added after scaling.")
-
                 # Append the preprocessed graph
                 preprocessed_graphs.append(graph)
 
