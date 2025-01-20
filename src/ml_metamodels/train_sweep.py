@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 
 app = typer.Typer()
 
+
 class TrainModelSweep:
     def __init__(self, cfg) -> None:
         self.cfg = cfg
@@ -335,6 +336,7 @@ def generate_sweep_configuration(
 
     return sweep_configuration
 
+
 def main() -> None:
     with initialize(config_path="../../configs"):
         # hydra.main() decorator was not used since it was conflicting with typer decorator
@@ -342,6 +344,7 @@ def main() -> None:
     # Train the model
     trainer = TrainModelSweep(cfg)
     trainer.train()
+
 
 @app.command()
 def sweep() -> None:
@@ -357,6 +360,7 @@ def sweep() -> None:
 
     # Start the sweep
     wandb.agent(sweep_id, function=main)
+
 
 if __name__ == "__main__":
     sweep()

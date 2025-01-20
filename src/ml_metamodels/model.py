@@ -92,6 +92,7 @@ class DiffusionTestModel(nn.Module):
         F_hat = F_hat.squeeze(-1)  # => [E]
         return F_hat
 
+
 if __name__ == "__main__":
     model = GCN(input_dim=24, hidden_dim=64)
     print(f"Model architecture: {model}")
