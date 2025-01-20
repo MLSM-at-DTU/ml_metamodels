@@ -12,8 +12,6 @@ app = typer.Typer()
 
 
 class SiouxFalls24Zones(Dataset):
-    """My custom dataset."""
-
     def __init__(self, cfg: DictConfig) -> None:
         # Load the configuration
         self.cfg = cfg
