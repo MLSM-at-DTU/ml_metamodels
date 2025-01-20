@@ -294,21 +294,8 @@ class TrainModelSweep:
         self.wandb_run.log_artifact(artifact)
 
 
-def generate_sweep_configuration(
-    cfg: Dict[str, Any], sweep_name: str = "sweep", metric_name: str = "L1_loss", goal: str = "minimize"
-) -> Dict[str, Any]:
-    """
-    Generates a sweep configuration for Weights & Biases based on list-type entries in the Hydra config.
+def generate_sweep_configuration(cfg: Dict[str, Any], sweep_name: str = "sweep", metric_name: str = "L1_loss", goal: str = "minimize") -> Dict[str, Any]:
 
-    Args:
-        cfg (Dict[str, Any]): The Hydra configuration dictionary.
-        sweep_name (str): Name of the sweep.
-        metric_name (str): Name of the metric to optimize.
-        goal (str): Optimization goal, either "minimize" or "maximize".
-
-    Returns:
-        Dict[str, Any]: A dictionary defining the sweep configuration.
-    """
     sweep_parameters = {}
 
     # Recursively find list-type entries in the config

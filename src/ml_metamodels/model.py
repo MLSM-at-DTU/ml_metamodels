@@ -8,7 +8,6 @@ from torch_geometric.nn import GCNConv
 
 
 class GCN(nn.Module):
-    """GCN model with Encoder-GNN-Decoder structure."""
 
     def __init__(self, node_feature_dim: int, edge_feature_dim: int, hidden_dim: int, num_gnn_layers: int) -> None:
         super().__init__()
@@ -58,10 +57,10 @@ class GAT(nn.Module):
 class DiffusionTestModel(nn.Module):
     """Simple model for testing purposes."""
 
-    def __init__(self, num_nodes, num_edges):
+    def __init__(self, num_nodes: int, num_edges: int) -> None:
         super().__init__()
 
-        # 1) Graph Convolution Layer (as before)
+        # 1) Graph Convolution Layer
         self.gconv = GCNConv(
             in_channels=num_nodes, out_channels=num_nodes, add_self_loops=True, normalize=True, bias=True
         )
@@ -72,7 +71,7 @@ class DiffusionTestModel(nn.Module):
         # 3) Final layer
         self.WF = nn.Linear(num_nodes, 1, bias=True)
 
-    def forward(self, data):
+    def forward(self, data: torch.Tensor) -> torch.Tensor:
         # Unpack inputs
         x, edge_index, edge_weight = data.x, data.edge_index, data.edge_weight
 

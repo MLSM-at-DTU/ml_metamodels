@@ -11,7 +11,7 @@ class LinearEncoder(nn.Module):
         self.node_encoder = nn.Linear(node_feature_dim, hidden_dim)
         self.edge_encoder = nn.Linear(edge_feature_dim, hidden_dim)
 
-    def forward(self, x, edge_attr):
+    def forward(self, x: torch.Tensor, edge_attr: torch.Tensor) -> torch.Tensor:
         # Encoded nodes
         encoded_nodes = torch.relu(self.node_encoder(x))
 

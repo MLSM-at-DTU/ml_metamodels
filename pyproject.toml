@@ -35,5 +35,6 @@ omit = ["tests/*", "*/_remote_module_non_scriptable.py"]
 [project.scripts]
 preprocess_data = "ml_metamodels.data:app"
 train = "ml_metamodels.train:app"
+train_sweep = "ml_metamodels.train:app"
 evaluate = "ml_metamodels.evaluate:app"
 visualize = "ml_metamodels.visualize:app"
