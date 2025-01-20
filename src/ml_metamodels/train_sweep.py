@@ -293,6 +293,7 @@ class TrainModelSweep:
         artifact.add_file(model_dir)
         self.wandb_run.log_artifact(artifact)
 
+
 def generate_sweep_configuration(
     cfg: Dict[str, Any], sweep_name: str = "sweep", metric_name: str = "L1_loss", goal: str = "minimize"
 ) -> Dict[str, Any]:
