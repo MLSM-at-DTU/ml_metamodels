@@ -1,13 +1,25 @@
 model:
-  layer_type: DiffusionTestModel
-  hidden_dim: [16,32,64]
-  num_gnn_layers: [1,2,3,4,5,6]
+  layer_type:
+    - GCN
+    - GAT
+  hidden_dim: 
+    - 32
+    - 64
+  num_gnn_layers:
+    - 1
+    - 2
+    - 3
 
 train:
-  lr: [0.01,0.03,0.05,0.07,0.09]
-  batch_size: [1,16,32,64,128]
-  epochs: 200
-  weight_decay: [0.001,0.0001,0.00001]
+  lr:
+    - 0.001
+    - 0.01
+    - 0.1
+  batch_size:
+    - 32
+    - 64
+  epochs: 5
+  weight_decay: 0.0001
   loss_fn: MSELoss ## L1Loss
   optimizer: AdamW ## AdamW
   device: cpu
@@ -27,3 +39,4 @@ inference:
 
 wandb:
   project_name: "gnn-siouxfalls"
+  sweep: True
