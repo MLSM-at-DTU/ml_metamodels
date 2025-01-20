@@ -10,6 +10,7 @@ import numpy as np
 import random
 import wandb
 import typer
+from typing import Dict, Any
 from dotenv import load_dotenv
 
 app = typer.Typer()
@@ -291,10 +292,6 @@ class TrainModelSweep:
         )
         artifact.add_file(model_dir)
         self.wandb_run.log_artifact(artifact)
-
-
-from typing import Dict, Any
-
 
 def generate_sweep_configuration(
     cfg: Dict[str, Any], sweep_name: str = "sweep", metric_name: str = "L1_loss", goal: str = "minimize"
