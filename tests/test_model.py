@@ -1,6 +1,6 @@
 import pytest
 import torch
-from src.ml_project.model import LinearEncoder, GCNConvLayer, GCNConvDecoder, GCN
+from ml_metamodels.model import LinearEncoder, GCNConvLayer, GCNConvDecoder, GCN
 import torch_geometric.data
 
 

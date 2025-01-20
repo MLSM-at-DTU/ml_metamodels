@@ -3,11 +3,12 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ml_project"
+name = "ml_metamodels"
 version = "0.0.1"
 description = "The final hand-in for the exam in ml-ops."
 authors = [
   { name = "Oskar Lassen", email = "your@email.com" },
+  { name = "Francisco Madaleno", email = "your@email.com" },
 ]
 
 keywords = ["machine learning", "MLOps"]
@@ -29,4 +30,10 @@ dev = {file = ['requirements_dev.txt']}
 line-length = 120
 
 [tool.coverage.run]
-omit = ["tests/*", "*/_remote_module_non_scriptable.py"]
+omit = ["tests/*", "*/_remote_module_non_scriptable.py", "*/_remote_module_non_scriptable.py"]
+
+[project.scripts]
+preprocess_data = "ml_metamodels.data:app"
+train = "ml_metamodels.train:app"
+evaluate = "ml_metamodels.evaluate:app"
+visualize = "ml_metamodels.visualize:app"

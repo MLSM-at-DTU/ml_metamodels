@@ -3,7 +3,7 @@ import os
 from invoke import Context, task
 
 WINDOWS = os.name == "nt"
-PROJECT_NAME = "ml_project"
+PROJECT_NAME = "ml_metamodels"
 PYTHON_VERSION = "3.11"
 
 
@@ -16,6 +16,14 @@ def create_environment(ctx: Context) -> None:
         echo=True,
         pty=not WINDOWS,
     )
+
+
+@task
+def conda(ctx: Context, name: str = "dtu_mlops"):
+    """Create a new conda environment, activates it and installs module."""
+    ctx.run("conda env create -f environment.yml", echo=True)
+    ctx.run(f"conda activate {name}", echo=True)
+    ctx.run("pip install -e .", echo=True)
 
 
 @task
@@ -43,6 +51,18 @@ def preprocess_data(ctx: Context) -> None:
 def train(ctx: Context) -> None:
     """Train model."""
     ctx.run(f"python src/{PROJECT_NAME}/train.py", echo=True, pty=not WINDOWS)
+
+
+@task
+def evaluate(ctx: Context) -> None:
+    """Evaluate model."""
+    ctx.run(f"python src/{PROJECT_NAME}/evaluate.py", echo=True, pty=not WINDOWS)
+
+
+@task
+def visualize(ctx: Context) -> None:
+    """Visualize model."""
+    ctx.run(f"python src/{PROJECT_NAME}/visualize.py", echo=True, pty=not WINDOWS)
 
 
 @task
