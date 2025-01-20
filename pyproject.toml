@@ -30,7 +30,7 @@ dev = {file = ['requirements_dev.txt']}
 line-length = 120
 
 [tool.coverage.run]
-omit = ["tests/*", "*/_remote_module_non_scriptable.py"]
+omit = ["tests/*", "*/_remote_module_non_scriptable.py", "*/_remote_module_non_scriptable.py"]
 
 [project.scripts]
 preprocess_data = "ml_metamodels.data:app"

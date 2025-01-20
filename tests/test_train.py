@@ -1,8 +1,7 @@
 import pytest
 import os
 from omegaconf import OmegaConf
-from src.ml_metamodels.train import TrainModel
-
+from ml_metamodels.train import TrainModel
 
 @pytest.fixture
 def test_cfg(tmp_path):

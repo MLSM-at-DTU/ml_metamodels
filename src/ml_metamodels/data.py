@@ -4,8 +4,11 @@ import pickle
 import torch
 import os
 from sklearn.preprocessing import StandardScaler
-import hydra
+from hydra import initialize, compose
 from omegaconf import DictConfig
+import typer
+
+app = typer.Typer()
 
 
 class SiouxFalls24Zones(Dataset):
@@ -81,6 +84,7 @@ class SiouxFalls24Zones(Dataset):
             with open(osp.join(self.processed_data_path, "scalers.pkl"), "wb") as f:
                 pickle.dump({"node_scaler": self.node_scaler, "edge_scaler": self.edge_scaler}, f)
 
+
     def preprocess(self) -> None:
         """Preprocess the raw data and save it to the output folder."""
 
@@ -136,6 +140,7 @@ class SiouxFalls24Zones(Dataset):
             # Initialize scalers for node and edge features
             self.node_scaler = StandardScaler()
             self.edge_scaler = StandardScaler()
+
         else:
             raise NotImplementedError(f"Scaling type {scaling_type} is not implemented.")
 
@@ -185,8 +190,12 @@ class SiouxFalls24Zones(Dataset):
                 self.test_graphs = normalized_graphs
 
 
-@hydra.main(config_path="../../configs", config_name="gnn_config", version_base=None)
-def main(cfg: DictConfig) -> None:
+@app.command()
+def main() -> None:
+    with initialize(config_path="../../configs"):
+        # hydra.main() decorator was not used since it was conflicting with typer decorator
+        cfg = compose(config_name="gnn_config.yaml")
+        
     data_class = cfg.data.data_class
 
     if data_class == "SiouxFalls24Zones":
@@ -194,10 +203,10 @@ def main(cfg: DictConfig) -> None:
         dataset_object = SiouxFalls24Zones(cfg)
         dataset_object.preprocess()
         dataset_object.save_data_and_scalers()
+
         print("Preprocessing complete!")
     else:
         raise NotImplementedError(f"Data class {data_class}) is not implemented.")
 
-
 if __name__ == "__main__":
-    main()
+    app()
