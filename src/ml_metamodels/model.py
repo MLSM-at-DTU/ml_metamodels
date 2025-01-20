@@ -6,6 +6,7 @@ from ml_metamodels.gnn_layers import GCNConvLayer, GATConvLayer
 from ml_metamodels.gnn_decoders import GNNConvDecoder
 from torch_geometric.nn import GCNConv
 
+
 class GCN(nn.Module):
     """GCN model with Encoder-GNN-Decoder structure."""
 
@@ -29,6 +30,7 @@ class GCN(nn.Module):
 
         return edge_output
 
+
 class GAT(nn.Module):
     """GAT model with Encoder-GNN-Decoder structure."""
 
@@ -51,6 +53,7 @@ class GAT(nn.Module):
         edge_output = self.decoder(x_embeddings, edge_encoded, edge_index)
 
         return edge_output
+
 
 class DiffusionTestModel(nn.Module):
     """Simple model for testing purposes."""

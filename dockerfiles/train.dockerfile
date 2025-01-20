@@ -30,3 +30,4 @@ RUN pip install -r requirements.txt
 RUN pip install . --no-deps --no-cache-dir
 
 ENTRYPOINT ["python", "-u", "train"]
+

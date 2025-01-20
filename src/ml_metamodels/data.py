@@ -10,7 +10,6 @@ import typer
 
 app = typer.Typer()
 
-
 class SiouxFalls24Zones(Dataset):
     """My custom dataset."""
 
@@ -188,6 +187,10 @@ class SiouxFalls24Zones(Dataset):
                 self.val_graphs = normalized_graphs
             elif split == "test":
                 self.test_graphs = normalized_graphs
+<<<<<<< HEAD
+=======
+
+>>>>>>> 26c1cd2df9c166d6c82093e6966dbf547efa87a9
 
 
 @app.command()

@@ -4,7 +4,6 @@ from torch_geometric.loader import DataLoader
 from ml_metamodels.model import GCN, GAT, DiffusionTestModel
 import datetime
 from hydra import initialize, compose
-import datetime
 from omegaconf import DictConfig, OmegaConf
 import os.path as osp
 import os
