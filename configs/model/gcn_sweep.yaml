@@ -2,10 +2,11 @@ layer_type: GCN
 hidden_dim:
     - 32
     - 64
+    - 76
 num_gnn_layers:
     - 1
-    - 2
     - 3
+    - 5
 normalize: 
     - True
     - False
