@@ -9,6 +9,7 @@ torchvision==0.20.1
 tqdm==4.67.1
 typer==0.15.1
 wandb==0.19.2
+evidently==0.5.1
 
 # commands
 invoke==2.2.0

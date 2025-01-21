@@ -128,6 +128,16 @@ docker pull <region>-docker.pkg.dev/<project-id>/<registry-name>/<image-name>:<i
 docker run --name train --env WANDB_API_KEY=$(cat .env | grep WANDB_API_KEY | cut -d '=' -f2) <region>-docker.pkg.dev/<project-id>/<registry-name>/<image-name>:<image-tag>
 ```
 
+You can also create a VM instance and run the job on it:
+```bash
+gcloud ai custom-jobs create --region=europe-west1 --display-name=test-run --config=configs/config.yaml --command 'python src/ml_metamodels/train.py'
+```
+
+And to use VERTEX AI to run the job on the cloud, training the model and exposing everything to wandb:
+```bash
+gcloud builds submit --project=ml-metamodels --config=configs/vertex_ai_train.yaml
+```
+
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
