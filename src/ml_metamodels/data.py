@@ -11,7 +11,7 @@ import typer
 app = typer.Typer()
 
 
-class SiouxFalls24Zones(Dataset):
+class SiouxFalls24ZonesOD(Dataset):
     def __init__(self, cfg: DictConfig) -> None:
         # Load the configuration
         self.cfg = cfg
@@ -41,7 +41,7 @@ class SiouxFalls24Zones(Dataset):
         os.makedirs(self.processed_data_path, exist_ok=True)
 
         # See if scaling is required
-        scaling = self.cfg.scaling
+        scaling = self.cfg.data.scaling
 
         # Preprocess the data
         if scaling is None:
@@ -77,7 +77,7 @@ class SiouxFalls24Zones(Dataset):
             torch.save(processed_graphs, osp.join(self.processed_data_path, f"{split}.pt"))
 
     def _preprocess_with_scaling(self) -> None:
-        scaling_type = self.cfg.scaling
+        scaling_type = self.cfg.data.scaling
 
         if scaling_type == "StandardScaler":
             # Initialize scalers for node and edge features
@@ -136,12 +136,12 @@ class SiouxFalls24Zones(Dataset):
 def main() -> None:
     with initialize(config_path="../../configs"):
         # hydra.main() decorator was not used since it was conflicting with typer decorator
-        cfg = compose(config_name="gnn_config.yaml")
+        cfg = compose(config_name="config.yaml")
     data_class = cfg.data.data_class
 
-    if data_class == "SiouxFalls24Zones":
+    if data_class == "SiouxFalls24ZonesOD":
         print("Preprocessing data...")
-        dataset_object = SiouxFalls24Zones(cfg)
+        dataset_object = SiouxFalls24ZonesOD(cfg)
         dataset_object.preprocess()
         print("Preprocessing complete!")
     else:

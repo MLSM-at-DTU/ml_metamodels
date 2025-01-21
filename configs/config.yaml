@@ -1,0 +1,5 @@
+defaults:
+  - data: SiouxFalls24ZonesOD
+  - model: gcn_default
+  - train: default_sweep
+  - wandb: default_sweep

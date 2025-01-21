@@ -1,0 +1,17 @@
+layer_type: GCN
+hidden_dim:
+    - 32
+    - 64
+num_gnn_layers:
+    - 1
+    - 2
+    - 3
+normalize: 
+    - True
+    - False
+add_self_loops:
+    - True
+    - False
+bias:
+    - True
+    - False

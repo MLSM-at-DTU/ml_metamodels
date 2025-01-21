@@ -1,27 +1,26 @@
-import matplotlib.pyplot as plt
 import torch
 from torch_geometric.loader import DataLoader
 from ml_metamodels.model import GCN, GAT, DiffusionTestModel
 import datetime
 from hydra import initialize, compose
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import OmegaConf
 import os.path as osp
 import os
 import numpy as np
 import random
 import wandb
-from dotenv import load_dotenv
 import typer
+from typing import Dict, Any
+from dotenv import load_dotenv
 
 app = typer.Typer()
 
 
 class TrainModel:
-    def __init__(self, cfg: DictConfig) -> None:
+    def __init__(self, cfg) -> None:
         self.cfg = cfg
         processed_dir = "data/processed"
         self.processed_data_path = osp.join(processed_dir, cfg.data.dataset_name)
-
         self._set_seed(cfg.train.random_seed)  # Set seed for reproducibility
 
     def _config_wandb(self) -> None:
@@ -35,13 +34,32 @@ class TrainModel:
             raise ValueError("WANDB_API_KEY is not set. Please check your .env file.")
         print("WANDB_API_KEY loaded successfully.")
 
-        # Initialize wandb and set log directory
-        self.wandb_run = wandb.init(
-            project=self.cfg.wandb.project_name, config=OmegaConf.to_container(self.cfg, resolve=True)
-        )
+        self.wandb_run = wandb.init()
 
-        # Save the processed data to wandb
-        self._save_data_to_wandb()
+    def _load_sweep_parameters(self):
+        """
+        Dynamically replace list values in the Hydra config with those from wandb.config for sweep.
+        """
+        # Convert Hydra config to a dictionary
+        cfg_dict = OmegaConf.to_container(self.cfg, resolve=True)
+
+        # Recursively update the config using flat keys from wandb.config
+        def update_cfg_with_wandb(node, prefix=""):
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    current_path = f"{prefix}.{key}" if prefix else key
+                    node[key] = update_cfg_with_wandb(value, current_path)
+            elif isinstance(node, list):
+                # Replace list with wandb.config value if available
+                if prefix in wandb.config:
+                    return wandb.config[prefix]
+            return node
+
+        # Update the config dictionary
+        updated_cfg_dict = update_cfg_with_wandb(cfg_dict)
+
+        # Convert back to OmegaConf for further use
+        self.cfg = OmegaConf.create(updated_cfg_dict)
 
     def _save_data_to_wandb(self) -> None:
         """Save the processed data into wandb."""
@@ -52,6 +70,9 @@ class TrainModel:
             artifact = wandb.Artifact(name=f"{split}.pt", type="data", description=f"Processed {split} data.")
             artifact.add_file(data_path)
             self.wandb_run.log_artifact(artifact)
+
+        # Save the processed data to wandb
+        self._save_data_to_wandb()
 
     def _check_data_path(self) -> None:
         """Check if the processed data path exists."""
@@ -101,6 +122,9 @@ class TrainModel:
                 edge_feature_dim=self.edge_feature_dim,
                 hidden_dim=self.cfg.model.hidden_dim,
                 num_gnn_layers=self.cfg.model.num_gnn_layers,
+                normalize = self.cfg.model.normalize, 
+                bias = self.cfg.model.bias,
+                add_self_loops = self.cfg.model.add_self_loops,
             ).to(self.cfg.train.device)
 
         elif self.cfg.model.layer_type == "GAT":
@@ -114,7 +138,7 @@ class TrainModel:
         elif self.cfg.model.layer_type == "DiffusionTestModel":
             model = DiffusionTestModel(num_nodes=self.num_nodes, num_edges=self.num_edges).to(self.cfg.train.device)
         else:
-            raise ValueError(f"Model type {self.model.layer_type} not supported. Please choose from ['GCN']")
+            raise ValueError(f"Model type {self.cfg.model.layer_type} not supported. Please choose from ['GCN']")
 
         # Log model to wandb
         print("Model architecture: " + str(model))
@@ -162,6 +186,9 @@ class TrainModel:
         # Initialize wandb
         self._config_wandb()
 
+        # Load sweep parameters into cfg
+        self._load_sweep_parameters()
+
         # Load training configuration
         print("Training configuration:")
         print(OmegaConf.to_yaml(self.cfg.train))
@@ -199,7 +226,7 @@ class TrainModel:
             model.train()
             epoch_loss = 0
             for data in train_loader:
-                data = data.to(self.cfg.train.device)  # Moves to device first
+                data = data.to(self.cfg.train.device)
                 optimizer.zero_grad()
 
                 # Forward pass
@@ -238,7 +265,6 @@ class TrainModel:
                 rmse_loss /= len(val_loader)
 
                 statistics["val_loss"].append(val_loss)
-
                 print(
                     f"Epoch {epoch + 1}/{self.cfg.train.epochs}, Loss: {epoch_loss}, Validation Loss: {val_loss}, MSE loss: {mse_loss}, L1 Loss: {l1_loss}, RMSE Loss: {rmse_loss}"
                 )
@@ -246,7 +272,7 @@ class TrainModel:
                     {
                         "Epoch": epoch,
                         "Train_loss": epoch_loss,
-                        "Valildation_loss": val_loss,
+                        "Validation_loss": val_loss,
                         "L1_loss": l1_loss,
                         "MSE_loss": mse_loss,
                         "RMSE_loss": rmse_loss,
@@ -270,28 +296,67 @@ class TrainModel:
         artifact.add_file(model_dir)
         self.wandb_run.log_artifact(artifact)
 
-        # Plot training and validation loss
-        plt.figure(figsize=(10, 5))
-        plt.plot(statistics["train_loss"], label="Train Loss")
-        plt.plot(statistics["val_loss"], label="Validation Loss")
-        plt.xlabel("Epochs")
-        plt.ylabel("Loss")
-        plt.title("Training Loss")
-        plt.legend()
-        graph_name = "training_validation_loss.png"
-        graph_dir = osp.join("reports/figures/" + graph_name)
-        plt.savefig(graph_dir)
+
+def generate_sweep_configuration(
+    cfg: Dict[str, Any], sweep_name: str = "sweep", metric_name: str = "L1_loss", goal: str = "minimize"
+) -> Dict[str, Any]:
+    sweep_parameters = {}
+
+    # Recursively find list-type entries in the config
+    def find_list_entries(node, prefix=""):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                current_path = f"{prefix}.{key}" if prefix else key
+                find_list_entries(value, current_path)
+        elif isinstance(node, list):
+            # Add the list as a sweep parameter
+            sweep_parameters[prefix] = {"values": node}
+
+    # Start processing the configuration
+    find_list_entries(OmegaConf.to_container(cfg, resolve=True))
+
+    # Create the sweep configuration
+    sweep_configuration = {
+        "method": "random",
+        "name": sweep_name,
+        "metric": {"goal": goal, "name": metric_name},
+        "parameters": sweep_parameters,
+    }
+
+    return sweep_configuration
 
 
-@app.command()
 def main() -> None:
     with initialize(config_path="../../configs"):
         # hydra.main() decorator was not used since it was conflicting with typer decorator
-        cfg = compose(config_name="gnn_config.yaml")
+        cfg = compose(config_name="config.yaml")
     # Train the model
     trainer = TrainModel(cfg)
     trainer.train()
 
 
+@app.command()
+def run_training() -> None:
+    with initialize(config_path="../../configs"):
+        # Load the Hydra configuration
+        cfg = compose(config_name="config.yaml")
+
+    if cfg.wandb.sweep.enabled:
+        # Generate the sweep configuration dynamically
+        sweep_cfg = generate_sweep_configuration(cfg, sweep_name=cfg.wandb.sweep.sweep_name, metric_name=cfg.wandb.sweep.metric_name, goal=cfg.wandb.sweep.metric_goal)
+        
+        # Check if the sweep_cfg contains any lists 
+        if not sweep_cfg["parameters"]:
+            raise ValueError("No list-type parameters found in the configuration. Please add at least one list-type parameter to run a sweep.")
+
+        # Initialize W&B sweep
+        sweep_id = wandb.sweep(sweep=sweep_cfg, project=cfg.wandb.project_name)
+
+        # Start the sweep
+        wandb.agent(sweep_id, function=main)
+
+    elif cfg.wandb.sweep.enabled == False:
+        main()
+
 if __name__ == "__main__":
-    app()
+    run_training()
