@@ -373,7 +373,14 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 17 fill here ---
+We used:
+- IAM to manage access to our project. This service is used to control who/which service accounts can do what in the project.
+- Artifact Registry to store our docker images. This service is used to store and manage docker images.
+- Cloud Build to build our docker images. This service is used to build and push docker images.
+- Compute Engine to run our docker images. This service is used to run virtual machines in the cloud.
+- Cloud Storage to store our data. This service is used to store and manage data in the cloud.
+- Vertex AI to train our models. This service is used to train machine learning models in the cloud.
+- Secret Manager to store our secrets. This service is used to store and manage secrets in the cloud like WANDB_API_KEY.
 
 ### Question 18
 
@@ -388,7 +395,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 18 fill here ---
+We used Compute engine to run our docker images. We used instances with the following hardware: n1-standard-1. We created a VM instance called playground1 on Zone: europe-west1-b and then can connect to it via ssh.
 
 ### Question 19
 
@@ -397,7 +404,9 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 19 fill here ---
+[General cloud storage](figures/cloud_storage1.png)
+
+[Raw and processed data](figures/cloud_storage2.png)
 
 ### Question 20
 
@@ -406,7 +415,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 20 fill here ---
+[Artifact Registry](figures/artifact_registry.png)
 
 ### Question 21
 
@@ -415,7 +424,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 21 fill here ---
+[Cloud Build](figures/cloud_build.png)
 
 ### Question 22
 
@@ -430,7 +439,9 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 22 fill here ---
+Yes, we managed to train our model in the cloud using Vertex AI. We did this by creating a custom job and then selecting the docker image we wanted to run that is on the artifact registry. We then selected the machine type and the number of nodes we wanted to use. The reason we choose Vertex AI was because it is a managed service that makes it easy to train machine learning models in the cloud. Additionally we inject WANDB_API_KEY on RUNTIME from GCP Secret Manager to log the training process to Weights & Biases and to be able to do sweeps.
+We also managed to do all of this using Compute Engine by running our docker images on a virtual machine, playground1.
+Both ways of training are described on the README.md file.
 
 ## Deployment
 
@@ -512,7 +523,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 27 fill here ---
+In total our total cost was $4.14. [Cost breakdown](figures/cost.png). The most expensive was Compute because storage is cheap, so Artifact and Cloud Storage will most of the times be reduced, and then we mostly used Compute Engine since we only started using VertexAI by the end of the project. It's very good in a production environment, but for development, it can be expensive and over-engineered.
 
 ### Question 28
 
@@ -559,7 +570,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 30 fill here ---
+The biggest struggles were defnitely making the project work in the cloud. Having a connection directly on runtime to wandb via a wandb_api_key, that is provided through secret manager, injected in VertexAI and used when running the docker image that exists on the Artifact Registry.
 
 ### Question 31
 
@@ -576,4 +587,8 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 31 fill here ---
+Oskar s155827 was in charge of setting up the initial cookie cutter project, developing the project idea and the unit tests.
+
+Francisco s250106 was responsible for developing the docker images for training our models in the cloud.
+
+Both members contributed with Typer, Hydra, WandB setup, logging. Both member were responsible for the maintenance of the github repository as well as github Actions. Both members contributed to the code, the README.md file, the report and the presentation.
