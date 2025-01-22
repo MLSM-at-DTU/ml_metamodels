@@ -23,35 +23,36 @@ class GCNConvLayer(nn.Module):
     """GNN layer for learning node embeddings."""
 
     def __init__(
-            self,
-            hidden_dim: int, 
-            num_gnn_layers: int, 
-            normalize: bool = True, 
-            bias: bool = True,
-            add_self_loops: Optional[bool] = None, 
-            ) -> torch.Tensor:
-        
+        self,
+        hidden_dim: int,
+        num_gnn_layers: int,
+        normalize: bool = True,
+        bias: bool = True,
+        add_self_loops: Optional[bool] = None,
+    ) -> torch.Tensor:
         super().__init__()
-        self.convs = nn.ModuleList([GCNConv(in_channels = hidden_dim,
-                                            out_channels = hidden_dim,
-                                            normalize = normalize,
-                                            bias = bias,
-                                            add_self_loops = add_self_loops) for _ in range(num_gnn_layers)])
-        
+        self.convs = nn.ModuleList(
+            [
+                GCNConv(
+                    in_channels=hidden_dim,
+                    out_channels=hidden_dim,
+                    normalize=normalize,
+                    bias=bias,
+                    add_self_loops=add_self_loops,
+                )
+                for _ in range(num_gnn_layers)
+            ]
+        )
+
         self.residual = nn.Linear(hidden_dim, hidden_dim)  # Residual connection
 
     def forward(
-            self,
-            x: torch.Tensor, 
-            edge_index: torch.Tensor, 
-            edge_weight: Optional[torch.Tensor] = None,
-            ) -> torch.Tensor:
-        
+        self,
+        x: torch.Tensor,
+        edge_index: torch.Tensor,
+        edge_weight: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
         for conv in self.convs:
             x_res = x
-            x = torch.relu(
-                    conv(x = x,
-                        edge_index = edge_index, 
-                        edge_weight = edge_weight) + self.residual(x_res)
-            )  
+            x = torch.relu(conv(x=x, edge_index=edge_index, edge_weight=edge_weight) + self.residual(x_res))
         return x

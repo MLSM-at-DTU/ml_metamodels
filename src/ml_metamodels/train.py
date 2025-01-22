@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 
 app = typer.Typer()
 
+
 class TrainModel:
     def __init__(self, cfg) -> None:
         self.cfg = cfg
@@ -119,9 +120,9 @@ class TrainModel:
                 edge_feature_dim=self.edge_feature_dim,
                 hidden_dim=self.cfg.model.hidden_dim,
                 num_gnn_layers=self.cfg.model.num_gnn_layers,
-                normalize = self.cfg.model.normalize, 
-                bias = self.cfg.model.bias,
-                add_self_loops = self.cfg.model.add_self_loops,
+                normalize=self.cfg.model.normalize,
+                bias=self.cfg.model.bias,
+                add_self_loops=self.cfg.model.add_self_loops,
             ).to(self.cfg.train.device)
 
         elif self.cfg.model.layer_type == "GAT":
@@ -299,15 +300,12 @@ class TrainModel:
 
 
 def generate_sweep_configuration(
-    cfg: Dict[str, Any], 
+    cfg: Dict[str, Any],
     sweep_name: str = "sweep",
-    metric_name: str = "L1_loss", 
-    goal: str = "minimize", 
+    metric_name: str = "L1_loss",
+    goal: str = "minimize",
     method: str = "random",
-
-    ) -> Dict[str, Any]:
-    
-    
+) -> Dict[str, Any]:
     sweep_parameters = {}
 
     # Recursively find list-type entries in the config
@@ -351,14 +349,19 @@ def run_training() -> None:
 
     if cfg.wandb.sweep.enabled:
         # Generate the sweep configuration dynamically
-        sweep_cfg = generate_sweep_configuration(cfg, sweep_name=cfg.wandb.sweep.sweep_name, 
-                                                 metric_name=cfg.wandb.sweep.metric_name, 
-                                                 goal=cfg.wandb.sweep.metric_goal, 
-                                                 method=cfg.wandb.sweep.method)
-        
-        # Check if the sweep_cfg contains any lists 
+        sweep_cfg = generate_sweep_configuration(
+            cfg,
+            sweep_name=cfg.wandb.sweep.sweep_name,
+            metric_name=cfg.wandb.sweep.metric_name,
+            goal=cfg.wandb.sweep.metric_goal,
+            method=cfg.wandb.sweep.method,
+        )
+
+        # Check if the sweep_cfg contains any lists
         if not sweep_cfg["parameters"]:
-            raise ValueError("No list-type parameters found in the configuration. Please add at least one list-type parameter to run a sweep.")
+            raise ValueError(
+                "No list-type parameters found in the configuration. Please add at least one list-type parameter to run a sweep."
+            )
 
         # Initialize W&B sweep
         sweep_id = wandb.sweep(sweep=sweep_cfg, project=cfg.wandb.project_name)
@@ -368,6 +371,7 @@ def run_training() -> None:
 
     elif not cfg.wandb.sweep.enabled:
         main()
+
 
 if __name__ == "__main__":
     run_training()
