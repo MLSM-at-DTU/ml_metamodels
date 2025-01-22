@@ -247,7 +247,7 @@ The total code coverage of code is 42%, which is quite far from 100% coverage. H
 >
 > Answer:
 
-As we worked together on the project repository in our group branches and PR requests were used
+As we worked together on the project repository in our group branches and PR requests were used constantly. All new work would be developed on a separate branch and to merge it to main several automations and requirements were to be satisfied. 
 
 ### Question 10
 
@@ -262,7 +262,7 @@ As we worked together on the project repository in our group branches and PR req
 >
 > Answer:
 
---- question 10 fill here ---
+--- question 10 fill here --- Francisco, leaving this blank until we decide. Please fill out if you have something to say here.
 
 ### Question 11
 
@@ -279,7 +279,7 @@ As we worked together on the project repository in our group branches and PR req
 >
 > Answer:
 
---- question 11 fill here ---
+We setup continous integration with several Github automataions. This included setting up the environment on github and running our tests on both linux and mac os. We had a pre_commit automation that ran ruff and formatted the code automatically.
 
 ## Running code and tracking experiments
 
@@ -298,7 +298,9 @@ As we worked together on the project repository in our group branches and PR req
 >
 > Answer:
 
---- question 12 fill here ---
+The core of our ML pipeline is to do scientific experiments on metamodelling of simulators. Hence, we did extensive work in setting up configuration files with hydra. 
+The hydra configuration setup was made with a base configuration file (hydra_config.yaml9 that points to five sub-folders with configuration files (data, inference, model, train, wandb). In these subfolders it is easy to change parameters and have specific templates for different models (e.g., one model type might require specific paramteres that can then be specified for that model type in a specific .yaml file). The hydra setup was linked to the wandb sweep setup such that if you provide parameters as a list (using "-") the configuration file is formatted into a wandb sweep dictionary that sets up a sweep.
+
 
 ### Question 13
 
@@ -313,7 +315,8 @@ As we worked together on the project repository in our group branches and PR req
 >
 > Answer:
 
---- question 13 fill here ---
+As we used configuration files and had setup a random seed in the configuration a experiment can be reproduced by using the same configuration setup. 
+This can be found in wandb in the config.yaml as this is linked to the configuration file created by hydra. The model weights are also stored as an artifact in hydra and can be extracted using the evauate.py script if a path to a specific run_id in wandb is given in the inference config file. This would enable reproducing prediction results without having to retrain. 
 
 ### Question 14
 
