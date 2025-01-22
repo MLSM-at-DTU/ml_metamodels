@@ -366,7 +366,7 @@ def run_training() -> None:
         # Start the sweep
         wandb.agent(sweep_id, function=main)
 
-    elif cfg.wandb.sweep.enabled == False:
+    elif not cfg.wandb.sweep.enabled:
         main()
 
 if __name__ == "__main__":
