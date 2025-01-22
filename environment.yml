@@ -1,4 +1,4 @@
-name: myenv
+name: ml_ops
 channels:
   - conda-forge
   - defaults
