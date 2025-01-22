@@ -333,7 +333,12 @@ This can be found in wandb in the config.yaml as this is linked to the configura
 >
 > Answer:
 
---- question 14 fill here ---
+As mentioned above one of the cornerstones of this repository is the use of hydra and wandb. 
+As seen in the first image the classic interface for different runs can be used to inspect the training curves and compare different models. 
+
+[this figure](figures/wandb_runs.png)
+
+As seen in the second image we also succeeded setting up the wandb sweep which makes it very easy to do hyperparameter search and identify the parameters that have the biggest impact on validation error and optimize for minimizing the loss. 
 
 ### Question 15
 
@@ -348,7 +353,9 @@ This can be found in wandb in the config.yaml as this is linked to the configura
 >
 > Answer:
 
---- question 15 fill here ---
+For this project we made to docker files that can both be built locally and on google cloud. 
+The training image can be built locally running: 'docker build -f dockerfiles/train.dockerfile . -t train:latest'. It relies on copying the configuration files that are available locally and hence one image is built to train a specific configuration. This is a limitation of the current docker setup as it would have been smarter to provide the configuration files as input to a container when running the docker image. The evaluation image can be built by running: 'docker build -f dockerfiles/evaluate.dockerfile . -t evaluate:latest'. This also relies on the configuration file and in particular on a run_id on wandb from which it can download specific model weights and evaluate. 
+
 
 ### Question 16
 
@@ -363,7 +370,9 @@ This can be found in wandb in the config.yaml as this is linked to the configura
 >
 > Answer:
 
---- question 16 fill here ---
+Debudding method was dependent on the specific group member. 
+
+Oskar used VS code and used the built-in debugging methods there. Francisco used PyCharm and used the built-in debugging methods there. 
 
 ## Working in the cloud
 
