@@ -15,7 +15,6 @@ from dotenv import load_dotenv
 
 app = typer.Typer()
 
-
 class TrainModel:
     def __init__(self, cfg) -> None:
         self.cfg = cfg
@@ -60,6 +59,7 @@ class TrainModel:
 
         # Convert back to OmegaConf for further use
         self.cfg = OmegaConf.create(updated_cfg_dict)
+        self.wandb_run.config.update(OmegaConf.to_container(self.cfg, resolve=True))
 
     def _save_data_to_wandb(self) -> None:
         """Save the processed data into wandb."""
@@ -70,9 +70,6 @@ class TrainModel:
             artifact = wandb.Artifact(name=f"{split}.pt", type="data", description=f"Processed {split} data.")
             artifact.add_file(data_path)
             self.wandb_run.log_artifact(artifact)
-
-        # Save the processed data to wandb
-        self._save_data_to_wandb()
 
     def _check_data_path(self) -> None:
         """Check if the processed data path exists."""
@@ -189,6 +186,10 @@ class TrainModel:
         # Load sweep parameters into cfg
         self._load_sweep_parameters()
 
+        # Save the processed data to wandb
+        if self.cfg.wandb.save_data:
+            self._save_data_to_wandb()
+
         # Load training configuration
         print("Training configuration:")
         print(OmegaConf.to_yaml(self.cfg.train))
@@ -298,8 +299,15 @@ class TrainModel:
 
 
 def generate_sweep_configuration(
-    cfg: Dict[str, Any], sweep_name: str = "sweep", metric_name: str = "L1_loss", goal: str = "minimize"
-) -> Dict[str, Any]:
+    cfg: Dict[str, Any], 
+    sweep_name: str = "sweep",
+    metric_name: str = "L1_loss", 
+    goal: str = "minimize", 
+    method: str = "random",
+
+    ) -> Dict[str, Any]:
+    
+    
     sweep_parameters = {}
 
     # Recursively find list-type entries in the config
@@ -317,7 +325,7 @@ def generate_sweep_configuration(
 
     # Create the sweep configuration
     sweep_configuration = {
-        "method": "random",
+        "method": method,
         "name": sweep_name,
         "metric": {"goal": goal, "name": metric_name},
         "parameters": sweep_parameters,
@@ -343,7 +351,10 @@ def run_training() -> None:
 
     if cfg.wandb.sweep.enabled:
         # Generate the sweep configuration dynamically
-        sweep_cfg = generate_sweep_configuration(cfg, sweep_name=cfg.wandb.sweep.sweep_name, metric_name=cfg.wandb.sweep.metric_name, goal=cfg.wandb.sweep.metric_goal)
+        sweep_cfg = generate_sweep_configuration(cfg, sweep_name=cfg.wandb.sweep.sweep_name, 
+                                                 metric_name=cfg.wandb.sweep.metric_name, 
+                                                 goal=cfg.wandb.sweep.metric_goal, 
+                                                 method=cfg.wandb.sweep.method)
         
         # Check if the sweep_cfg contains any lists 
         if not sweep_cfg["parameters"]:

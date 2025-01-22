@@ -7,7 +7,6 @@ from ml_metamodels.gnn_layers import GCNConvLayer, GATConvLayer
 from ml_metamodels.gnn_decoders import GNNConvDecoder
 from torch_geometric.nn import GCNConv
 
-
 class GCN(nn.Module):
     def __init__(self,
                  node_feature_dim: int, 
@@ -37,7 +36,6 @@ class GCN(nn.Module):
         edge_output = self.decoder(x_embeddings, edge_encoded, edge_index)
 
         return edge_output
-
 
 class GAT(nn.Module):
     """GAT model with Encoder-GNN-Decoder structure."""

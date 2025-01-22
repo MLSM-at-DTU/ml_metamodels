@@ -1,5 +1,6 @@
 defaults:
   - data: SiouxFalls24ZonesOD
-  - model: gcn_sweep
-  - train: default_sweep
-  - wandb: default_sweep
+  - model: gcn
+  - train: default
+  - wandb: default
+  - inference: default
