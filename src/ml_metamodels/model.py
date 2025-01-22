@@ -7,20 +7,27 @@ from ml_metamodels.gnn_layers import GCNConvLayer, GATConvLayer
 from ml_metamodels.gnn_decoders import GNNConvDecoder
 from torch_geometric.nn import GCNConv
 
+
 class GCN(nn.Module):
-    def __init__(self,
-                 node_feature_dim: int, 
-                 edge_feature_dim: int,
-                 hidden_dim: int, 
-                 num_gnn_layers: int,
-                 normalize: bool = True, 
-                 bias: bool = True,
-                 add_self_loops: Optional[bool] = None, 
-                 ) -> None:
-        
+    def __init__(
+        self,
+        node_feature_dim: int,
+        edge_feature_dim: int,
+        hidden_dim: int,
+        num_gnn_layers: int,
+        normalize: bool = True,
+        bias: bool = True,
+        add_self_loops: Optional[bool] = None,
+    ) -> None:
         super().__init__()
         self.encoder = LinearEncoder(node_feature_dim, edge_feature_dim, hidden_dim)
-        self.gnn = GCNConvLayer(hidden_dim = hidden_dim, num_gnn_layers = num_gnn_layers, normalize = normalize, bias = bias, add_self_loops = add_self_loops)
+        self.gnn = GCNConvLayer(
+            hidden_dim=hidden_dim,
+            num_gnn_layers=num_gnn_layers,
+            normalize=normalize,
+            bias=bias,
+            add_self_loops=add_self_loops,
+        )
         self.decoder = GNNConvDecoder(hidden_dim)
 
     def forward(self, data: torch.Tensor) -> torch.Tensor:
@@ -30,12 +37,13 @@ class GCN(nn.Module):
         x_encoded, edge_encoded = self.encoder(x, edge_attr)
 
         # Step 2: Process node embeddings using the GNN
-        x_embeddings = self.gnn(x = x_encoded, edge_index = edge_index, edge_weight = edge_weight)
+        x_embeddings = self.gnn(x=x_encoded, edge_index=edge_index, edge_weight=edge_weight)
 
         # Step 3: Decode embeddings and edge features for predictions
         edge_output = self.decoder(x_embeddings, edge_encoded, edge_index)
 
         return edge_output
+
 
 class GAT(nn.Module):
     """GAT model with Encoder-GNN-Decoder structure."""

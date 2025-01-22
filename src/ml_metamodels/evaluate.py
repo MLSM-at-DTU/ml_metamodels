@@ -9,6 +9,7 @@ import os
 
 app = typer.Typer()
 
+
 class EvaluateModel:
     def __init__(self, cfg):
         self.wandb_run = cfg.inference.wandb_run
@@ -34,8 +35,10 @@ class EvaluateModel:
                 print("Removing data types from artifact types.")
                 artifact_types.remove("data")
                 if len(artifact_types) > 1:
-                    raise ValueError(f"Multiple artifact types found in wandb run {self.wandb_run} after removing data types.")                
-        
+                    raise ValueError(
+                        f"Multiple artifact types found in wandb run {self.wandb_run} after removing data types."
+                    )
+
         # Get the model artifact
         artifact_names = [artifact.name for artifact in artifacts]
         self.model_artifact = artifact_names[0]
@@ -49,17 +52,16 @@ class EvaluateModel:
 
     def load_data(self):
         self.processed_dir = "data/processed"
-        self.processed_data_path = os.path.join(self.processed_dir, self.cfg['data']['dataset_name'], "test.pt")
+        self.processed_data_path = os.path.join(self.processed_dir, self.cfg["data"]["dataset_name"], "test.pt")
 
         # Load the test data
         self.dataset = torch.load(self.processed_data_path, weights_only=False)
-        self.test_loader = DataLoader(self.dataset, batch_size=self.cfg['train']['batch_size'], shuffle=False)
+        self.test_loader = DataLoader(self.dataset, batch_size=self.cfg["train"]["batch_size"], shuffle=False)
         print(f"Loaded test data from {self.processed_data_path}")
 
         # Get the feature dimensions
         self.node_feature_dim = self.dataset[0].x.shape[1]
         self.edge_feature_dim = self.dataset[0].edge_attr.shape[1]
-        
 
     def load_model(self):
         self.model_type = self.cfg.model.layer_type
@@ -71,9 +73,9 @@ class EvaluateModel:
                 edge_feature_dim=self.edge_feature_dim,
                 hidden_dim=self.cfg.model.hidden_dim,
                 num_gnn_layers=self.cfg.model.num_gnn_layers,
-                normalize = self.cfg.model.normalize, 
-                bias = self.cfg.model.bias,
-                add_self_loops = self.cfg.model.add_self_loops,
+                normalize=self.cfg.model.normalize,
+                bias=self.cfg.model.bias,
+                add_self_loops=self.cfg.model.add_self_loops,
             ).to(self.cfg.train.device)
 
         elif self.model_type == "GAT":
@@ -87,7 +89,6 @@ class EvaluateModel:
 
         else:
             raise ValueError(f"Model type {self.model_type} not supported.")
-        
 
     def loss_fn(self) -> torch.nn.Module:
         """Get the loss function for the model."""
@@ -107,12 +108,14 @@ class EvaluateModel:
 
     def evaluate(self) -> None:
         """Evaluate a trained GCN model."""
-        
+
         print("Evaluating GCN model")
         print(f"Model checkpoint: {self.model_checkpoint}")
 
         # Load model
-        self.model.load_state_dict(torch.load(self.model_checkpoint, map_location=self.cfg.train.device, weights_only=False))
+        self.model.load_state_dict(
+            torch.load(self.model_checkpoint, map_location=self.cfg.train.device, weights_only=False)
+        )
 
         self.model.eval()
         total_loss = 0
@@ -129,6 +132,7 @@ class EvaluateModel:
         avg_loss = total_loss / len(self.test_loader)
         print(f"Test Loss: {avg_loss}")
 
+
 @app.command()
 def main():
     with initialize(config_path="../../configs"):
@@ -137,6 +141,7 @@ def main():
 
     evaluate = EvaluateModel(cfg)
     evaluate.evaluate()
+
 
 if __name__ == "__main__":
     app()
