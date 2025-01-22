@@ -9,6 +9,7 @@ import os
 
 app = typer.Typer()
 
+
 class EvaluateModel:
     def __init__(self, cfg):
         self.wandb_run = cfg.inference.wandb_run
