@@ -10,8 +10,6 @@ COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
 COPY src/ml_metamodels/ src/ml_metamodels/
 COPY data/ data/
-COPY models/ models/
-COPY reports/figures/ reports/figures/
 
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir

@@ -143,7 +143,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 3 fill here ---
+The members of this group are PhDs at DTU in metamodelling of scientific simulators. We used the thrid-party framework PyG which utilizes the Pytorch library and makes it easy to write and train Graph Neural Networks and hence help us building metamodels of different simulators. The package enables us to easily implement the latest GNN layer-types in a pytorch framework and test our research against these.
 
 ## Coding environment
 
@@ -163,7 +163,11 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 4 fill here ---
+We used conda to manage our dependencies in the project and made a separate conda environment to run the code in. The list of dependencies was auto-generated using pipreqs which ensures to only keep the packages that are actually used in the code in the requirements.txt file. A complete copy of the environment can be built by running:
+
+1. conda env create -f environment.yml
+2. conda activate ml_ops
+3. pip install -e .
 
 ### Question 5
 
@@ -179,7 +183,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 5 fill here ---
+The cookiecutter template was used as the baseline structure for our project. We stayed very close to the template but deviated slightly in the src folder where the model.py script is taking encoding methods, GNN layers, and decoding methods from three new scripts with Pytorch classes. The idea is that these can contain customized modules that can be developed during the PhD to improve prediciton error of the metamodels. We deleted the visualize.py script as the full integration with wandb contains sufficient visualizations. We also deleted the api.py script as the cloud configuration files are sufficient for setting of Google Cloud.
 
 ### Question 6
 
@@ -194,7 +198,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 6 fill here ---
+We used typing throughout the code to ensure better readability, have better documentation, and make debugging easier. We also implemented ruff as a pre_commit action to ensure that the code merged with main is formatted properly.
 
 ## Version control
 
@@ -213,7 +217,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 7 fill here ---
+In total we have implemented 14 tests. We are testing the data.py script, the model.py script and the train.py script. These scripts are the most critical scripts in our pipeline and have calls to several other scripts (e.g., the model.py imports classes from gnn_layers, gnn_decoders, and node_embeddings). The test coverage is around 42% of the code which is in the lower end - however, the most critical parts are covered (including testing the GCN and all elements used to build it, and the TrainModel class which is by far the largest and most important class in the code).
 
 ### Question 8
 
@@ -228,7 +232,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 8 fill here ---
+The total code coverage of code is 42%, which is quite far from 100% coverage. However, as mentioned above the most critical parts of our pipeline is tested in the scripts.
 
 ### Question 9
 
@@ -243,7 +247,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 9 fill here ---
+As we worked together on the project repository in our group branches and PR requests were used constantly. All new work would be developed on a separate branch and to merge it to main several automations and requirements were to be satisfied.
 
 ### Question 10
 
@@ -258,7 +262,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 10 fill here ---
+--- question 10 fill here --- Francisco, leaving this blank until we decide. Please fill out if you have something to say here.
 
 ### Question 11
 
@@ -275,7 +279,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 11 fill here ---
+We setup continous integration with several Github automataions. This included setting up the environment on github and running our tests on both linux and mac os. We had a pre_commit automation that ran ruff and formatted the code automatically.
 
 ## Running code and tracking experiments
 
@@ -294,7 +298,9 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 12 fill here ---
+The core of our ML pipeline is to do scientific experiments on metamodelling of simulators. Hence, we did extensive work in setting up configuration files with hydra.
+The hydra configuration setup was made with a base configuration file (hydra_config.yaml9 that points to five sub-folders with configuration files (data, inference, model, train, wandb). In these subfolders it is easy to change parameters and have specific templates for different models (e.g., one model type might require specific paramteres that can then be specified for that model type in a specific .yaml file). The hydra setup was linked to the wandb sweep setup such that if you provide parameters as a list (using "-") the configuration file is formatted into a wandb sweep dictionary that sets up a sweep.
+
 
 ### Question 13
 
@@ -309,7 +315,8 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 13 fill here ---
+As we used configuration files and had setup a random seed in the configuration a experiment can be reproduced by using the same configuration setup.
+This can be found in wandb in the config.yaml as this is linked to the configuration file created by hydra. The model weights are also stored as an artifact in hydra and can be extracted using the evauate.py script if a path to a specific run_id in wandb is given in the inference config file. This would enable reproducing prediction results without having to retrain.
 
 ### Question 14
 
@@ -326,7 +333,14 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 14 fill here ---
+As mentioned above one of the cornerstones of this repository is the use of hydra and wandb.
+As seen in the first image the classic interface for different runs can be used to inspect the training curves and compare different models.
+
+[Wandb runs](figures/wandb_runs.png)
+
+As seen in the second image we also succeeded setting up the wandb sweep which makes it very easy to do hyperparameter search and identify the parameters that have the biggest impact on validation error and optimize for minimizing the loss.
+
+[Wandb sweep](figures/wandb_sweeps.png)
 
 ### Question 15
 
@@ -341,7 +355,9 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 15 fill here ---
+For this project we made to docker files that can both be built locally and on google cloud.
+The training image can be built locally running: 'docker build -f dockerfiles/train.dockerfile . -t train:latest'. It relies on copying the configuration files that are available locally and hence one image is built to train a specific configuration. This is a limitation of the current docker setup as it would have been smarter to provide the configuration files as input to a container when running the docker image. The evaluation image can be built by running: 'docker build -f dockerfiles/evaluate.dockerfile . -t evaluate:latest'. This also relies on the configuration file and in particular on a run_id on wandb from which it can download specific model weights and evaluate.
+
 
 ### Question 16
 
@@ -356,7 +372,9 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 16 fill here ---
+Debudding method was dependent on the specific group member.
+
+Oskar used VS code and used the built-in debugging methods there. Francisco used PyCharm and used the built-in debugging methods there.
 
 ## Working in the cloud
 
