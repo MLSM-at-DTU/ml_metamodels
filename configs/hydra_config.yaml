@@ -1,0 +1,6 @@
+defaults:
+  - data: SiouxFalls24ZonesOD
+  - model: gcn
+  - train: default
+  - wandb: default
+  - inference: default

@@ -2,7 +2,13 @@ docs/site/
 
 # logs
 wandb/
+!configs/wandb/
 outputs/
+
+# Ignore data
+data/
+!configs/data/
+models/
 
 # test cache
 manual_test/

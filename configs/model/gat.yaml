@@ -1,0 +1,8 @@
+layer_type: GAT
+hidden_dim:
+    - 32
+    - 64
+num_gnn_layers:
+    - 1
+    - 2
+    - 3
