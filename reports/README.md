@@ -336,9 +336,11 @@ This can be found in wandb in the config.yaml as this is linked to the configura
 As mentioned above one of the cornerstones of this repository is the use of hydra and wandb. 
 As seen in the first image the classic interface for different runs can be used to inspect the training curves and compare different models. 
 
-[this figure](figures/wandb_runs.png)
+[Wandb runs](figures/wandb_runs.png)
 
 As seen in the second image we also succeeded setting up the wandb sweep which makes it very easy to do hyperparameter search and identify the parameters that have the biggest impact on validation error and optimize for minimizing the loss. 
+
+[Wandb sweep](figures/wandb_sweeps.png)
 
 ### Question 15
 
