@@ -17,7 +17,21 @@ steps:
       'push',
       'europe-west1-docker.pkg.dev/ml-metamodels/ml-metamodels-registry/$_IMAGE_NAME:latest'
     ]
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'Deploy to Cloud Run'
+  args: [
+    'run',
+    'deploy',
+    'fastapi_app',
+    '--image',
+    'europe-west1-docker.pkg.dev/ml-metamodels/ml-metamodels-registry/$_IMAGE_NAME_APP:latest',
+    '--region',
+    'europe-west1',
+    '--platform',
+    'managed',
+  ]
 options:
   logging: CLOUD_LOGGING_ONLY
 substitutions:
   _IMAGE_NAME: 'train'
+  _IMAGE_NAME_APP: 'fastapi_app'

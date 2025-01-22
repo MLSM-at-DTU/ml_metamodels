@@ -138,6 +138,18 @@ And to use VERTEX AI to run the job on the cloud, training the model and exposin
 gcloud builds submit --project=ml-metamodels --config=configs/vertex_ai_train.yaml
 ```
 
+# Deployment
+You can build the image:
+```bash
+docker build --platform=linux/amd64 \
+  -f dockerfiles/fastapi_app.dockerfile \
+  -t fastapi_app:latest \
+  .
+```
+
+Then on Cloud Run, have a Service that uses that image from cloud registry.
+
+
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
