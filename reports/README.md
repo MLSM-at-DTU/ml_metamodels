@@ -143,7 +143,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 3 fill here ---
+The members of this group are PhDs at DTU in metamodelling of scientific simulators. We used the thrid-party framework PyG which utilizes the Pytorch library and makes it easy to write and train Graph Neural Networks and hence help us building metamodels of different simulators. The package enables us to easily implement the latest GNN layer-types in a pytorch framework and test our research against these.
 
 ## Coding environment
 
@@ -163,7 +163,11 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 4 fill here ---
+We used conda to manage our dependencies in the project and made a separate conda environment to run the code in. The list of dependencies was auto-generated using pipreqs which ensures to only keep the packages that are actually used in the code in the requirements.txt file. A complete copy of the environment can be built by running: 
+
+1. conda env create -f environment.yml
+2. conda activate ml_ops
+3. pip install -e .
 
 ### Question 5
 
@@ -179,7 +183,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 5 fill here ---
+The cookiecutter template was used as the baseline structure for our project. We stayed very close to the template but deviated slightly in the src folder where the model.py script is taking encoding methods, GNN layers, and decoding methods from three new scripts with Pytorch classes. The idea is that these can contain customized modules that can be developed during the PhD to improve prediciton error of the metamodels. We deleted the visualize.py script as the full integration with wandb contains sufficient visualizations. We also deleted the api.py script as the cloud configuration files are sufficient for setting of Google Cloud.
 
 ### Question 6
 
@@ -194,7 +198,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 6 fill here ---
+We used typing throughout the code to ensure better readability, have better documentation, and make debugging easier. We also implemented ruff as a pre_commit action to ensure that the code merged with main is formatted properly. 
 
 ## Version control
 
@@ -213,7 +217,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 7 fill here ---
+In total we have implemented 14 tests. We are testing the data.py script, the model.py script and the train.py script. These scripts are the most critical scripts in our pipeline and have calls to several other scripts (e.g., the model.py imports classes from gnn_layers, gnn_decoders, and node_embeddings). The test coverage is around 42% of the code which is in the lower end - however, the most critical parts are covered (including testing the GCN and all elements used to build it, and the TrainModel class which is by far the largest and most important class in the code).
 
 ### Question 8
 
@@ -228,7 +232,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 8 fill here ---
+The total code coverage of code is 42%, which is quite far from 100% coverage. However, as mentioned above the most critical parts of our pipeline is tested in the scripts. 
 
 ### Question 9
 
@@ -243,7 +247,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
---- question 9 fill here ---
+As we worked together on the project repository in our group branches and PR requests were used
 
 ### Question 10
 
