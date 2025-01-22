@@ -133,7 +133,7 @@ class EvaluateModel:
 def main():
     with initialize(config_path="../../configs"):
         # Load the Hydra configuration
-        cfg = compose(config_name="config.yaml")
+        cfg = compose(config_name="hydra_config.yaml")
 
     evaluate = EvaluateModel(cfg)
     evaluate.evaluate()

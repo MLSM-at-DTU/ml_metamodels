@@ -337,7 +337,7 @@ def generate_sweep_configuration(
 def main() -> None:
     with initialize(config_path="../../configs"):
         # hydra.main() decorator was not used since it was conflicting with typer decorator
-        cfg = compose(config_name="config.yaml")
+        cfg = compose(config_name="hydra_config.yaml")
     # Train the model
     trainer = TrainModel(cfg)
     trainer.train()
@@ -347,7 +347,7 @@ def main() -> None:
 def run_training() -> None:
     with initialize(config_path="../../configs"):
         # Load the Hydra configuration
-        cfg = compose(config_name="config.yaml")
+        cfg = compose(config_name="hydra_config.yaml")
 
     if cfg.wandb.sweep.enabled:
         # Generate the sweep configuration dynamically

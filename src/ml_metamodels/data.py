@@ -136,7 +136,7 @@ class SiouxFalls24ZonesOD(Dataset):
 def main() -> None:
     with initialize(config_path="../../configs"):
         # hydra.main() decorator was not used since it was conflicting with typer decorator
-        cfg = compose(config_name="config.yaml")
+        cfg = compose(config_name="hydra_config.yaml")
     data_class = cfg.data.data_class
 
     if data_class == "SiouxFalls24ZonesOD":

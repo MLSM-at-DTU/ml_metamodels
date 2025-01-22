@@ -1,7 +1,7 @@
 project_name: gnn-siouxfalls_final
 save_data: False
 sweep:
-  enabled: False
+  enabled: True
   sweep_name: hyperparameter_search
   metric_name: L1_loss
   metric_goal: minimize

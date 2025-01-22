@@ -1,6 +1,8 @@
 layer_type: GCN
 hidden_dim: 76
-num_gnn_layers: 5
+num_gnn_layers: 
+  - 3
+  - 4
 normalize: True
 add_self_loops: True
 bias: True
