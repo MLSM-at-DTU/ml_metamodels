@@ -143,7 +143,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
-The members of this group are PhDs at DTU in metamodelling of scientific simulators. We used the thrid-party framework PyG which utilizes the Pytorch library and makes it easy to write and train Graph Neural Networks and hence help us building metamodels of different simulators. The package enables us to easily implement the latest GNN layer-types in a pytorch framework and test our research against these.
+The members of this group are PhD students at DTU specializing in metamodeling of scientific simulators. We utilized the third-party framework PyG, which builds upon the PyTorch library to simplify the design and training of Graph Neural Networks (GNNs). This framework provides a streamlined framework for the development of metamodels for various simulators by providing tools to implement cutting-edge GNN layer types within the PyTorch ecosystem. PyG allowed us to efficiently test our research against state-of-the-art methodologies, enhancing both the robustness and scalability of our metamodeling efforts.
 
 ## Coding environment
 
@@ -163,11 +163,13 @@ The members of this group are PhDs at DTU in metamodelling of scientific simulat
 >
 > Answer:
 
-We used conda to manage our dependencies in the project and made a separate conda environment to run the code in. The list of dependencies was auto-generated using pipreqs which ensures to only keep the packages that are actually used in the code in the requirements.txt file. A complete copy of the environment can be built by running:
+We used Conda to manage our dependencies in the project, creating a dedicated Conda environment to ensure consistency and reproducibility. The list of dependencies was auto-generated using pipreqs, which ensures that only the packages explicitly used in the code are included in the requirements.txt file. A new team member can recreate the exact environment by following these steps:
 
-1. conda env create -f environment.yml
-2. conda activate ml_ops
-3. pip install -e .
+1. Run 'conda env create -f environment.yml' to create the environment
+2. Activate the environment using 'conda activate ml_ops'
+3. Install the project dependencies locally with 'pip install -e .'
+
+These steps ensure that the environment mirrors the original setup, allowing seamless collaboration and project execution.
 
 ### Question 5
 
@@ -183,7 +185,7 @@ We used conda to manage our dependencies in the project and made a separate cond
 >
 > Answer:
 
-The cookiecutter template was used as the baseline structure for our project. We stayed very close to the template but deviated slightly in the src folder where the model.py script is taking encoding methods, GNN layers, and decoding methods from three new scripts with Pytorch classes. The idea is that these can contain customized modules that can be developed during the PhD to improve prediciton error of the metamodels. We deleted the visualize.py script as the full integration with wandb contains sufficient visualizations. We also deleted the api.py script as the cloud configuration files are sufficient for setting of Google Cloud.
+The cookiecutter template was used as the baseline structure for our project. We stayed very close to the template but deviated slightly in the src folder where the model.py script is now taking encoding methods, GNN layers, and decoding methods from three new scripts with PyTorch classes. The idea is that these scripts can house customized modules developed during the PhD to improve the prediction error of the metamodels. We removed the visualize.py script since full integration with W&B provides sufficient visualizations. Additionally, the api.py script was deleted as the cloud configuration files were sufficient for setting up Google Cloud.
 
 ### Question 6
 
@@ -198,7 +200,7 @@ The cookiecutter template was used as the baseline structure for our project. We
 >
 > Answer:
 
-We used typing throughout the code to ensure better readability, have better documentation, and make debugging easier. We also implemented ruff as a pre_commit action to ensure that the code merged with main is formatted properly.
+We used typing throughout the code to ensure better readability, documentation, and easier debugging. Additionally, we implemented Ruff as a pre-commit action to ensure that any code merged with the main branch adhered to proper formatting and quality standards. These measures are important in larger projects as it makes it easier for team members to maintain each others code and prevent bugs.
 
 ## Version control
 
@@ -217,7 +219,7 @@ We used typing throughout the code to ensure better readability, have better doc
 >
 > Answer:
 
-In total we have implemented 14 tests. We are testing the data.py script, the model.py script and the train.py script. These scripts are the most critical scripts in our pipeline and have calls to several other scripts (e.g., the model.py imports classes from gnn_layers, gnn_decoders, and node_embeddings). The test coverage is around 42% of the code which is in the lower end - however, the most critical parts are covered (including testing the GCN and all elements used to build it, and the TrainModel class which is by far the largest and most important class in the code).
+In total, we implemented 14 tests. These tests focus on the data.py, model.py, and train.py scripts, which are the most critical components of our pipeline. These scripts contain calls to several other scripts (e.g., model.py imports classes from gnn_layers, gnn_decoders, and node_embeddings). Our test coverage is approximately 42%, which is on the lower end, but it covers the most critical parts, including testing the GCN and all its components, as well as the TrainModel class, the largest and most important class in the code.
 
 ### Question 8
 
@@ -232,8 +234,8 @@ In total we have implemented 14 tests. We are testing the data.py script, the mo
 >
 > Answer:
 
-The total code coverage of code is 42%, which is quite far from 100% coverage. However, as mentioned above the most critical parts of our pipeline is tested in the scripts.
-
+The total code coverage of our code is 42%, which is far from 100% coverage. However, even if code coverage were close to 100%, it would not guarantee the absence of errors. Comprehensive tests can ensure critical functionality but cannot account for all edge cases or potential unforeseen issues, making it essential to complement testing with other validation practices (as code review in Github).
+ 
 ### Question 9
 
 > **Did you workflow include using branches and pull requests? If yes, explain how. If not, explain how branches and**
@@ -247,7 +249,7 @@ The total code coverage of code is 42%, which is quite far from 100% coverage. H
 >
 > Answer:
 
-As we worked together on the project repository in our group branches and PR requests were used constantly. All new work would be developed on a separate branch and to merge it to main several automations and requirements were to be satisfied.
+As a group, we consistently used branches and pull requests (PRs) in our workflow. All new work was developed on separate branches, and several automations and requirements had to be satisfied before merging into the main branch. This approach ensured proper version control, facilitated peer review, and minimized the risk of introducing bugs into the main codebase.
 
 ### Question 10
 
@@ -279,7 +281,7 @@ As we worked together on the project repository in our group branches and PR req
 >
 > Answer:
 
-We setup continous integration with several Github automataions. This included setting up the environment on github and running our tests on both linux and mac os. We had a pre_commit automation that ran ruff and formatted the code automatically.
+We set up continuous integration with several GitHub automations. This included configuring the environment on GitHub and running our tests on both Linux and macOS. Additionally, we implemented a pre-commit automation that ran Ruff to check code quality and formatted the code automatically, ensuring consistency and reducing potential errors.
 
 ## Running code and tracking experiments
 
@@ -298,8 +300,9 @@ We setup continous integration with several Github automataions. This included s
 >
 > Answer:
 
-The core of our ML pipeline is to do scientific experiments on metamodelling of simulators. Hence, we did extensive work in setting up configuration files with hydra.
-The hydra configuration setup was made with a base configuration file (hydra_config.yaml9 that points to five sub-folders with configuration files (data, inference, model, train, wandb). In these subfolders it is easy to change parameters and have specific templates for different models (e.g., one model type might require specific paramteres that can then be specified for that model type in a specific .yaml file). The hydra setup was linked to the wandb sweep setup such that if you provide parameters as a list (using "-") the configuration file is formatted into a wandb sweep dictionary that sets up a sweep.
+The core of our ML pipeline revolves around conducting scientific experiments on the metamodeling of simulators. To streamline this process, we extensively used Hydra for configuration management.
+
+The Hydra configuration setup consisted of a base configuration file (hydra_config.yaml) that linked to five subfolders containing configuration files for data, inference, model, training, and W&B integration. These subfolders allowed us to easily modify parameters and create templates specific to different models. For example, certain model types requiring unique parameters could have their settings specified in dedicated .yaml files. Furthermore, the Hydra setup was integrated with W&B sweeps, enabling seamless formatting of configuration files into W&B sweep dictionaries when parameters were provided as lists. This integration allowed us to efficiently set up and execute hyperparameter sweeps.
 
 
 ### Question 13
@@ -315,8 +318,9 @@ The hydra configuration setup was made with a base configuration file (hydra_con
 >
 > Answer:
 
-As we used configuration files and had setup a random seed in the configuration a experiment can be reproduced by using the same configuration setup.
-This can be found in wandb in the config.yaml as this is linked to the configuration file created by hydra. The model weights are also stored as an artifact in hydra and can be extracted using the evauate.py script if a path to a specific run_id in wandb is given in the inference config file. This would enable reproducing prediction results without having to retrain.
+To ensure reproducibility of experiments, we relied on configuration files and set a random seed within the configuration. By using the same configuration setup, any experiment could be replicated with identical results.
+
+W&B further facilitated reproducibility by storing configuration details in the config.yaml, which was linked to the Hydra-generated configuration file. Additionally, model weights were stored as artifacts in W&B and could be retrieved using the evaluate.py script. By specifying the path to a particular run_id in the inference configuration file, prediction results could be reproduced without retraining the model.
 
 ### Question 14
 
@@ -333,12 +337,13 @@ This can be found in wandb in the config.yaml as this is linked to the configura
 >
 > Answer:
 
-As mentioned above one of the cornerstones of this repository is the use of hydra and wandb.
-As seen in the first image the classic interface for different runs can be used to inspect the training curves and compare different models.
+One of the cornerstones of this repository is the integration of Hydra and W&B.
+
+As shown in the first image, the W&B interface allows for easy inspection of training curves and comparison of different models:
 
 [Wandb runs](figures/wandb_runs.png)
 
-As seen in the second image we also succeeded setting up the wandb sweep which makes it very easy to do hyperparameter search and identify the parameters that have the biggest impact on validation error and optimize for minimizing the loss.
+The second image demonstrates the successful setup of W&B sweeps, enabling efficient hyperparameter searches. This tool helps identify parameters with the most significant impact on validation error, ultimately optimizing the model for minimizing loss:
 
 [Wandb sweep](figures/wandb_sweeps.png)
 
@@ -355,9 +360,21 @@ As seen in the second image we also succeeded setting up the wandb sweep which m
 >
 > Answer:
 
-For this project we made to docker files that can both be built locally and on google cloud.
-The training image can be built locally running: 'docker build -f dockerfiles/train.dockerfile . -t train:latest'. It relies on copying the configuration files that are available locally and hence one image is built to train a specific configuration. This is a limitation of the current docker setup as it would have been smarter to provide the configuration files as input to a container when running the docker image. The evaluation image can be built by running: 'docker build -f dockerfiles/evaluate.dockerfile . -t evaluate:latest'. This also relies on the configuration file and in particular on a run_id on wandb from which it can download specific model weights and evaluate.
+Docker was used to create containerized applications for this project. We developed two Docker files, both of which can be built locally or on Google Cloud.
 
+The training image can be built locally using the following command:
+
+'''docker build -f dockerfiles/train.dockerfile . -t train:latest'''
+
+This image relies on locally available configuration files, which are copied into the container. 
+
+The evaluation image can be built with the command:
+
+'''docker build -f dockerfiles/evaluate.dockerfile . -t evaluate:latest'''
+
+This image also depends on configuration files and a specific run_id from W&B, which is used to download model weights for evaluation.
+
+Currently, the setup builds an image for a specific configuration, a limitation that could be addressed by providing configuration files as input to the container when running the image.
 
 ### Question 16
 
@@ -372,9 +389,12 @@ The training image can be built locally running: 'docker build -f dockerfiles/tr
 >
 > Answer:
 
-Debudding method was dependent on the specific group member.
+Debugging methods varied among group members:
 
-Oskar used VS code and used the built-in debugging methods there. Francisco used PyCharm and used the built-in debugging methods there.
+* Oskar used VS Code and its built-in debugging tools.
+* Francisco used PyCharm and its integrated debugging features.
+
+These tools facilitated efficient identification and resolution of issues during experimentation. While we did not explicitly profile the code, we believe the setup is efficient, though there is always room for improvement.
 
 ## Working in the cloud
 
