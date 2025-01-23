@@ -235,7 +235,7 @@ In total, we implemented 14 tests. These tests focus on the `data.py`, `model.py
 > Answer:
 
 The total code coverage of our code is 42%, which is far from 100% coverage. However, even if code coverage were close to 100%, it would not guarantee the absence of errors. Comprehensive tests can ensure critical functionality but cannot account for all edge cases or potential unforeseen issues, making it essential to complement testing with other validation practices (as code review in Github).
- 
+
 ### Question 9
 
 > **Did you workflow include using branches and pull requests? If yes, explain how. If not, explain how branches and**
@@ -366,7 +366,7 @@ The training image can be built locally using the following command:
 
 ```docker build -f dockerfiles/train.dockerfile . -t train:latest```
 
-This image relies on locally available configuration files, which are copied into the container. 
+This image relies on locally available configuration files, which are copied into the container.
 
 The evaluation image can be built with the command:
 
