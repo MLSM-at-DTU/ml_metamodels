@@ -599,7 +599,10 @@ No.
 >
 > Answer:
 
---- question 29 fill here ---
+In the figure below the overall architecture of the repository is outlined:
+[Repository overview](figures/ml_ops_overview.png)
+
+As it can be seen on the figure, the control and integrity of the repository is managed using github actions and code reviews. The code can be run both to train a model and to evaulate a model. This is achieved using docker images and containers that can be build and run in either Google Cloud or on the local desktop. The training image is linked to wandb where all experiements are logged. The evaulate script is also linked to wandb where a run_id must be provided in the config file and then the evaulate image can be build and executed.
 
 ### Question 30
 
@@ -630,8 +633,8 @@ The biggest struggles were defnitely making the project work in the cloud. Havin
 >
 > Answer:
 
-Oskar s155827 was in charge of setting up the initial cookie cutter project, developing the project idea and the unit tests.
+Oskar s155827 was in charge of setting up the initial cookie cutter project, developing the project idea and setting up wandb sweep.
 
 Francisco s250106 was responsible for developing the docker images for training our models in the cloud.
 
-Both members contributed with Typer, Hydra, WandB setup, logging. Both member were responsible for the maintenance of the github repository as well as github Actions. Both members contributed to the code, the README.md file, the report and the presentation.
+Both members contributed with Typer, Hydra, logging, and testing. Both member were responsible for the maintenance of the github repository as well as github Actions. Both members contributed to the code, the README.md file, the report and the presentation.
