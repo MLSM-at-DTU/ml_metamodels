@@ -399,6 +399,7 @@ We used:
 - Cloud Storage to store our data. This service is used to store and manage data in the cloud.
 - Vertex AI to train our models. This service is used to train machine learning models in the cloud.
 - Secret Manager to store our secrets. This service is used to store and manage secrets in the cloud like WANDB_API_KEY.
+- Cloud Run to showcase that we can setup a simple API, but no usecase for use so we did not extend this.
 
 ### Question 18
 
@@ -476,7 +477,11 @@ Both ways of training are described on the README.md file.
 >
 > Answer:
 
---- question 23 fill here ---
+Yes, we managed to write a Simple API and managed to deploy it on Cloud Run. We used FastAPI to do this, but did not extend the API to expose anything since this adds nothing to the intent of this project.
+[Fast API](figures/fast_api.png)
+
+Oh look, number 42, must mean something...
+[42.png](figures/42.png)
 
 ### Question 24
 
@@ -492,7 +497,7 @@ Both ways of training are described on the README.md file.
 >
 > Answer:
 
---- question 24 fill here ---
+As explained on Question 23, we did indeed manage to expose a simple API on cloud, also locally, but did not develop a more complex API that would expose our model or anything like that. The reason is that the use case of this project is for experimentation on metamodelling of scientific simulators and for that reason, there's no point in deploying the models.
 
 ### Question 25
 
@@ -507,7 +512,7 @@ Both ways of training are described on the README.md file.
 >
 > Answer:
 
---- question 25 fill here ---
+Based on answers 23 and 24, there was no point in performing load test on the API.
 
 ### Question 26
 
@@ -522,7 +527,7 @@ Both ways of training are described on the README.md file.
 >
 > Answer:
 
---- question 26 fill here ---
+Based on answers 23 and 24, there was no point in performing monitoring on the deployed model.
 
 ## Overall discussion of project
 
@@ -557,7 +562,7 @@ In total our total cost was $4.14. [Cost breakdown](figures/cost.png). The most 
 >
 > Answer:
 
---- question 28 fill here ---
+No.
 
 ### Question 29
 
