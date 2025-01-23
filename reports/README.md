@@ -165,9 +165,9 @@ The members of this group are PhD students at DTU specializing in metamodeling o
 
 We used Conda to manage our dependencies in the project, creating a dedicated Conda environment to ensure consistency and reproducibility. The list of dependencies was auto-generated using pipreqs, which ensures that only the packages explicitly used in the code are included in the requirements.txt file. A new team member can recreate the exact environment by following these steps:
 
-1. Run 'conda env create -f environment.yml' to create the environment
-2. Activate the environment using 'conda activate ml_ops'
-3. Install the project dependencies locally with 'pip install -e .'
+1. Run `conda env create -f environment.yml` to create the environment
+2. Activate the environment using `conda activate ml_ops`
+3. Install the project dependencies locally with `pip install -e .`
 
 These steps ensure that the environment mirrors the original setup, allowing seamless collaboration and project execution.
 
@@ -185,7 +185,7 @@ These steps ensure that the environment mirrors the original setup, allowing sea
 >
 > Answer:
 
-The cookiecutter template was used as the baseline structure for our project. We stayed very close to the template but deviated slightly in the src folder where the model.py script is now taking encoding methods, GNN layers, and decoding methods from three new scripts with PyTorch classes. The idea is that these scripts can house customized modules developed during the PhD to improve the prediction error of the metamodels. We removed the visualize.py script since full integration with W&B provides sufficient visualizations. Additionally, the api.py script was deleted as the cloud configuration files were sufficient for setting up Google Cloud.
+The cookiecutter template was used as the baseline structure for our project. We stayed very close to the template but deviated slightly in the src folder where the model.py script is now taking encoding methods, GNN layers, and decoding methods from three new scripts with PyTorch classes. The idea is that these scripts can house customized modules developed during the PhD to improve the prediction error of the metamodels. We removed the `visualize.py` script since full integration with W&B provides sufficient visualizations. Additionally, the `api.py` script was deleted as the cloud configuration files were sufficient for setting up Google Cloud.
 
 ### Question 6
 
@@ -219,7 +219,7 @@ We used typing throughout the code to ensure better readability, documentation, 
 >
 > Answer:
 
-In total, we implemented 14 tests. These tests focus on the data.py, model.py, and train.py scripts, which are the most critical components of our pipeline. These scripts contain calls to several other scripts (e.g., model.py imports classes from gnn_layers, gnn_decoders, and node_embeddings). Our test coverage is approximately 42%, which is on the lower end, but it covers the most critical parts, including testing the GCN and all its components, as well as the TrainModel class, the largest and most important class in the code.
+In total, we implemented 14 tests. These tests focus on the `data.py`, `model.py`, and `train.py` scripts, which are the most critical components of our pipeline. These scripts contain calls to several other scripts (e.g., `model.py` imports classes from `gnn_layers.py`, `gnn_decoders.py`, and `node_embeddings.py`). Our test coverage is approximately 42%, which is on the lower end, but it covers the most critical parts, including testing the GCN and all its components, as well as the `TrainModel` class, the largest and most important class in the code.
 
 ### Question 8
 
@@ -302,7 +302,7 @@ We set up continuous integration with several GitHub automations. This included 
 
 The core of our ML pipeline revolves around conducting scientific experiments on the metamodeling of simulators. To streamline this process, we extensively used Hydra for configuration management.
 
-The Hydra configuration setup consisted of a base configuration file (hydra_config.yaml) that linked to five subfolders containing configuration files for data, inference, model, training, and W&B integration. These subfolders allowed us to easily modify parameters and create templates specific to different models. For example, certain model types requiring unique parameters could have their settings specified in dedicated .yaml files. Furthermore, the Hydra setup was integrated with W&B sweeps, enabling seamless formatting of configuration files into W&B sweep dictionaries when parameters were provided as lists. This integration allowed us to efficiently set up and execute hyperparameter sweeps.
+The Hydra configuration setup consisted of a base configuration file (`hydra_config.yaml`) that linked to five subfolders containing configuration files for `data`, `inference`, `model`, `train`, and `wandb`. These subfolders allowed us to easily modify parameters and create templates specific to different models. For example, certain model types requiring unique parameters could have their settings specified in dedicated .yaml files. Furthermore, the Hydra setup was integrated with W&B sweeps, enabling seamless formatting of configuration files into W&B sweep dictionaries when parameters were provided as lists. This integration allowed us to efficiently set up and execute hyperparameter sweeps.
 
 
 ### Question 13
@@ -320,7 +320,7 @@ The Hydra configuration setup consisted of a base configuration file (hydra_conf
 
 To ensure reproducibility of experiments, we relied on configuration files and set a random seed within the configuration. By using the same configuration setup, any experiment could be replicated with identical results.
 
-W&B further facilitated reproducibility by storing configuration details in the config.yaml, which was linked to the Hydra-generated configuration file. Additionally, model weights were stored as artifacts in W&B and could be retrieved using the evaluate.py script. By specifying the path to a particular run_id in the inference configuration file, prediction results could be reproduced without retraining the model.
+W&B further facilitated reproducibility by storing configuration details in the `hydra_config.yaml`, which was linked to the Hydra-generated configuration file. Additionally, model weights were stored as artifacts in W&B and could be retrieved using the evaluate.py script. By specifying the path to a particular run_id in the inference configuration file, prediction results could be reproduced without retraining the model.
 
 ### Question 14
 
@@ -364,13 +364,13 @@ Docker was used to create containerized applications for this project. We develo
 
 The training image can be built locally using the following command:
 
-'''docker build -f dockerfiles/train.dockerfile . -t train:latest'''
+```docker build -f dockerfiles/train.dockerfile . -t train:latest```
 
 This image relies on locally available configuration files, which are copied into the container. 
 
 The evaluation image can be built with the command:
 
-'''docker build -f dockerfiles/evaluate.dockerfile . -t evaluate:latest'''
+```docker build -f dockerfiles/evaluate.dockerfile . -t evaluate:latest```
 
 This image also depends on configuration files and a specific run_id from W&B, which is used to download model weights for evaluation.
 
