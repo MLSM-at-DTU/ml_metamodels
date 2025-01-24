@@ -58,7 +58,7 @@ will check the repositories and the code to verify your answers.
   are using (M2+M6)
 * [x] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
 * [x] Do a bit of code typing and remember to document essential parts of your code (M7)
-* [ ] Setup version control for your data or part of your data (M8)
+* [x] Setup version control for your data or part of your data (M8)
 * [x] Add command line interfaces and project commands to your code where it makes sense (M9)
 * [x] Construct one or multiple docker files for your code (M10)
 * [x] Build the docker files locally and make sure they work as intended (M10)
@@ -82,7 +82,7 @@ will check the repositories and the code to verify your answers.
 * [ ] Add a continues workflow that triggers when data changes (M19)
 * [ ] Add a continues workflow that triggers when changes to the model registry is made (M19)
 * [ ] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
-* [ ] Create a trigger workflow for automatically building your docker images (M21)
+* [x] Create a trigger workflow for automatically building your docker images (M21)
 * [x] Get your model training in GCP using either the Engine or Vertex AI (M21)
 * [ ] Create a FastAPI application that can do inference using your model (M22)
 * [ ] Deploy your model in GCP using either Functions or Run as the backend (M23)
@@ -324,8 +324,9 @@ colleagues would then be there to support if it was needed.
 >
 > Answer:
 
---- question 10 fill here --- Francisco, leaving this blank until we decide. Please fill out if you have something to
-say here.
+While we have not employed DVC specifically for data version control, we do maintain versioned models via Docker images in a cloud-based Artifact Registry. Each time we update our models, a new Docker image is pushed, effectively capturing and preserving the state of the code, dependencies, and any embedded data artifacts used by the model at that point in time. This approach ensures that we can easily roll back to previous versions of our models if needed and keeps our production deployments consistent.
+
+Still, a tool like DVC could be beneficial in scenarios where large datasets themselves need explicit versioning and collaborative workflows. For example, if you need to track incremental changes to a massive dataset in a structured manner or experiment with multiple data subsets for training and evaluation, DVC would allow you to manage data revisions alongside code changes in Git. This can be especially helpful when working in larger teams or when reproducibility is a high priority.
 
 ### Question 11
 
@@ -744,6 +745,11 @@ reviews. The code can be run both to train a model and to evaulate a model. This
 containers that can be build and run in either Google Cloud or on the local desktop. The training image is linked to
 wandb where all experiements are logged. The evaulate script is also linked to wandb where a run_id must be provided in
 the config file and then the evaulate image can be build and executed.
+The image is built and pushed to the Artifact Registry and then run on a Compute Engine or Vertex AI. The data is stored
+in the Cloud Storage and the secrets are stored in the Secret Manager. The API is deployed on Cloud Run, even though it's
+only a simple API that is not exposing anything related to the model since the purpose of the repository does not require
+this. Github Actions is used to ensure that the code is always in a working state and that the code is always formatted
+properly.
 
 ### Question 30
 
