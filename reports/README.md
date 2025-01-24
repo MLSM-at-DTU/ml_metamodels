@@ -328,7 +328,6 @@ While we have not employed DVC specifically for data version control, we do main
 
 Still, a tool like DVC could be beneficial in scenarios where large datasets themselves need explicit versioning and collaborative workflows. For example, if you need to track incremental changes to a massive dataset in a structured manner or experiment with multiple data subsets for training and evaluation, DVC would allow you to manage data revisions alongside code changes in Git. This can be especially helpful when working in larger teams or when reproducibility is a high priority.
 
-
 ### Question 11
 
 > **Discuss you continuous integration setup. What kind of continuous integration are you running (unittesting,**
@@ -750,7 +749,6 @@ in the Cloud Storage and the secrets are stored in the Secret Manager. The API i
 only a simple API that is not exposing anything related to the model since the purpose of the repository does not require
 this. Github Actions is used to ensure that the code is always in a working state and that the code is always formatted
 properly.
-
 
 ### Question 30
 
