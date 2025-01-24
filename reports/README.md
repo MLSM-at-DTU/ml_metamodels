@@ -419,18 +419,19 @@ pertaining to an experiment was logged and accessible, enabling easy replication
 >
 > Answer:
 
-One of the cornerstones of this repository is the integration of Hydra and W&B.
-
-As shown in the first image, the W&B interface allows for easy inspection of training curves and comparison of different
-models:
+One of the cornerstones of this repository is the integration of Hydra and W&B. As shown in the first image, the W&B interface allows for easy inspection of training curves and comparison of different model runs:
 
 ![Wandb runs](figures/wandb_runs.png)
 
-The second image demonstrates the successful setup of W&B sweeps, enabling efficient hyperparameter searches. This tool
-helps identify parameters with the most significant impact on validation error, ultimately optimizing the model for
-minimizing loss:
+The Wandb interface allows the users to investigate the specific configurations of the different runs and the model weights are stored as an artifact in Wandb. The setup also allows for saving the data used to train the specific model as an artifact. This is as default set to false as the datasets can be quite large and Wandb is not build to store very large files.
+
+The second image demonstrates the successful setup of W&B sweeps, enabling efficient hyperparameter searches:
 
 ![Wandb sweep](figures/wandb_sweeps.png)
+
+This tool helps identify parameters with the most significant impact on validation error, ultimately optimizing the model for minimizing loss. The Wandb sweep interface is a amazing tool for researchers that want to test different models and easily evaulate the effect on the validation loss when doing smaller tweeks.
+
+In general, Wandb is an amazing tool to manage experimentation with Machine Learning models in a strutured way and is a great alternative to store model weights and configurations of model runs on HDDs either on the local machine, on a local server or on a Google Cloud Bucket.
 
 ### Question 15
 
@@ -756,9 +757,15 @@ the config file and then the evaulate image can be build and executed.
 >
 > Answer:
 
-The biggest struggles were defnitely making the project work in the cloud. Having a connection directly on runtime to
-wandb via a wandb_api_key, that is provided through secret manager, injected in VertexAI and used when running the
-docker image that exists on the Artifact Registry.
+While developing the project, we overall ran into two larger struggles:
+
+1. Setting up wandb sweep
+2. Setting up Google Cloud
+
+When setting up wandb, there was issues in how to provide the API key to the docker containers in a safe way. In the beginning, we built the docker image and during this we provided the API key as an environment variable by copying the `.env` file. We ensured that the `.env` file was in the `.gitignore` and didn't push the docker image to the docker remote repositories. This had the limitation that users would need a `.env` file with the `WANDB_API_KEY` to build the image. We ended up being able to build the docker image without providing the `WANDB_API_KEY` which allowed us to make a VM without containing secret keys. When running the container, the user then needed to provide the `WANDB_API_KEY` for the image to run.
+
+When setting up the project work in the cloud we experienced several issues. It was difficult to succeed with a connection directly on runtime to wandb via a `WANDB_API_KEY`. However, we solved that by providing the API key through the secret manager and inject it in VertexAI. Then when running the
+docker image that exists on the Artifact Registry it would be provided with the `WANDB_API_KEY`.
 
 ### Question 31
 
