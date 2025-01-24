@@ -227,13 +227,11 @@ These measures are important in larger projects as it makes it easier for team m
 >
 > Answer:
 
-In total we have implemented 14 tests. We are testing the `data.py` script, the `model.py` script and the `train.py` script. These scripts are the most critical scripts in our pipeline and have calls to several other scripts (e.g., the `model.py` imports classes from `gnn_layers.py`, `gnn_decoders.py`, and `node_embeddings.py`). 
+In total we have implemented 14 tests. We are testing the `data.py` script, the `model.py` script and the `train.py` script. These scripts are the most critical scripts in our pipeline and have calls to several other scripts (e.g., the `model.py` imports classes from `gnn_layers.py`).
 
 * The `test_data.py` checks whether the data is available and has been formatted correctly (e.g., the existence of the data and the shape of x features and edge features).
-* The `test_model.py` checks whether the shapes of the encoder, gnn_layer, and decoder works and also puts these three elements together into a transformer to check that the shapes works here as well. 
+* The `test_model.py` checks whether the shapes of the encoder, gnn_layer, and decoder works and also puts these three elements together into a transformer.
 * The `train_model.py` checks is the `TrainModel` instance can be initialized with a given example of a configuration file.
-
-The test coverage is around 42% of the code which is in the lower end. However, the most critical parts are covered (including testing the GCN and all elements used to build it, and the `TrainModel` class which is by far the largest and most important class in the code).
 
 ### Question 8
 
@@ -248,7 +246,7 @@ The test coverage is around 42% of the code which is in the lower end. However, 
 >
 > Answer:
 
-The total code coverage of our code is 42%, which is far from 100% coverage. However, even if code coverage were close to 100%, it would not guarantee the absence of errors. Comprehensive tests can ensure critical functionality but cannot account for all edge cases or potential unforeseen issues, making it essential to complement testing with other validation practices (as code review in Github).
+The test coverage is around 42% of the code which is in the lower end (and quite far from 100%). However, the most critical parts are covered (including testing the GCN and all elements used to build it, and the `TrainModel` class which is by far the largest and most important class in the code). In addition, even if code coverage were close to 100%, it would not guarantee the absence of errors. Comprehensive tests can ensure critical functionality but cannot account for all edge cases or potential unforeseen issues, making it essential to complement testing with other validation practices (as code review in Github).
 
 ### Question 9
 
@@ -263,7 +261,11 @@ The total code coverage of our code is 42%, which is far from 100% coverage. How
 >
 > Answer:
 
-As a group, we consistently used branches and pull requests (PRs) in our workflow. All new work was developed on separate branches, and several automations and requirements had to be satisfied before merging into the main branch. This approach ensured proper version control, facilitated peer review, and minimized the risk of introducing bugs into the main codebase.
+As a group, we consistently used branches and pull requests (PRs) in our workflow. All new work was developed on separate branches, and several automations and requirements had to be satisfied before merging into the main branch. This approach ensured proper version control, facilitated peer review, and minimized the risk of introducing bugs into the main codebase. 
+
+In order to merge code, all tests had to pass on both ubuntu and macos, the pre-commit had to be passed, and another member of the group needed to review all code changes and approve them. When approved the student that had submitted the PR would then merge into main. 
+
+If there was conflicts the submitter of the PR would have to resolve these before a code review. Other student / colleagues would then be there to support if it was needed. 
 
 ### Question 10
 
@@ -295,7 +297,7 @@ As a group, we consistently used branches and pull requests (PRs) in our workflo
 >
 > Answer:
 
-We set up continuous integration with several GitHub automations. This included configuring the environment on GitHub and running our tests on both Linux and macOS. Additionally, we implemented a pre-commit automation that ran Ruff to check code quality and formatted the code automatically, ensuring consistency and reducing potential errors.
+We set up continuous integration with several GitHub automations. This included configuring the environment on GitHub and running our tests on both ubuntu and macOS. Additionally, we implemented a pre-commit automation that ran Ruff to check code quality and formatted the code automatically, ensuring consistency and reducing potential errors. 
 
 ## Running code and tracking experiments
 
@@ -447,7 +449,7 @@ We used:
 >
 > Answer:
 
-We used Compute engine to run our docker images. We used instances with the following hardware: n1-standard-1. We created a VM instance called playground1 on Zone: europe-west1-b and then can connect to it via ssh.
+We used Compute engine to run our docker images. We used instances with the following hardware: n1-standard-1. We created a VM instance called playground1 on Zone: europe-west1-b and then can connect to it via ssh. 
 
 ### Question 19
 
@@ -457,7 +459,6 @@ We used Compute engine to run our docker images. We used instances with the foll
 > Answer:
 
 [General cloud storage](figures/cloud_storage1.png)
-
 [Raw and processed data](figures/cloud_storage2.png)
 
 ### Question 20
@@ -491,7 +492,7 @@ We used Compute engine to run our docker images. We used instances with the foll
 >
 > Answer:
 
-Yes, we managed to train our model in the cloud using Vertex AI. We did this by creating a custom job and then selecting the docker image we wanted to run that is on the artifact registry. We then selected the machine type and the number of nodes we wanted to use. The reason we choose Vertex AI was because it is a managed service that makes it easy to train machine learning models in the cloud. Additionally we inject WANDB_API_KEY on RUNTIME from GCP Secret Manager to log the training process to Weights & Biases and to be able to do sweeps.
+We managed to train our model in the cloud using Vertex AI. We did this by creating a custom job and then selecting the docker image we wanted to run that is on the artifact registry. We then selected the machine type and the number of nodes we wanted to use. The reason we choose Vertex AI was because it is a managed service that makes it easy to train machine learning models in the cloud. Additionally we inject WANDB_API_KEY on RUNTIME from GCP Secret Manager to log the training process to Weights & Biases and to be able to do sweeps.
 We also managed to do all of this using Compute Engine by running our docker images on a virtual machine, playground1.
 Both ways of training are described on the README.md file.
 
@@ -510,11 +511,15 @@ Both ways of training are described on the README.md file.
 >
 > Answer:
 
-Yes, we managed to write a Simple API and managed to deploy it on Cloud Run. We used FastAPI to do this, but did not extend the API to expose anything since this adds nothing to the intent of this project.
+We managed to write a Simple API and managed to deploy it on Cloud Run and used FastAPI to do this.
 [Fast API](figures/fast_api.png)
+
+We did not extend the API to expose our model and be able to do inference since this adds nothing to the intent of this project. The goal of the repository is to support us in doing research and build custom GNNs for predicting the outcome of scientific simulators. 
 
 Oh look, number 42, must mean something...
 [42.png](figures/42.png)
+
+As it can be seen from the above screenshot, the API was successfully deployed on the Google Cloud which shows that we could have added model inference to it, if it had made sense for our purpose.
 
 ### Question 24
 
@@ -530,7 +535,7 @@ Oh look, number 42, must mean something...
 >
 > Answer:
 
-As explained on Question 23, we did indeed manage to expose a simple API on cloud, also locally, but did not develop a more complex API that would expose our model or anything like that. The reason is that the use case of this project is for experimentation on metamodelling of scientific simulators and for that reason, there's no point in deploying the models.
+As explained on Question 23, we did indeed manage to expose a simple API on cloud, also locally, but did not develop a more complex API that would expose our model or be able to do model inference. The reason is that the use case of this project is for experimentation on metamodelling of scientific simulators and for that reason, there's no point in deploying the models.
 
 ### Question 25
 
