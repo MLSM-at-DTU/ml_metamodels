@@ -45,19 +45,22 @@ The directory structure of the project looks like this:
 ├── src/                      # Source code
 │   ├── project_name/
 │   │   ├── __init__.py
-│   │   ├── api.py
 │   │   ├── data.py
 │   │   ├── evaluate.py
+│   │   ├── gnn_decoders.py
+│   │   ├── gnn_layers.py
 │   │   ├── models.py
-│   │   ├── train.py
-│   │   └── visualize.py
+│   │   ├── node_embeddings.py
+│   │   └── train.py
 └── tests/                    # Tests
 │   ├── __init__.py
-│   ├── test_api.py
+│   ├── test_model.py
 │   ├── test_data.py
-│   └── test_model.py
+│   └── test_train.py
 ├── .gitignore
 ├── .pre-commit-config.yaml
+├── environment.yml
+├── fastapi_app.py
 ├── LICENSE
 ├── pyproject.toml            # Python project file
 ├── README.md                 # Project README
