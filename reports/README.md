@@ -55,7 +55,7 @@ will check the repositories and the code to verify your answers.
 * [x] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
 * [x] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
 * [x] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
-    are using (M2+M6)
+  are using (M2+M6)
 * [x] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
 * [x] Do a bit of code typing and remember to document essential parts of your code (M7)
 * [ ] Setup version control for your data or part of your data (M8)
@@ -114,6 +114,7 @@ will check the repositories and the code to verify your answers.
 ## Group information
 
 ### Question 1
+
 > **Enter the group number you signed up on <learn.inside.dtu.dk>**
 >
 > Answer:
@@ -121,6 +122,7 @@ will check the repositories and the code to verify your answers.
 93
 
 ### Question 2
+
 > **Enter the study number for each member in the group**
 >
 > Example:
@@ -132,6 +134,7 @@ will check the repositories and the code to verify your answers.
 fmfsa: s250106, obola: s155827
 
 ### Question 3
+
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
 > **did you choose to work with and did it help you complete the project?**
 >
@@ -143,7 +146,14 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
-The members of this group are PhD students at DTU specializing in metamodeling of scientific simulators. We utilized the third-party framework PyG, which builds upon the PyTorch library to simplify the design and training of Graph Neural Networks (GNNs). This framework provides a streamlined framework for the development of metamodels for various simulators by providing tools to implement cutting-edge GNN layer types within the PyTorch ecosystem. PyG allowed us to efficiently test our research against state-of-the-art methodologies, enhancing both the robustness and scalability of our metamodeling efforts. Our dataset consists of a list of PyG objects (i.e., PyG Graphs) that plays nicely together with ML model pipeline. The PyG framework is essential for doing research in a fast changing environment as machine learning as it reduces the time spent on coding significantly.
+The members of this group are PhD students at DTU specializing in metamodeling of scientific simulators. We utilized the
+third-party framework PyG, which builds upon the PyTorch library to simplify the design and training of Graph Neural
+Networks (GNNs). This framework provides a streamlined framework for the development of metamodels for various
+simulators by providing tools to implement cutting-edge GNN layer types within the PyTorch ecosystem. PyG allowed us to
+efficiently test our research against state-of-the-art methodologies, enhancing both the robustness and scalability of
+our metamodeling efforts. Our dataset consists of a list of PyG objects (i.e., PyG Graphs) that plays nicely together
+with ML model pipeline. The PyG framework is essential for doing research in a fast changing environment as machine
+learning as it reduces the time spent on coding significantly.
 
 ## Coding environment
 
@@ -163,15 +173,22 @@ The members of this group are PhD students at DTU specializing in metamodeling o
 >
 > Answer:
 
-We used Conda to manage our dependencies in the project, creating a dedicated Conda environment to ensure consistency and reproducibility. The list of dependencies was auto-generated using pipreqs, which ensures that only the packages explicitly used in the code are included in the requirements.txt file. A new team member can recreate the exact environment by following these steps:
+We used Conda to manage our dependencies in the project, creating a dedicated Conda environment to ensure consistency
+and reproducibility. The list of dependencies was auto-generated using pipreqs, which ensures that only the packages
+explicitly used in the code are included in the requirements.txt file. A new team member can recreate the exact
+environment by following these steps:
 
 1. Run `conda env create -f environment.yml` to create the environment
 2. Activate the environment using `conda activate ml_ops`
 3. Install the project dependencies locally with `pip install -e .`
 
-These steps ensure that the environment mirrors the original setup, allowing seamless collaboration and project execution.
+These steps ensure that the environment mirrors the original setup, allowing seamless collaboration and project
+execution.
 
-On a local computer it is great to have conda to control several virtual environments on the same machine. However, the dependencies can also be installed using only pip and the `requirements.txt` file (this is for example how the VMs on docker are configured). The file `requirements_dev.txt` contains the packages that are needed for further development of the repository (in our case the two files are identical).
+On a local computer it is great to have conda to control several virtual environments on the same machine. However, the
+dependencies can also be installed using only pip and the `requirements.txt` file (this is for example how the VMs on
+docker are configured). The file `requirements_dev.txt` contains the packages that are needed for further development of
+the repository (in our case the two files are identical).
 
 ### Question 5
 
@@ -187,7 +204,12 @@ On a local computer it is great to have conda to control several virtual environ
 >
 > Answer:
 
-The cookiecutter template was used as the baseline structure for our project. We stayed very close to the template but deviated slightly in the src folder where the model.py script is now taking encoding methods, GNN layers, and decoding methods from three new scripts with PyTorch classes. The idea is that these scripts can house customized modules developed during the PhD to improve the prediction error of the metamodels. We removed the `visualize.py` script since full integration with W&B provides sufficient visualizations. Additionally, the `api.py` script was deleted as the cloud configuration files were sufficient for setting up Google Cloud.
+The cookiecutter template was used as the baseline structure for our project. We stayed very close to the template but
+deviated slightly in the src folder where the model.py script is now taking encoding methods, GNN layers, and decoding
+methods from three new scripts with PyTorch classes. The idea is that these scripts can house customized modules
+developed during the PhD to improve the prediction error of the metamodels. We removed the `visualize.py` script since
+full integration with W&B provides sufficient visualizations. Additionally, the `api.py` script was deleted as the cloud
+configuration files were sufficient for setting up Google Cloud.
 
 ### Question 6
 
@@ -202,13 +224,21 @@ The cookiecutter template was used as the baseline structure for our project. We
 >
 > Answer:
 
-We used typing throughout the code to ensure better readability, have better documentation, and make debugging easier. Typing is a great tool to ensure that the reader of a function can see what type of argument the function expects (e.g., an argument `x` in a `torch.module` class is expected to be a `torch.tensor` which could then be written as `x: torch.tensor` in the definition of the function).
+We used typing throughout the code to ensure better readability, have better documentation, and make debugging easier.
+Typing is a great tool to ensure that the reader of a function can see what type of argument the function expects (e.g.,
+an argument `x` in a `torch.module` class is expected to be a `torch.tensor` which could then be written as
+`x: torch.tensor` in the definition of the function).
 
-We also implemented ruff as a pre_commit action to ensure that the code was always formatted properly. This helped us removing whitespace after a finished line of code and generally identifying undesirable formatting patterns. Using Ruff as a pre-commit action to ensure that any code merged with the main branch adhered to proper formatting and quality standards.
+We also implemented ruff as a pre_commit action to ensure that the code was always formatted properly. This helped us
+removing whitespace after a finished line of code and generally identifying undesirable formatting patterns. Using Ruff
+as a pre-commit action to ensure that any code merged with the main branch adhered to proper formatting and quality
+standards.
 
-At last, we tried to document our code with inline comments using `#` and with doc-strings using `'''`. This is good practice and also supports efficient collaboration when building on each others code.
+At last, we tried to document our code with inline comments using `#` and with doc-strings using `'''`. This is good
+practice and also supports efficient collaboration when building on each others code.
 
-These measures are important in larger projects as it makes it easier for team members to maintain each others code and prevent bugs.
+These measures are important in larger projects as it makes it easier for team members to maintain each others code and
+prevent bugs.
 
 ## Version control
 
@@ -227,11 +257,14 @@ These measures are important in larger projects as it makes it easier for team m
 >
 > Answer:
 
-In total we have implemented 14 tests. We are testing the `data.py` script, the `model.py` script and the `train.py` script. These scripts are the most critical scripts in our pipeline and have calls to several other scripts (e.g., the `model.py` imports classes from `gnn_layers.py`).
+In total we have implemented 14 tests. We are testing the `data.py`, the `model.py` and the `train.py`.
 
-* The `test_data.py` checks whether the data is available and has been formatted correctly (e.g., the existence of the data and the shape of x features and edge features).
-* The `test_model.py` checks whether the shapes of the encoder, gnn_layer, and decoder works and also puts these three elements together into a transformer.
-* The `train_model.py` checks is the `TrainModel` instance can be initialized with a given example of a configuration file.
+* The `test_data.py` checks whether the data is available and has been formatted correctly (e.g., the existence of the
+  data and the shape of x features and edge features).
+* The `test_model.py` checks whether the shapes of the encoder, gnn_layer, and decoder works and also puts these three
+  elements together into a transformer.
+* The `train_model.py` checks is the `TrainModel` instance can be initialized with a given example of a configuration
+  file.
 
 ### Question 8
 
@@ -246,7 +279,12 @@ In total we have implemented 14 tests. We are testing the `data.py` script, the 
 >
 > Answer:
 
-The test coverage is around 42% of the code which is in the lower end (and quite far from 100%). However, the most critical parts are covered (including testing the GCN and all elements used to build it, and the `TrainModel` class which is by far the largest and most important class in the code). In addition, even if code coverage were close to 100%, it would not guarantee the absence of errors. Comprehensive tests can ensure critical functionality but cannot account for all edge cases or potential unforeseen issues, making it essential to complement testing with other validation practices (as code review in Github).
+The test coverage is around 42% of the code which is in the lower end (and quite far from 100%). However, the most
+critical parts are covered (including testing the GCN and all elements used to build it, and the `TrainModel` class
+which is by far the largest and most important class in the code). In addition, even if code coverage were close to
+100%, it would not guarantee the absence of errors. Comprehensive tests can ensure critical functionality but cannot
+account for all edge cases or potential unforeseen issues, making it essential to complement testing with other
+validation practices (as code review in Github).
 
 ### Question 9
 
@@ -261,11 +299,17 @@ The test coverage is around 42% of the code which is in the lower end (and quite
 >
 > Answer:
 
-As a group, we consistently used branches and pull requests (PRs) in our workflow. All new work was developed on separate branches, and several automations and requirements had to be satisfied before merging into the main branch. This approach ensured proper version control, facilitated peer review, and minimized the risk of introducing bugs into the main codebase.
+As a group, we consistently used branches and pull requests (PRs) in our workflow. All new work was developed on
+separate branches, and several automations and requirements had to be satisfied before merging into the main branch.
+This approach ensured proper version control, facilitated peer review, and minimized the risk of introducing bugs into
+the main codebase.
 
-In order to merge code, all tests had to pass on both ubuntu and macos, the pre-commit had to be passed, and another member of the group needed to review all code changes and approve them. When approved the student that had submitted the PR would then merge into main.
+In order to merge code, all tests had to pass on both ubuntu and macos, the pre-commit had to be passed, and another
+member of the group needed to review all code changes and approve them. When approved the student that had submitted the
+PR would then merge into main.
 
-If there was conflicts the submitter of the PR would have to resolve these before a code review. Other student / colleagues would then be there to support if it was needed.
+If there was conflicts the submitter of the PR would have to resolve these before a code review. Other student /
+colleagues would then be there to support if it was needed.
 
 ### Question 10
 
@@ -280,12 +324,13 @@ If there was conflicts the submitter of the PR would have to resolve these befor
 >
 > Answer:
 
---- question 10 fill here --- Francisco, leaving this blank until we decide. Please fill out if you have something to say here.
+--- question 10 fill here --- Francisco, leaving this blank until we decide. Please fill out if you have something to
+say here.
 
 ### Question 11
 
 > **Discuss you continuous integration setup. What kind of continuous integration are you running (unittesting,**
-> **linting, etc.)? Do you test multiple operating systems, Python  version etc. Do you make use of caching? Feel free**
+> **linting, etc.)? Do you test multiple operating systems, Python version etc. Do you make use of caching? Feel free**
 > **to insert a link to one of your GitHub actions workflow.**
 >
 > Recommended answer length: 200-300 words.
@@ -297,7 +342,19 @@ If there was conflicts the submitter of the PR would have to resolve these befor
 >
 > Answer:
 
-We set up continuous integration with several GitHub automations. This included configuring the environment on GitHub and running our tests on both ubuntu and macOS. Additionally, we implemented a pre-commit automation that ran Ruff to check code quality and formatted the code automatically, ensuring consistency and reducing potential errors.
+We set up continuous integration with several GitHub automations. This included configuring the environment on GitHub
+and running our tests on both ubuntu and macOS. Additionally, we implemented a pre-commit automation that ran Ruff to
+check code quality and formatted the code automatically, ensuring consistency and reducing potential errors. We also
+setup a codecheck that runs ```ruff check .``` and ```ruff format .``` but in the end do not use. Similar to our
+pre_commit based on ```stefanzweifel``` git repo. The reason for this is because we also setup pre-commit CI that runs
+the same commands and also we wanted to have a more consistent setup. The pre-commit CI is also faster than the
+codecheck CI. For example our unittests workflow can be checked
+on [tests.yaml](/Users/fmfsa/Repositories/ml_metamodels/.github/workflows/tests.yaml). Additionally, our pre-commit CI
+can be checked on [PRE-COMMIT CI](https://results.pre-commit.ci/run/github/914763986/1737407950.3heoTpreQTaBC9l-VAaUXw).
+For the unit tests workflow upon each push or pull request to the main branch, it checks out the code, sets up Python (
+3.11), installs dependencies, and runs pytest with coverage. The workflow uses a matrix strategy to test on both Ubuntu
+and macOS. For pushes to the main branch, it also authenticates with GCP and submits the build to Cloud Build for
+continuous integration.
 
 ## Running code and tracking experiments
 
@@ -312,13 +369,18 @@ We set up continuous integration with several GitHub automations. This included 
 > Recommended answer length: 50-100 words.
 >
 > Example:
-> *We used a simple argparser, that worked in the following way: Python  my_script.py --lr 1e-3 --batch_size 25*
+> *We used a simple argparser, that worked in the following way: Python my_script.py --lr 1e-3 --batch_size 25*
 >
 > Answer:
 
-The core of our ML pipeline revolves around conducting scientific experiments on the metamodeling of simulators. To streamline this process, we extensively used Hydra for configuration management.
+The core of our ML pipeline revolves around conducting scientific experiments on the metamodeling of simulators. To
+streamline this process, we extensively used Hydra for configuration management.
 
-The Hydra configuration setup consisted of a base configuration file (`hydra_config.yaml`) that linked to five subfolders containing configuration files for `data`, `inference`, `model`, `train`, and `wandb`. These subfolders allowed us to easily modify parameters and create templates specific to different models. For example, certain model types requiring unique parameters could have their settings specified in dedicated .yaml files. Furthermore, the Hydra setup was integrated with W&B sweeps, enabling seamless formatting of configuration files into W&B sweep dictionaries when parameters were provided as lists. This integration allowed us to efficiently set up and execute hyperparameter sweeps.
+Hydra configuration setup consisted of a base configuration file (`hydra_config.yaml`) that linked to five subfolders
+containing configuration files for `data`, `inference`, `model`, `train`, and `wandb`. For example, certain model types requiring
+unique parameters could have their settings specified in dedicated .yaml files. Furthermore, the Hydra setup was
+integrated with W&Bsweeps, enabling seamless formatting of configuration files into W&Bsweep dictionaries when
+parameters were provided as lists.
 
 ### Question 13
 
@@ -333,9 +395,14 @@ The Hydra configuration setup consisted of a base configuration file (`hydra_con
 >
 > Answer:
 
-To ensure reproducibility of experiments, we relied on configuration files and set a random seed within the configuration. By using the same configuration setup, any experiment could be replicated with identical results.
+To ensure reproducibility of experiments, we relied on configuration files and set a random seed within the
+configuration. By using the same configuration setup, any experiment could be replicated with identical results.
 
-W&B further facilitated reproducibility by storing configuration details in the `hydra_config.yaml`, which was linked to the Hydra-generated configuration file. Additionally, model weights were stored as artifacts in W&B and could be retrieved using the evaluate.py script. By specifying the path to a particular run_id in the inference configuration file, prediction results could be reproduced without retraining the model.
+W&B further facilitated reproducibility by storing configuration details in the `hydra_config.yaml`, which was linked to
+the Hydra-generated configuration file. Additionally, model weights were stored as artifacts in W&B and could be
+retrieved using the evaluate.py script. By specifying the path to a particular run_id in the inference configuration
+file, prediction results could be reproduced without retraining the model. This setup ensured that all information
+pertaining to an experiment was logged and accessible, enabling easy replication of results.
 
 ### Question 14
 
@@ -354,13 +421,16 @@ W&B further facilitated reproducibility by storing configuration details in the 
 
 One of the cornerstones of this repository is the integration of Hydra and W&B.
 
-As shown in the first image, the W&B interface allows for easy inspection of training curves and comparison of different models:
+As shown in the first image, the W&B interface allows for easy inspection of training curves and comparison of different
+models:
 
-[Wandb runs](figures/wandb_runs.png)
+![Wandb runs](figures/wandb_runs.png)
 
-The second image demonstrates the successful setup of W&B sweeps, enabling efficient hyperparameter searches. This tool helps identify parameters with the most significant impact on validation error, ultimately optimizing the model for minimizing loss:
+The second image demonstrates the successful setup of W&B sweeps, enabling efficient hyperparameter searches. This tool
+helps identify parameters with the most significant impact on validation error, ultimately optimizing the model for
+minimizing loss:
 
-[Wandb sweep](figures/wandb_sweeps.png)
+![Wandb sweep](figures/wandb_sweeps.png)
 
 ### Question 15
 
@@ -375,7 +445,8 @@ The second image demonstrates the successful setup of W&B sweeps, enabling effic
 >
 > Answer:
 
-Docker was used to create containerized applications for this project. We developed two Docker files, both of which can be built locally or on Google Cloud.
+Docker was used to create containerized applications for this project. We developed two Docker files, both of which can
+be built locally or on Google Cloud.
 
 The training image can be built locally using the following command:
 
@@ -387,9 +458,11 @@ The evaluation image can be built with the command:
 
 ```docker build -f dockerfiles/evaluate.dockerfile . -t evaluate:latest```
 
-This image also depends on configuration files and a specific run_id from W&B, which is used to download model weights for evaluation.
+This image also depends on configuration files and a specific run_id from W&B, which is used to download model weights
+for evaluation.
 
-Currently, the setup builds an image for a specific configuration, a limitation that could be addressed by providing configuration files as input to the container when running the image.
+Currently, the setup builds an image for a specific configuration, a limitation that could be addressed by providing
+configuration files as input to the container when running the image.
 
 ### Question 16
 
@@ -409,7 +482,11 @@ Debugging methods varied among group members:
 * Oskar used VS Code and its built-in debugging tools.
 * Francisco used PyCharm and its integrated debugging features.
 
-These tools facilitated efficient identification and resolution of issues during experimentation. While we did not explicitly profile the code, we believe the setup is efficient, though there is always room for improvement.
+These tools facilitated efficient identification and resolution of issues during experimentation. While we did not
+explicitly profile the code, we believe the setup is efficient, though there is always room for improvement.
+We also made use of breakpoint whenever we wanted to debug the code. Breakpoints allow us to pause the code at a
+specific line and inspect the variables at that point in time. This was very useful when we wanted to understand the
+output of a specific function or to understand the flow of the code.
 
 ## Working in the cloud
 
@@ -427,7 +504,9 @@ These tools facilitated efficient identification and resolution of issues during
 > Answer:
 
 We used:
-- IAM to manage access to our project. This service is used to control who/which service accounts can do what in the project.
+
+- IAM to manage access to our project. This service is used to control who/which service accounts can do what in the
+  project.
 - Artifact Registry to store our docker images. This service is used to store and manage docker images.
 - Cloud Build to build our docker images. This service is used to build and push docker images.
 - Compute Engine to run our docker images. This service is used to run virtual machines in the cloud.
@@ -449,7 +528,20 @@ We used:
 >
 > Answer:
 
-We used Compute engine to run our docker images. We used instances with the following hardware: n1-standard-1. We created a VM instance called playground1 on Zone: europe-west1-b and then can connect to it via ssh.
+We used Compute engine to run our docker images. We used instances with the following hardware: n1-standard-1.
+Here are the key specifications for the n1-standard-1 machine type in Google Cloud:
+- vCPUs: 1
+- Memory (GB): 3.75
+- Max number of Persistent Disks: 128
+- Max total Persistent Disk size (TiB): 257
+- Local SSD: Yes
+- Default egress bandwidth (Gbps): Up to 2
+- Tier_1 egress bandwidth (Gbps): N/A
+
+Using this we would expect long training times, but for resource management we decided that this was good enough for our
+project setup during this course. Additionally, the intention is to migrate to a local server in the future.
+We created a VM instance called playground1 on Zone: europe-west1-b and then can connect to it via ssh.
+
 
 ### Question 19
 
@@ -458,8 +550,8 @@ We used Compute engine to run our docker images. We used instances with the foll
 >
 > Answer:
 
-[General cloud storage](figures/cloud_storage1.png)
-[Raw and processed data](figures/cloud_storage2.png)
+![General cloud storage](figures/cloud_storage1.png)
+![Raw and processed data](figures/cloud_storage2.png)
 
 ### Question 20
 
@@ -468,7 +560,7 @@ We used Compute engine to run our docker images. We used instances with the foll
 >
 > Answer:
 
-[Artifact Registry](figures/artifact_registry.png)
+![Artifact Registry](figures/artifact_registry.png)
 
 ### Question 21
 
@@ -477,7 +569,7 @@ We used Compute engine to run our docker images. We used instances with the foll
 >
 > Answer:
 
-[Cloud Build](figures/cloud_build.png)
+![Cloud Build](figures/cloud_build.png)
 
 ### Question 22
 
@@ -492,7 +584,11 @@ We used Compute engine to run our docker images. We used instances with the foll
 >
 > Answer:
 
-We managed to train our model in the cloud using Vertex AI. We did this by creating a custom job and then selecting the docker image we wanted to run that is on the artifact registry. We then selected the machine type and the number of nodes we wanted to use. The reason we choose Vertex AI was because it is a managed service that makes it easy to train machine learning models in the cloud. Additionally we inject WANDB_API_KEY on RUNTIME from GCP Secret Manager to log the training process to Weights & Biases and to be able to do sweeps.
+We managed to train our model in the cloud using Vertex AI. We did this by creating a custom job and then selecting the
+docker image we wanted to run that is on the artifact registry. We then selected the machine type and the number of
+nodes we wanted to use. The reason we choose Vertex AI was because it is a managed service that makes it easy to train
+machine learning models in the cloud. Additionally we inject WANDB_API_KEY on RUNTIME from GCP Secret Manager to log the
+training process to Weights & Biases and to be able to do sweeps.
 We also managed to do all of this using Compute Engine by running our docker images on a virtual machine, playground1.
 Both ways of training are described on the README.md file.
 
@@ -512,14 +608,17 @@ Both ways of training are described on the README.md file.
 > Answer:
 
 We managed to write a Simple API and managed to deploy it on Cloud Run and used FastAPI to do this.
-[Fast API](figures/fast_api.png)
+![Fast API](figures/fast_api.png)
 
-We did not extend the API to expose our model and be able to do inference since this adds nothing to the intent of this project. The goal of the repository is to support us in doing research and build custom GNNs for predicting the outcome of scientific simulators.
+We did not extend the API to expose our model and be able to do inference since this adds nothing to the intent of this
+project. The goal of the repository is to support us in doing research and build custom GNNs for predicting the outcome
+of scientific simulators.
 
 Oh look, number 42, must mean something...
-[42.png](figures/42.png)
+![42.png](figures/42.png)
 
-As it can be seen from the above screenshot, the API was successfully deployed on the Google Cloud which shows that we could have added model inference to it, if it had made sense for our purpose.
+As it can be seen from the above screenshot, the API was successfully deployed on the Google Cloud which shows that we
+could have added model inference to it, if it had made sense for our purpose.
 
 ### Question 24
 
@@ -535,7 +634,13 @@ As it can be seen from the above screenshot, the API was successfully deployed o
 >
 > Answer:
 
-As explained on Question 23, we did indeed manage to expose a simple API on cloud, also locally, but did not develop a more complex API that would expose our model or be able to do model inference. The reason is that the use case of this project is for experimentation on metamodelling of scientific simulators and for that reason, there's no point in deploying the models.
+As explained on Question 23, we did indeed manage to expose a simple API on the Cloud, also locally, but did not develop a
+more complex API that would expose our model or be able to do model inference. The reason is that the use case of this
+project is for experimentation on metamodelling of scientific simulators and for that reason, there's no point in
+deploying the models. The API was deployed on Cloud Run and could be invoked by calling the URL of the API. The API
+itself is a simple API that returns a JSON response with a message "Hello, World!" or an integer that is requested,
+similar to the API developed during the class. If we would have extended the API to expose the model, we would have
+needed to add a POST method that would take in the input data and return the prediction of the model, for example.
 
 ### Question 25
 
@@ -550,7 +655,11 @@ As explained on Question 23, we did indeed manage to expose a simple API on clou
 >
 > Answer:
 
-Based on answers 23 and 24, there was no point in performing load test on the API.
+Based on answers 23 and 24, there was no point in performing load test on the API. A load test would have been done by
+using a tool like Locust to simulate a large number of users accessing the API at the same time. The goal of the load
+test would be to see how the API behaves under heavy load and to identify potential bottlenecks. The results of the load
+test would show how many requests the API can handle before it crashes and how the response time changes.
+Since our API is a simple API that returns a JSON response, we did not perform this step.
 
 ### Question 26
 
@@ -565,7 +674,12 @@ Based on answers 23 and 24, there was no point in performing load test on the AP
 >
 > Answer:
 
-Based on answers 23 and 24, there was no point in performing monitoring on the deployed model.
+Based on answers 23 and 24, there was no point in performing monitoring on the deployed model. Monitoring would have
+been done by using a tool like Prometheus to collect metrics from the API and Grafana to visualize the metrics. The goal
+of monitoring would be to track the performance of the API over time and to identify potential issues before they become
+critical. The metrics that would be collected could include the response time of the API, the number of requests it
+receives, and the error rate. Additionally, data drift detection could be implemented to monitor the performance of the
+model over time and to identify when the model needs to be retrained.
 
 ## Overall discussion of project
 
@@ -584,7 +698,11 @@ Based on answers 23 and 24, there was no point in performing monitoring on the d
 >
 > Answer:
 
-In total our total cost was $4.14. [Cost breakdown](figures/cost.png). The most expensive was Compute because storage is cheap, so Artifact and Cloud Storage will most of the times be reduced, and then we mostly used Compute Engine since we only started using VertexAI by the end of the project. It's very good in a production environment, but for development, it can be expensive and over-engineered.
+In total our total cost was $4.14. ![Cost breakdown](figures/cost.png). The most expensive was Compute because storage
+is cheap, so Artifact and Cloud Storage will most of the times be reduced, and then we mostly used Compute Engine since
+we only started using VertexAI by the end of the project. It's very good in a production environment, but for
+development, it can be expensive and over-engineered. If we had used a machine with a GPU, the cost would have been
+higher. The cost of the project was very low, but the cost of the cloud can be very high if not managed properly.
 
 ### Question 28
 
@@ -618,9 +736,13 @@ No.
 > Answer:
 
 In the figure below the overall architecture of the repository is outlined:
-[Repository overview](figures/ml_ops_overview.png)
+![Repository overview](figures/ml_ops_overview.png)
 
-As it can be seen on the figure, the control and integrity of the repository is managed using github actions and code reviews. The code can be run both to train a model and to evaulate a model. This is achieved using docker images and containers that can be build and run in either Google Cloud or on the local desktop. The training image is linked to wandb where all experiements are logged. The evaulate script is also linked to wandb where a run_id must be provided in the config file and then the evaulate image can be build and executed.
+As it can be seen on the figure, the control and integrity of the repository is managed using github actions and code
+reviews. The code can be run both to train a model and to evaulate a model. This is achieved using docker images and
+containers that can be build and run in either Google Cloud or on the local desktop. The training image is linked to
+wandb where all experiements are logged. The evaulate script is also linked to wandb where a run_id must be provided in
+the config file and then the evaulate image can be build and executed.
 
 ### Question 30
 
@@ -634,7 +756,9 @@ As it can be seen on the figure, the control and integrity of the repository is 
 >
 > Answer:
 
-The biggest struggles were defnitely making the project work in the cloud. Having a connection directly on runtime to wandb via a wandb_api_key, that is provided through secret manager, injected in VertexAI and used when running the docker image that exists on the Artifact Registry.
+The biggest struggles were defnitely making the project work in the cloud. Having a connection directly on runtime to
+wandb via a wandb_api_key, that is provided through secret manager, injected in VertexAI and used when running the
+docker image that exists on the Artifact Registry.
 
 ### Question 31
 
@@ -651,8 +775,11 @@ The biggest struggles were defnitely making the project work in the cloud. Havin
 >
 > Answer:
 
-Oskar s155827 was in charge of setting up the initial cookie cutter project, developing the project idea and setting up wandb sweep.
+Oskar s155827 was in charge of setting up the initial cookie cutter project, developing the project idea and setting up
+wandb sweep.
 
 Francisco s250106 was responsible for developing the docker images for training our models in the cloud.
 
-Both members contributed with Typer, Hydra, logging, and testing. Both member were responsible for the maintenance of the github repository as well as github Actions. Both members contributed to the code, the README.md file, the report and the presentation.
+Both members contributed with Typer, Hydra, logging, and testing. Both member were responsible for the maintenance of
+the github repository as well as github Actions. Both members contributed to the code, the README.md file, the report
+and the presentation.
