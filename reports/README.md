@@ -68,7 +68,7 @@ will check the repositories and the code to verify your answers.
 * [x] Use logging to log important events in your code (M14)
 * [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
 * [x] Consider running a hyperparameter optimization sweep (M14)
-* [ ] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
+* [x] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
 
 ### Week 2
 
@@ -107,7 +107,7 @@ will check the repositories and the code to verify your answers.
 * [x] Write some documentation for your application (M32)
 * [ ] Publish the documentation to GitHub Pages (M32)
 * [x] Revisit your initial project description. Did the project turn out as you wanted?
-* [ ] Create an architectural diagram over your MLOps pipeline
+* [x] Create an architectural diagram over your MLOps pipeline
 * [x] Make sure all group members have an understanding about all parts of the project
 * [x] Uploaded all your code to GitHub
 
@@ -143,7 +143,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
-The members of this group are PhD students at DTU specializing in metamodeling of scientific simulators. We utilized the third-party framework PyG, which builds upon the PyTorch library to simplify the design and training of Graph Neural Networks (GNNs). This framework provides a streamlined framework for the development of metamodels for various simulators by providing tools to implement cutting-edge GNN layer types within the PyTorch ecosystem. PyG allowed us to efficiently test our research against state-of-the-art methodologies, enhancing both the robustness and scalability of our metamodeling efforts.
+The members of this group are PhD students at DTU specializing in metamodeling of scientific simulators. We utilized the third-party framework PyG, which builds upon the PyTorch library to simplify the design and training of Graph Neural Networks (GNNs). This framework provides a streamlined framework for the development of metamodels for various simulators by providing tools to implement cutting-edge GNN layer types within the PyTorch ecosystem. PyG allowed us to efficiently test our research against state-of-the-art methodologies, enhancing both the robustness and scalability of our metamodeling efforts. Our dataset consists of a list of PyG objects (i.e., PyG Graphs) that plays nicely together with ML model pipeline. The PyG framework is essential for doing research in a fast changing environment as machine learning as it reduces the time spent on coding significantly. 
 
 ## Coding environment
 
@@ -170,6 +170,8 @@ We used Conda to manage our dependencies in the project, creating a dedicated Co
 3. Install the project dependencies locally with `pip install -e .`
 
 These steps ensure that the environment mirrors the original setup, allowing seamless collaboration and project execution.
+
+On a local computer it is great to have conda to control several virtual environments on the same machine. However, the dependencies can also be installed using only pip and the `requirements.txt` file (this is for example how the VMs on docker are configured). The file `requirements_dev.txt` contains the packages that are needed for further development of the repository (in our case the two files are identical).
 
 ### Question 5
 
@@ -200,7 +202,13 @@ The cookiecutter template was used as the baseline structure for our project. We
 >
 > Answer:
 
-We used typing throughout the code to ensure better readability, documentation, and easier debugging. Additionally, we implemented Ruff as a pre-commit action to ensure that any code merged with the main branch adhered to proper formatting and quality standards. These measures are important in larger projects as it makes it easier for team members to maintain each others code and prevent bugs.
+We used typing throughout the code to ensure better readability, have better documentation, and make debugging easier. Typing is a great tool to ensure that the reader of a function can see what type of argument the function expects (e.g., an argument `x` in a `torch.module` class is expected to be a `torch.tensor` which could then be written as `x: torch.tensor` in the definition of the function).
+
+We also implemented ruff as a pre_commit action to ensure that the code was always formatted properly. This helped us removing whitespace after a finished line of code and generally identifying undesirable formatting patterns. Using Ruff as a pre-commit action to ensure that any code merged with the main branch adhered to proper formatting and quality standards. 
+
+At last, we tried to document our code with inline comments using `#` and with doc-strings using `'''`. This is good practice and also supports efficient collaboration when building on each others code. 
+
+These measures are important in larger projects as it makes it easier for team members to maintain each others code and prevent bugs.
 
 ## Version control
 
@@ -219,7 +227,13 @@ We used typing throughout the code to ensure better readability, documentation, 
 >
 > Answer:
 
-In total, we implemented 14 tests. These tests focus on the `data.py`, `model.py`, and `train.py` scripts, which are the most critical components of our pipeline. These scripts contain calls to several other scripts (e.g., `model.py` imports classes from `gnn_layers.py`, `gnn_decoders.py`, and `node_embeddings.py`). Our test coverage is approximately 42%, which is on the lower end, but it covers the most critical parts, including testing the GCN and all its components, as well as the `TrainModel` class, the largest and most important class in the code.
+In total we have implemented 14 tests. We are testing the `data.py` script, the `model.py` script and the `train.py` script. These scripts are the most critical scripts in our pipeline and have calls to several other scripts (e.g., the `model.py` imports classes from `gnn_layers.py`, `gnn_decoders.py`, and `node_embeddings.py`). 
+
+* The `test_data.py` checks whether the data is available and has been formatted correctly (e.g., the existence of the data and the shape of x features and edge features).
+* The `test_model.py` checks whether the shapes of the encoder, gnn_layer, and decoder works and also puts these three elements together into a transformer to check that the shapes works here as well. 
+* The `train_model.py` checks is the `TrainModel` instance can be initialized with a given example of a configuration file.
+
+The test coverage is around 42% of the code which is in the lower end. However, the most critical parts are covered (including testing the GCN and all elements used to build it, and the `TrainModel` class which is by far the largest and most important class in the code).
 
 ### Question 8
 
@@ -303,7 +317,6 @@ We set up continuous integration with several GitHub automations. This included 
 The core of our ML pipeline revolves around conducting scientific experiments on the metamodeling of simulators. To streamline this process, we extensively used Hydra for configuration management.
 
 The Hydra configuration setup consisted of a base configuration file (`hydra_config.yaml`) that linked to five subfolders containing configuration files for `data`, `inference`, `model`, `train`, and `wandb`. These subfolders allowed us to easily modify parameters and create templates specific to different models. For example, certain model types requiring unique parameters could have their settings specified in dedicated .yaml files. Furthermore, the Hydra setup was integrated with W&B sweeps, enabling seamless formatting of configuration files into W&B sweep dictionaries when parameters were provided as lists. This integration allowed us to efficiently set up and execute hyperparameter sweeps.
-
 
 ### Question 13
 
