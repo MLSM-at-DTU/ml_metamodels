@@ -143,7 +143,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
-The members of this group are PhD students at DTU specializing in metamodeling of scientific simulators. We utilized the third-party framework PyG, which builds upon the PyTorch library to simplify the design and training of Graph Neural Networks (GNNs). This framework provides a streamlined framework for the development of metamodels for various simulators by providing tools to implement cutting-edge GNN layer types within the PyTorch ecosystem. PyG allowed us to efficiently test our research against state-of-the-art methodologies, enhancing both the robustness and scalability of our metamodeling efforts. Our dataset consists of a list of PyG objects (i.e., PyG Graphs) that plays nicely together with ML model pipeline. The PyG framework is essential for doing research in a fast changing environment as machine learning as it reduces the time spent on coding significantly. 
+The members of this group are PhD students at DTU specializing in metamodeling of scientific simulators. We utilized the third-party framework PyG, which builds upon the PyTorch library to simplify the design and training of Graph Neural Networks (GNNs). This framework provides a streamlined framework for the development of metamodels for various simulators by providing tools to implement cutting-edge GNN layer types within the PyTorch ecosystem. PyG allowed us to efficiently test our research against state-of-the-art methodologies, enhancing both the robustness and scalability of our metamodeling efforts. Our dataset consists of a list of PyG objects (i.e., PyG Graphs) that plays nicely together with ML model pipeline. The PyG framework is essential for doing research in a fast changing environment as machine learning as it reduces the time spent on coding significantly.
 
 ## Coding environment
 
@@ -204,9 +204,9 @@ The cookiecutter template was used as the baseline structure for our project. We
 
 We used typing throughout the code to ensure better readability, have better documentation, and make debugging easier. Typing is a great tool to ensure that the reader of a function can see what type of argument the function expects (e.g., an argument `x` in a `torch.module` class is expected to be a `torch.tensor` which could then be written as `x: torch.tensor` in the definition of the function).
 
-We also implemented ruff as a pre_commit action to ensure that the code was always formatted properly. This helped us removing whitespace after a finished line of code and generally identifying undesirable formatting patterns. Using Ruff as a pre-commit action to ensure that any code merged with the main branch adhered to proper formatting and quality standards. 
+We also implemented ruff as a pre_commit action to ensure that the code was always formatted properly. This helped us removing whitespace after a finished line of code and generally identifying undesirable formatting patterns. Using Ruff as a pre-commit action to ensure that any code merged with the main branch adhered to proper formatting and quality standards.
 
-At last, we tried to document our code with inline comments using `#` and with doc-strings using `'''`. This is good practice and also supports efficient collaboration when building on each others code. 
+At last, we tried to document our code with inline comments using `#` and with doc-strings using `'''`. This is good practice and also supports efficient collaboration when building on each others code.
 
 These measures are important in larger projects as it makes it easier for team members to maintain each others code and prevent bugs.
 
