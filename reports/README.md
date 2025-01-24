@@ -261,11 +261,11 @@ The test coverage is around 42% of the code which is in the lower end (and quite
 >
 > Answer:
 
-As a group, we consistently used branches and pull requests (PRs) in our workflow. All new work was developed on separate branches, and several automations and requirements had to be satisfied before merging into the main branch. This approach ensured proper version control, facilitated peer review, and minimized the risk of introducing bugs into the main codebase. 
+As a group, we consistently used branches and pull requests (PRs) in our workflow. All new work was developed on separate branches, and several automations and requirements had to be satisfied before merging into the main branch. This approach ensured proper version control, facilitated peer review, and minimized the risk of introducing bugs into the main codebase.
 
-In order to merge code, all tests had to pass on both ubuntu and macos, the pre-commit had to be passed, and another member of the group needed to review all code changes and approve them. When approved the student that had submitted the PR would then merge into main. 
+In order to merge code, all tests had to pass on both ubuntu and macos, the pre-commit had to be passed, and another member of the group needed to review all code changes and approve them. When approved the student that had submitted the PR would then merge into main.
 
-If there was conflicts the submitter of the PR would have to resolve these before a code review. Other student / colleagues would then be there to support if it was needed. 
+If there was conflicts the submitter of the PR would have to resolve these before a code review. Other student / colleagues would then be there to support if it was needed.
 
 ### Question 10
 
@@ -297,7 +297,7 @@ If there was conflicts the submitter of the PR would have to resolve these befor
 >
 > Answer:
 
-We set up continuous integration with several GitHub automations. This included configuring the environment on GitHub and running our tests on both ubuntu and macOS. Additionally, we implemented a pre-commit automation that ran Ruff to check code quality and formatted the code automatically, ensuring consistency and reducing potential errors. 
+We set up continuous integration with several GitHub automations. This included configuring the environment on GitHub and running our tests on both ubuntu and macOS. Additionally, we implemented a pre-commit automation that ran Ruff to check code quality and formatted the code automatically, ensuring consistency and reducing potential errors.
 
 ## Running code and tracking experiments
 
@@ -449,7 +449,7 @@ We used:
 >
 > Answer:
 
-We used Compute engine to run our docker images. We used instances with the following hardware: n1-standard-1. We created a VM instance called playground1 on Zone: europe-west1-b and then can connect to it via ssh. 
+We used Compute engine to run our docker images. We used instances with the following hardware: n1-standard-1. We created a VM instance called playground1 on Zone: europe-west1-b and then can connect to it via ssh.
 
 ### Question 19
 
@@ -514,7 +514,7 @@ Both ways of training are described on the README.md file.
 We managed to write a Simple API and managed to deploy it on Cloud Run and used FastAPI to do this.
 [Fast API](figures/fast_api.png)
 
-We did not extend the API to expose our model and be able to do inference since this adds nothing to the intent of this project. The goal of the repository is to support us in doing research and build custom GNNs for predicting the outcome of scientific simulators. 
+We did not extend the API to expose our model and be able to do inference since this adds nothing to the intent of this project. The goal of the repository is to support us in doing research and build custom GNNs for predicting the outcome of scientific simulators.
 
 Oh look, number 42, must mean something...
 [42.png](figures/42.png)
