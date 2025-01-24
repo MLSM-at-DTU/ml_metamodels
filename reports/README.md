@@ -68,7 +68,7 @@ will check the repositories and the code to verify your answers.
 * [x] Use logging to log important events in your code (M14)
 * [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
 * [x] Consider running a hyperparameter optimization sweep (M14)
-* [ ] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
+* [x] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
 
 ### Week 2
 
@@ -107,7 +107,7 @@ will check the repositories and the code to verify your answers.
 * [x] Write some documentation for your application (M32)
 * [ ] Publish the documentation to GitHub Pages (M32)
 * [x] Revisit your initial project description. Did the project turn out as you wanted?
-* [ ] Create an architectural diagram over your MLOps pipeline
+* [x] Create an architectural diagram over your MLOps pipeline
 * [x] Make sure all group members have an understanding about all parts of the project
 * [x] Uploaded all your code to GitHub
 
@@ -143,7 +143,7 @@ fmfsa: s250106, obola: s155827
 >
 > Answer:
 
-The members of this group are PhDs at DTU in metamodelling of scientific simulators. We used the thrid-party framework PyG which utilizes the Pytorch library and makes it easy to write and train Graph Neural Networks and hence help us building metamodels of different simulators. The package enables us to easily implement the latest GNN layer-types in a pytorch framework and test our research against these.
+The members of this group are PhDs at DTU in metamodelling of scientific simulators. We used the thrid-party framework PyG which utilizes the Pytorch library and makes it easy to write and train Graph Neural Networks and hence help us building metamodels of different simulators. The package enables us to easily implement the latest GNN layer-types in a pytorch framework and test our research against these. Our dataset consists of a list of PyG objects (i.e., PyG Graphs) that plays nicely together with ML model pipeline. The PyG framework is essential for doing research in a fast changing environment as machine learning as it reduces the time spent on coding significantly. 
 
 ## Coding environment
 
@@ -165,9 +165,11 @@ The members of this group are PhDs at DTU in metamodelling of scientific simulat
 
 We used conda to manage our dependencies in the project and made a separate conda environment to run the code in. The list of dependencies was auto-generated using pipreqs which ensures to only keep the packages that are actually used in the code in the requirements.txt file. A complete copy of the environment can be built by running:
 
-1. conda env create -f environment.yml
-2. conda activate ml_ops
-3. pip install -e .
+1. `conda env create -f environment.yml`
+2. `conda activate ml_ops`
+3. `pip install -e .`
+
+On a local computer it is great to have conda to control several virtual environments on the same machine. However, the dependencies can also be installed using only pip and the `requirements.txt` file (this is for example how the VMs on docker are configured). The file `requirements_dev.txt` contains the packages that are needed for further development of the repository (in our case the two files are identical).
 
 ### Question 5
 
@@ -198,7 +200,11 @@ The cookiecutter template was used as the baseline structure for our project. We
 >
 > Answer:
 
-We used typing throughout the code to ensure better readability, have better documentation, and make debugging easier. We also implemented ruff as a pre_commit action to ensure that the code merged with main is formatted properly.
+We used typing throughout the code to ensure better readability, have better documentation, and make debugging easier. Typing is a great tool to ensure that the reader of a function can see what type of argument the function expects (e.g., an argument `x` in a `torch.module` class is expected to be a `torch.tensor` which could then be written as `x: torch.tensor` in the definition of the function).
+
+We also implemented ruff as a pre_commit action to ensure that the code was always formatted properly. This helped us removing whitespace after a finished line of code and generally identifying undesirable formatting patterns. 
+
+At last, we tried to document our code with inline comments using `#` and with doc-strings using `'''`. This is good practice and also supports efficient collaboration when building on each others code. 
 
 ## Version control
 
@@ -217,7 +223,13 @@ We used typing throughout the code to ensure better readability, have better doc
 >
 > Answer:
 
-In total we have implemented 14 tests. We are testing the data.py script, the model.py script and the train.py script. These scripts are the most critical scripts in our pipeline and have calls to several other scripts (e.g., the model.py imports classes from gnn_layers, gnn_decoders, and node_embeddings). The test coverage is around 42% of the code which is in the lower end - however, the most critical parts are covered (including testing the GCN and all elements used to build it, and the TrainModel class which is by far the largest and most important class in the code).
+In total we have implemented 14 tests. We are testing the `data.py` script, the `model.py` script and the `train.py` script. These scripts are the most critical scripts in our pipeline and have calls to several other scripts (e.g., the `model.py` imports classes from `gnn_layers.py`, `gnn_decoders.py`, and `node_embeddings.py`). 
+
+* The `test_data.py` checks whether the data is available and has been formatted correctly (e.g., the existence of the data and the shape of x features and edge features).
+* The `test_model.py` checks whether the shapes of the encoder, gnn_layer, and decoder works and also puts these three elements together into a transformer to check that the shapes works here as well. 
+* The `train_model.py` checks is the `TrainModel` instance can be initialized with a given example of a configuration file.
+
+The test coverage is around 42% of the code which is in the lower end. However, the most critical parts are covered (including testing the GCN and all elements used to build it, and the TrainModel class which is by far the largest and most important class in the code).
 
 ### Question 8
 
@@ -299,7 +311,7 @@ We setup continous integration with several Github automataions. This included s
 > Answer:
 
 The core of our ML pipeline is to do scientific experiments on metamodelling of simulators. Hence, we did extensive work in setting up configuration files with hydra.
-The hydra configuration setup was made with a base configuration file (hydra_config.yaml9 that points to five sub-folders with configuration files (data, inference, model, train, wandb). In these subfolders it is easy to change parameters and have specific templates for different models (e.g., one model type might require specific paramteres that can then be specified for that model type in a specific .yaml file). The hydra setup was linked to the wandb sweep setup such that if you provide parameters as a list (using "-") the configuration file is formatted into a wandb sweep dictionary that sets up a sweep.
+The hydra configuration setup was made with a base configuration file (`hydra_config.yaml` that points to five sub-folders with configuration files (data, inference, model, train, wandb). In these subfolders it is easy to change parameters and have specific templates for different models (e.g., one model type might require specific paramteres that can then be specified for that model type in a specific .yaml file). The hydra setup was linked to the wandb sweep setup such that if you provide parameters as a list (using "-") the configuration file is formatted into a wandb sweep dictionary that sets up a sweep.
 
 
 ### Question 13
