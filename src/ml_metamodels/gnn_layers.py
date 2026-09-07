@@ -1,7 +1,6 @@
-from typing import Optional
 import torch
 from torch import nn
-from torch_geometric.nn import GCNConv, GATv2Conv
+from torch_geometric.nn import GATv2Conv, GCNConv
 
 
 class GATConvLayer(nn.Module):
@@ -28,7 +27,7 @@ class GCNConvLayer(nn.Module):
         num_gnn_layers: int,
         normalize: bool = True,
         bias: bool = True,
-        add_self_loops: Optional[bool] = None,
+        add_self_loops: bool | None = None,
     ) -> torch.Tensor:
         super().__init__()
         self.convs = nn.ModuleList(
@@ -50,7 +49,7 @@ class GCNConvLayer(nn.Module):
         self,
         x: torch.Tensor,
         edge_index: torch.Tensor,
-        edge_weight: Optional[torch.Tensor] = None,
+        edge_weight: torch.Tensor | None = None,
     ) -> torch.Tensor:
         for conv in self.convs:
             x_res = x
