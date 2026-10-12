@@ -1,12 +1,13 @@
-from torch.utils.data import Dataset
+import os
 import os.path as osp
 import pickle
+
 import torch
-import os
-from sklearn.preprocessing import StandardScaler
-from hydra import initialize, compose
-from omegaconf import DictConfig
 import typer
+from hydra import compose, initialize
+from omegaconf import DictConfig
+from sklearn.preprocessing import StandardScaler
+from torch.utils.data import Dataset
 
 app = typer.Typer()
 
