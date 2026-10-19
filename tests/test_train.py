@@ -1,6 +1,8 @@
-import pytest
 import os
+
+import pytest
 from omegaconf import OmegaConf
+
 from ml_metamodels.train import TrainModel
 
 
