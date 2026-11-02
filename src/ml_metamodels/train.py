@@ -1,17 +1,19 @@
-import torch
-from torch_geometric.loader import DataLoader
-from ml_metamodels.model import GCN, GAT, DiffusionTestModel
 import datetime
-from hydra import initialize, compose
-from omegaconf import OmegaConf
-import os.path as osp
 import os
-import numpy as np
+import os.path as osp
 import random
-import wandb
+from typing import Any
+
+import numpy as np
+import torch
 import typer
-from typing import Dict, Any
+import wandb
 from dotenv import load_dotenv
+from hydra import compose, initialize
+from omegaconf import OmegaConf
+from torch_geometric.loader import DataLoader
+
+from ml_metamodels.model import GAT, GCN, DiffusionTestModel
 
 app = typer.Typer()
 
@@ -300,12 +302,12 @@ class TrainModel:
 
 
 def generate_sweep_configuration(
-    cfg: Dict[str, Any],
+    cfg: dict[str, Any],
     sweep_name: str = "sweep",
     metric_name: str = "L1_loss",
     goal: str = "minimize",
     method: str = "random",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     sweep_parameters = {}
 
     # Recursively find list-type entries in the config

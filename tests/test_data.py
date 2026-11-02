@@ -1,8 +1,9 @@
+import os
 import os.path as osp
 import pickle
-import torch
+
 import pytest
-import os
+import torch
 
 
 @pytest.mark.skipif(not os.path.exists("data/raw/sioux_falls_simulation_24_zones_OD_2K"), reason="Data files not found")
