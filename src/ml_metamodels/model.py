@@ -1,11 +1,11 @@
-from typing import Optional
 import torch
 from torch import nn
 from torch_geometric.data import Data
-from ml_metamodels.node_embeddings import LinearEncoder
-from ml_metamodels.gnn_layers import GCNConvLayer, GATConvLayer
-from ml_metamodels.gnn_decoders import GNNConvDecoder
 from torch_geometric.nn import GCNConv
+
+from ml_metamodels.gnn_decoders import GNNConvDecoder
+from ml_metamodels.gnn_layers import GATConvLayer, GCNConvLayer
+from ml_metamodels.node_embeddings import LinearEncoder
 
 
 class GCN(nn.Module):
@@ -17,7 +17,7 @@ class GCN(nn.Module):
         num_gnn_layers: int,
         normalize: bool = True,
         bias: bool = True,
-        add_self_loops: Optional[bool] = None,
+        add_self_loops: bool | None = None,
     ) -> None:
         super().__init__()
         self.encoder = LinearEncoder(node_feature_dim, edge_feature_dim, hidden_dim)
