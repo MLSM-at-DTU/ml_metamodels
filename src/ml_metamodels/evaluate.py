@@ -1,11 +1,13 @@
+import os
+
 import torch
 import typer
-from torch_geometric.loader import DataLoader
-from omegaconf import OmegaConf
-from hydra import initialize, compose
 import wandb
-from ml_metamodels.model import GCN, GAT
-import os
+from hydra import compose, initialize
+from omegaconf import OmegaConf
+from torch_geometric.loader import DataLoader
+
+from ml_metamodels.model import GAT, GCN
 
 app = typer.Typer()
 
